@@ -93,7 +93,7 @@ readGown <- function(dataDir, samplePattern, bamfiles = NULL, pData = NULL, verb
    names(transgrl) = paste0("tx", names(transgrl))
 
    ## Connect transcripts to genes:
-   t2g = data.frame(t_id = trans$t_id, g_id = as.numeric(sapply(trans$gene_id, function(s) substr(s, 6, nchar(s)))))
+   t2g = data.frame(t_id = trans$t_id, g_id = trans$gene_id)
 
    ## Read phenotype table, if given:
    if(!is.null(pData)){
