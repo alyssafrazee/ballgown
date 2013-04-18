@@ -62,20 +62,20 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
     
     
     # plot base:
-    plot(xax, rep(0,length(xax)), ylim=c(0,ymax), type="n", xlab="genomic position", main=paste0(gene,": ",numtx," transcripts"), yaxt = "n", ylab="", )
+    plot(xax, rep(0,length(xax)), ylim=c(0,ymax), type="n", xlab="genomic position", main=paste0(gene,": ",sampname), yaxt = "n", ylab="", )
     
     
     # set color scale:
+	sampcoltype = gettype(samp)
     if(colorby == "transcript"){
-	    maxcol = quantile(as.matrix(gown$data$trans[which(gown$data$trans$gene_id==gene),-c(1:10)]), 0.99)
+    	smalldat = subset(gown$data$trans, gene_id==gene)
+		coltype = as.character(sapply(names(gown$data$trans), gettype))
     }
     if(colorby == "exon"){
-    	myexons = unique(gtrans$id)
+	   	smalldat = subset(gown$data$exon, e_id %in% gtrans$id)
     	coltype = as.character(sapply(names(gown$data$exon), gettype))
-    	sampcoltype = gettype(samp)
-    	delcols = which(coltype != sampcoltype)
-    	maxcol = quantile(as.matrix(gown$data$exon[which(gown$data$exon$e_id %in% myexons), -delcols]), 0.99)	
     }
+    maxcol = quantile(as.matrix(smalldat[,coltype==sampcoltype]), 0.99)
     colscale = seq(0,maxcol,length.out=200)
     
     
@@ -109,8 +109,6 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
 		text(x = median(xax), y = ymax-0.5, labels=paste("expression, by",  colorby), cex=0.5)
 		}
 }
-
-
 
 
 
