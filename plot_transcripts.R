@@ -33,8 +33,11 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
 	if(is.character(samp)){
 		if(colorby == "transcript"){
 			col = which(names(gown$data$trans)==samp)
+			if(gettype(samp)!="cov" & gettype(samp)!="FPKM") stop("transcripts only have cov and FPKM measurements")
 		}
 		if(colorby == "exon"){
+			exontypes = unique(as.character(sapply(names(gown$data$exon)[-c(1:5)], gettype)))
+			if(!(gettype(samp) %in% exontypes)) stop(paste0("exons only have the following measurements: ", paste(exontypes, collapse=", ")))
 			col = which(names(gown$data$exon)==samp)
 		}
 		sampname = samp
@@ -44,9 +47,13 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
 		col = samp
 		if(colorby == "transcript"){
 			sampname = names(gown$data$trans)[samp]	
+			if(gettype(sampname)!="cov" & gettype(sampname)!="FPKM") stop("transcripts only have cov and FPKM measurements")
+
 		}
 		if(colorby == "exon"){
 			sampname = names(gown$data$exon)[samp]
+			if(!(gettype(sampname) %in% exontypes)) stop(paste0("exons only have the following measurements: ", paste(exontypes, collapse=", ")))
+
 		}
 	}
 	
@@ -60,6 +67,8 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
     par(mar=c(5,2,4,2))
     ymax = ifelse(legend, numtx+1.5, numtx+1)
     
+    if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
+    if(length(unique(gtrans$strand)) > 1) stop("Your gene appears to contain exons from both strands, which is potentially interesting but also kind of confusing, so please choose another gene until we figure this sucker out.")
     
     # plot base:
     plot(xax, rep(0,length(xax)), ylim=c(0,ymax), type="n", xlab="genomic position", main=paste0(gene,": ",sampname), yaxt = "n", ylab="", )
@@ -80,6 +89,8 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
     
     
     # draw the transcripts
+    introntypes = unique(as.character(sapply(names(gown$data$intron)[-c(1:5)], gettype)))
+    color.introns = ifelse(gettype(samp) %in% introntypes, TRUE, FALSE)
     for(tx in unique(gtrans$tid)){
     	if(colorby == "transcript"){
     		mycolor = closestColor(gown$data$trans[,col][which(gown$data$trans$t_id==tx)], colscale)
@@ -93,7 +104,18 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
     		}
 			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), col=mycolor)
 			if(exind!=dim(gtsub)[1]){
-				lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind, txind), lty=2, col="gray60")
+				if(!color.introns){
+					lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind, txind), lty=2, col="gray60")
+				}
+				if(color.introns){
+					intronindex = which(gown$data$intron$start == gtsub$end[exind]+1 & gown$data$intron$end == gtsub$start[exind+1]-1 & gown$data$intron$chr==unique(gtsub$seqnames) & gown$data$intron$strand == unique(gtsub$strand))
+					icolumnind = which(names(gown$data$intron) == samp)
+					icol = closestColor(gown$data$intron[intronindex,icolumnind], colscale)
+					lines(c(gtsub$end[exind]+10,gtsub$start[exind+1]-10),c(txind, txind), lwd=3, col=icol)
+					lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind+0.1, txind+0.1), lwd=0.5, col="gray60")
+					lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind-0.1, txind-0.1), lwd=0.5, col="gray60")
+
+				}
 			}	
     	}
     }
@@ -112,9 +134,9 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
 
 
 
-plotTranscripts("XLOC_000002", "cov.orbFrontalF2", gown, colorby="exon")
-plotTranscripts("XLOC_000002", "cov.orbFrontalF2", gown, colorby="transcript")
-plotTranscripts("XLOC_000011", "cov.orbFrontalF2", gown, colorby="exon")
+plotTranscripts("XLOC_000002", "rcount.orbFrontalF2", gown, colorby="exon")
+plotTranscripts("XLOC_000002", "FPKM.orbFrontalF2", gown, colorby="transcript")
+plotTranscripts("XLOC_000011", "rcount.orbFrontalF2", gown, colorby="exon")
 plotTranscripts("XLOC_000011", "cov.orbFrontalF2", gown, colorby="transcript")
 
 # pData wasn't loaded before, but re-running readGown.R will do it. I've loaded it locally:
