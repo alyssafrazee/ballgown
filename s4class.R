@@ -153,7 +153,11 @@ setMethod("show", "ballgown",
 )
 
 
-# define slot setters (still need to do)
+# define slot setters (still need to finish)
+setGeneric("indexes<-", function(x, value) standardGeneric("indexes<-"))
+setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; x})
+###### AFTER DEFINING A VALIDITY METHOD:
+setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; validObject(x); x})
 
 
 # define coercion methods (still need to do)
@@ -186,3 +190,309 @@ setMethod("subset", "ballgown", function(x, cond){
 	return(new("ballgown", data = list(intron=intron, exon=exon, trans=trans), indexes = list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles = indexes(x)$bamfiles, pData = indexes(x)$pData), structure=list(intron = introngr, exon=exongr, trans=transgrl), dirs = dirs(x), mergedDate=mergedDate(x)))
 } )
 
+
+
+
+# plotTranscripts method: (I think this actually just needs to be a function, since "plotTranscripts" is not a current method)
+
+### helper functions
+last = function(x) return(tail(x,n=1))
+
+closestColor = function(x, colscale){
+	choices = rev(heat.colors(length(colscale)))
+	diffs = abs(x-colscale)
+	return(choices[which.min(diffs)])
+}
+
+gettype = function(x) strsplit(x, split="\\.")[[1]][1]
+getsamp = function(x) last(strsplit(x, split="\\.")[[1]])
+
+### MAIN FUNCTION
+plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcript"){
+	
+	if(class(gown)!="ballgown") stop("gown must be a ballgown object")
+	
+	suppressMessages(library(GenomicRanges))
+	
+	# if "samp" is the character name of the column:
+	if(is.character(samp)){
+		if(colorby == "transcript"){
+			col = which(names(data(gown)$trans)==samp)
+			if(gettype(samp)!="cov" & gettype(samp)!="FPKM") stop("transcripts only have cov and FPKM measurements")
+		}
+		if(colorby == "exon"){
+			exontypes = unique(as.character(sapply(names(data(gown)$exon)[-c(1:5)], gettype)))
+			if(!(gettype(samp) %in% exontypes)) stop(paste0("exons only have the following measurements: ", paste(exontypes, collapse=", ")))
+			col = which(names(data(gown)$exon)==samp)
+		}
+		sampname = samp
+	}
+	# if it is the column index:
+	if(is.numeric(samp)){
+		col = samp
+		if(colorby == "transcript"){
+			sampname = names(data(gown)$trans)[samp]	
+			if(gettype(sampname)!="cov" & gettype(sampname)!="FPKM") stop("transcripts only have cov and FPKM measurements")
+
+		}
+		if(colorby == "exon"){
+			sampname = names(data(gown)$exon)[samp]
+			if(!(gettype(sampname) %in% exontypes)) stop(paste0("exons only have the following measurements: ", paste(exontypes, collapse=", ")))
+
+		}
+	}
+	
+	ma = IRanges::as.data.frame(structure(gown)$trans)
+	thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
+	thetranscripts = paste0("tx", thetranscripts)
+	gtrans = subset(ma, element %in% thetranscripts)
+	gtrans$tid = as.numeric(sapply(gtrans$element, function(x) as.numeric(substr(x,3,nchar(x)))))
+	xax = seq(min(gtrans$start), max(gtrans$end), by=1)
+    numtx = length(unique(thetranscripts))
+    par(mar=c(5,2,4,2))
+    ymax = ifelse(legend, numtx+1.5, numtx+1)
+    
+    if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
+    if(length(unique(gtrans$strand)) > 1) stop("Your gene appears to contain exons from both strands, which is potentially interesting but also kind of confusing, so please choose another gene until we figure this sucker out.")
+    
+    # plot base:
+    plot(xax, rep(0,length(xax)), ylim=c(0,ymax), type="n", xlab="genomic position", main=paste0(gene,": ",sampname), yaxt = "n", ylab="", )
+    
+    
+    # set color scale:
+	sampcoltype = gettype(samp)
+    if(colorby == "transcript"){
+    	smalldat = subset(data(gown)$trans, gene_id==gene)
+		coltype = as.character(sapply(names(data(gown)$trans), gettype))
+    }
+    if(colorby == "exon"){
+	   	smalldat = subset(data(gown)$exon, e_id %in% gtrans$id)
+    	coltype = as.character(sapply(names(data(gown)$exon), gettype))
+    }
+    maxcol = quantile(as.matrix(smalldat[,coltype==sampcoltype]), 0.99)
+    colscale = seq(0,maxcol,length.out=200)
+    
+    
+    # draw the transcripts
+    introntypes = unique(as.character(sapply(names(data(gown)$intron)[-c(1:5)], gettype)))
+    color.introns = ifelse(gettype(samp) %in% introntypes, TRUE, FALSE)
+    for(tx in unique(gtrans$tid)){
+    	if(colorby == "transcript"){
+    		mycolor = closestColor(data(gown)$trans[,col][which(data(gown)$trans$t_id==tx)], colscale)
+    	}
+    	txind = which(unique(gtrans$tid)==tx)
+    	gtsub = gtrans[gtrans$tid==tx,]
+    	gtsub = gtsub[order(gtsub$start),]
+    	for(exind in 1:dim(gtsub)[1]){
+    		if(colorby == "exon"){
+    			mycolor = closestColor(data(gown)$exon[,col][which(data(gown)$exon$e_id==gtsub$id[exind])], colscale)
+    		}
+			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), col=mycolor)
+			if(exind!=dim(gtsub)[1]){
+				if(!color.introns){
+					lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind, txind), lty=2, col="gray60")
+				}
+				if(color.introns){
+					intronindex = which(data(gown)$intron$start == gtsub$end[exind]+1 & data(gown)$intron$end == gtsub$start[exind+1]-1 & data(gown)$intron$chr==unique(gtsub$seqnames) & data(gown)$intron$strand == unique(gtsub$strand))
+					icolumnind = which(names(data(gown)$intron) == samp)
+					icol = closestColor(data(gown)$intron[intronindex,icolumnind], colscale)
+					lines(c(gtsub$end[exind]+10,gtsub$start[exind+1]-10),c(txind, txind), lwd=3, col=icol)
+					lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind+0.1, txind+0.1), lwd=0.5, col="gray60")
+					lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind-0.1, txind-0.1), lwd=0.5, col="gray60")
+
+				}
+			}	
+    	}
+    }
+    
+    
+    # draw the legend:
+    if(legend){
+    	leglocs = seq(min(xax)+1, max(xax)-1, length=length(colscale)+1)
+		for(i in 1:length(colscale)){
+			polygon(x = c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]), y = c(ymax-0.3, ymax, ymax, ymax-0.3), border=NA, col = rev(heat.colors(length(colscale)))[i])
+		}
+		text(x = seq(min(xax)+1, max(xax)-1, length = 20), y = rep(ymax+0.1, 20), labels = round(colscale,2)[seq(1,length(colscale), length=20)], cex=0.5 )	
+		text(x = median(xax), y = ymax-0.5, labels=paste("expression, by",  colorby), cex=0.5)
+		}
+}
+
+
+
+## and here is the plotMeans function:
+plotMeans = function(gene, gown, groupvar, groupname, dattype = "cov", legend = TRUE, colorby = "transcript"){
+	
+	if(class(gown)!="ballgown") stop("gown must be a ballgown object")
+	
+	suppressMessages(library(GenomicRanges))
+	
+	# some setup:
+	outcomecol = which(names(indexes(gown)$pData)==groupvar)
+	ma = IRanges::as.data.frame(structure(gown)$trans)
+	thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
+	thetranscripts = paste0("tx", thetranscripts)
+	gtrans = subset(ma, element %in% thetranscripts)
+	gtrans$tid = as.numeric(sapply(gtrans$element, function(x) as.numeric(substr(x,3,nchar(x)))))
+	xax = seq(min(gtrans$start), max(gtrans$end), by=1)
+    numtx = length(unique(thetranscripts))
+    par(mar=c(5,2,4,2))
+    ymax = ifelse(legend, numtx+1.5, numtx+1)
+    pdatacol = which(names(indexes(gown)$pData)==groupvar) # the group variable (column index)
+	samples = indexes(gown)$pData$dirname[indexes(gown)$pData[,pdatacol]==groupname] # names of the samples in that group
+
+    
+    # plot base:
+    plot(xax, rep(0,length(xax)), ylim=c(0,ymax), type="n", xlab="genomic position", main=paste0(gene,": ",groupname), yaxt = "n", ylab="", )
+
+
+	# calculate means
+	if(colorby == "transcript"){
+		# mean transcript-level expression measurement for this group
+		smalldat = subset(data(gown)$trans, t_id %in% gtrans$tid)
+		coltype = as.character(sapply(names(data(gown)$trans), gettype))
+		colsamp = as.character(sapply(names(data(gown)$trans), getsamp))
+		datacols = which(coltype==dattype & colsamp %in% samples)
+		smalldat2 = smalldat[,datacols]
+		tmeans = apply(smalldat2, 1, mean)
+		}
+	
+    if(colorby == "exon"){
+    	# mean exon-level expression measurement for this group
+    	smalldat = subset(data(gown)$exon, e_id %in% gtrans$id)
+    	coltype = as.character(sapply(names(data(gown)$exon), gettype))
+    	colsamp = as.character(sapply(names(data(gown)$exon), getsamp))
+		datacols = which(coltype==dattype & colsamp %in% samples)
+		smalldat2 = smalldat[,datacols]
+		emeans = apply(smalldat2, 1, mean)
+        }
+    
+    # make color scale:
+    maxcol = quantile(as.matrix(smalldat[, which(coltype==dattype)]), 0.99)
+    colscale = seq(0,maxcol,length.out=200)
+
+
+    # draw the transcripts
+    for(tx in unique(gtrans$tid)){
+    	if(colorby == "transcript"){
+    		mycolor = closestColor(tmeans[which(smalldat$t_id==tx)], colscale)
+    	}
+    	txind = which(unique(gtrans$tid)==tx)
+    	gtsub = gtrans[gtrans$tid==tx,]
+    	gtsub = gtsub[order(gtsub$start),]
+    	for(exind in 1:dim(gtsub)[1]){
+    		if(colorby == "exon"){
+    			mycolor = closestColor(emeans[which(smalldat$e_id==gtsub$id[exind])], colscale)
+    		}
+			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), col=mycolor)
+			if(exind!=dim(gtsub)[1]){
+				lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind, txind), lty=2, col="gray60")
+			}	
+    	}
+    }
+    
+    
+    # draw the legend:
+    if(legend){
+    	leglocs = seq(min(xax)+1, max(xax)-1, length=length(colscale)+1)
+		for(i in 1:length(colscale)){
+			polygon(x = c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]), y = c(ymax-0.3, ymax, ymax, ymax-0.3), border=NA, col = rev(heat.colors(length(colscale)))[i])
+		}
+		text(x = seq(min(xax)+1, max(xax)-1, length = 20), y = rep(ymax+0.1, 20), labels = round(colscale,2)[seq(1,length(colscale), length=20)], cex=0.5 )	
+		text(x = median(xax), y = ymax-0.5, labels=paste("mean expression, by",  colorby), cex=0.5)
+		}
+
+}
+
+
+
+
+setwd("~/Google Drive/hopkins/research/_cufflinks visualization project")
+load("small_gown.rda")
+tinygown = new("ballgown", data=gown$data, indexes=gown$indexes, structure=gown$structure, dirs=gown$dirs, mergedDate=gown$mergedDate)
+# some fixeruppers (all changed in the new read function)
+indexes(tinygown)$t2g$g_id[indexes(tinygown)$t2g$t_id %in% data(tinygown)$trans$t_id] <- data(tinygown)$trans$gene_id
+indexes(tinygown)$pData <- read.table("~/Desktop/phenotypes_all.txt", stringsAsFactors=FALSE, sep="\t", header=TRUE)
+indexes(tinygown)$pData$dirname[18] <- NA
+theorder = sapply(names(dirs(tinygown)), function(x) which(indexes(tinygown)$pData$dirname==x))
+indexes(tinygown)$pData = indexes(tinygown)$pData[theorder,]
+
+plotTranscripts("XLOC_000002", "rcount.orbFrontalF2", tinygown, colorby="exon")
+plotTranscripts("XLOC_000002", "FPKM.orbFrontalF2", tinygown, colorby="transcript")
+plotTranscripts("XLOC_000011", "rcount.orbFrontalF2", tinygown, colorby="exon")
+plotTranscripts("XLOC_000011", "cov.orbFrontalF2", tinygown, colorby="transcript")
+
+plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "bipolar", dattype = "cov", legend = TRUE, colorby = "exon")
+plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "control", dattype = "cov", legend = TRUE, colorby = "transcript")
+plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "schizophrenia", dattype = "cov", legend = TRUE, colorby = "transcript")
+plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "depression", dattype = "cov", legend = TRUE, colorby = "transcript")
+
+
+######## MERGING TRANSCRIPTS #########
+# (1) define function calculating transcript overlaps within a gene.
+
+
+bpset = function(tra){
+	unique(unlist(sapply(1:length(ranges(tra)), function(i) c(start(tra[i,]):end(tra[i,])))))
+}
+
+transcriptOverlaps = function(gene, gown){
+	
+	txnames = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id == gene]
+	strucnames = as.numeric(substr(names(structure(gown)$trans),3,nchar(names(structure(gown)$trans))))
+	inds = which(strucnames %in% txnames)
+	tx = structure(gown)$trans[inds]
+	
+	overlapMat = matrix(NA, nrow=length(inds), ncol=length(inds))
+	rownames(overlapMat) = colnames(overlapMat) = names(tx)
+	diag(overlapMat) = 1
+	for(ii in 1:length(inds)){
+		for(jj in 1:length(inds)){
+			if(ii==jj) next
+			bpsi = bpset(tx[[ii]])
+			bpsj = bpset(tx[[jj]])
+			overlapMat[ii,jj] = length(intersect(bpsi, bpsj))/length(bpsi)
+		}
+	}
+	
+	return(overlapMat)
+}  #number in row i, column j answers the question "what percentage of transcript i is overlapped by transcript j?"
+
+
+system.time(transcriptOverlaps("XLOC_000002", tinygown)) #8 seconds elapsed time
+system.time(transcriptOverlaps("XLOC_000011", tinygown)) #15 seconds elapsed time
+transcriptOverlaps("XLOC_000011", tinygown)
+plotMeans("XLOC_000011", tinygown, "outcome", "control", colorby="exon")
+
+
+#(2) decide which transcripts to combine into one.  (I vote for the "reduce" function but what do I know?)
+
+
+
+########### DIFFERENTIAL EXPRESSION TESTS ###########
+# here is a way we can do differential expression (the test formerly known as "cufffix")
+difftest = function(gown, feature = "transcript", method = "DESeq", dattype = "cov", ...){
+	if(feature=="transcript"){
+		if(dattype!="cov" & dattype!="FPKM") stop("transcripts only have cov and FPKM measurements")
+		coltypes = as.character(sapply(names(data(gown)$trans), gettype))
+		inds = which(coltypes==dattype)
+		tab = data(gown)$trans[,inds]
+	}
+	if(feature=="exon"){
+		exontypes = unique(as.character(sapply(names(data(gown)$exon)[-c(1:5)], gettype)))
+		if(!(dattype %in% exontypes)) stop(paste0("exons only have the following measurements: ", paste(exontypes, collapse=", ")))
+		coltypes = as.character(sapply(names(data(gown)$exon), gettype))
+		inds = which(coltypes==dattype)
+		tab = data(gown)$exon[,inds]
+	}
+	if(feature=="junction" | feature=="intron"){
+		introntypes = c("rcount", "ucount", "mrcount")
+		if(!(dattype %in% introntypes)) stop(paste0("introns/junctions only have the following measurements: ", paste(introntypes, collapse=", ")))
+		coltypes = as.character(sapply(names(data(gown)$intron), gettype))
+		inds = which(coltypes==dattype)
+		tab = data(gown)$intron[,inds]
+	}
+	if(!(feature %in% c("transcript","exon","junction","intron"))) stop(paste0("unknown feature: ",feature,". Please choose one of transcript, exon, intron, or junction.  (\"intron\" and \"junction\" are the same test)."))
+	
+	# now do stuff!
+	
+}
