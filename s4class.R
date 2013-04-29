@@ -157,7 +157,7 @@ setMethod("show", "ballgown",
 setGeneric("indexes<-", function(x, value) standardGeneric("indexes<-"))
 setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; x})
 ###### AFTER DEFINING A VALIDITY METHOD:
-setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; validObject(x); x})
+#setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; validObject(x); x})
 
 
 # define coercion methods (still need to do)
@@ -405,26 +405,26 @@ plotMeans = function(gene, gown, groupvar, groupname, dattype = "cov", legend = 
 
 
 
-
-setwd("~/Google Drive/hopkins/research/_cufflinks visualization project")
-load("small_gown.rda")
-tinygown = new("ballgown", data=gown$data, indexes=gown$indexes, structure=gown$structure, dirs=gown$dirs, mergedDate=gown$mergedDate)
+### code for testing (run locally on my machine)
+#setwd("~/Google Drive/hopkins/research/_cufflinks visualization project")
+#load("small_gown.rda")
+#tinygown = new("ballgown", data=gown$data, indexes=gown$indexes, structure=gown$structure, dirs=gown$dirs, mergedDate=gown$mergedDate)
 # some fixeruppers (all changed in the new read function)
-indexes(tinygown)$t2g$g_id[indexes(tinygown)$t2g$t_id %in% data(tinygown)$trans$t_id] <- data(tinygown)$trans$gene_id
-indexes(tinygown)$pData <- read.table("~/Desktop/phenotypes_all.txt", stringsAsFactors=FALSE, sep="\t", header=TRUE)
-indexes(tinygown)$pData$dirname[18] <- NA
-theorder = sapply(names(dirs(tinygown)), function(x) which(indexes(tinygown)$pData$dirname==x))
-indexes(tinygown)$pData = indexes(tinygown)$pData[theorder,]
+#indexes(tinygown)$t2g$g_id[indexes(tinygown)$t2g$t_id %in% data(tinygown)$trans$t_id] <- data(tinygown)$trans$gene_id
+#indexes(tinygown)$pData <- read.table("~/Desktop/phenotypes_all.txt", stringsAsFactors=FALSE, sep="\t", header=TRUE)
+#indexes(tinygown)$pData$dirname[18] <- NA
+#theorder = sapply(names(dirs(tinygown)), function(x) which(indexes(tinygown)$pData$dirname==x))
+#indexes(tinygown)$pData = indexes(tinygown)$pData[theorder,]
 
-plotTranscripts("XLOC_000002", "rcount.orbFrontalF2", tinygown, colorby="exon")
-plotTranscripts("XLOC_000002", "FPKM.orbFrontalF2", tinygown, colorby="transcript")
-plotTranscripts("XLOC_000011", "rcount.orbFrontalF2", tinygown, colorby="exon")
-plotTranscripts("XLOC_000011", "cov.orbFrontalF2", tinygown, colorby="transcript")
+#plotTranscripts("XLOC_000002", "rcount.orbFrontalF2", tinygown, colorby="exon")
+#plotTranscripts("XLOC_000002", "FPKM.orbFrontalF2", tinygown, colorby="transcript")
+#plotTranscripts("XLOC_000011", "rcount.orbFrontalF2", tinygown, colorby="exon")
+#plotTranscripts("XLOC_000011", "cov.orbFrontalF2", tinygown, colorby="transcript")
 
-plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "bipolar", dattype = "cov", legend = TRUE, colorby = "exon")
-plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "control", dattype = "cov", legend = TRUE, colorby = "transcript")
-plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "schizophrenia", dattype = "cov", legend = TRUE, colorby = "transcript")
-plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "depression", dattype = "cov", legend = TRUE, colorby = "transcript")
+#plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "bipolar", dattype = "cov", legend = TRUE, colorby = "exon")
+#plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "control", dattype = "cov", legend = TRUE, colorby = "transcript")
+#plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "schizophrenia", dattype = "cov", legend = TRUE, colorby = "transcript")
+#plotMeans("XLOC_000002", tinygown, groupvar = "outcome", groupname = "depression", dattype = "cov", legend = TRUE, colorby = "transcript")
 
 
 ######## MERGING TRANSCRIPTS #########
@@ -458,10 +458,11 @@ transcriptOverlaps = function(gene, gown){
 }  #number in row i, column j answers the question "what percentage of transcript i is overlapped by transcript j?"
 
 
-system.time(transcriptOverlaps("XLOC_000002", tinygown)) #8 seconds elapsed time
-system.time(transcriptOverlaps("XLOC_000011", tinygown)) #15 seconds elapsed time
-transcriptOverlaps("XLOC_000011", tinygown)
-plotMeans("XLOC_000011", tinygown, "outcome", "control", colorby="exon")
+# testing (to be run locally)
+#system.time(transcriptOverlaps("XLOC_000002", tinygown)) #8 seconds elapsed time
+#system.time(transcriptOverlaps("XLOC_000011", tinygown)) #15 seconds elapsed time
+#transcriptOverlaps("XLOC_000011", tinygown)
+#plotMeans("XLOC_000011", tinygown, "outcome", "control", colorby="exon")
 
 
 #(2) decide which transcripts to combine into one.  (I vote for the "reduce" function but what do I know?)
