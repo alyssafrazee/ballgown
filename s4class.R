@@ -7,7 +7,7 @@ setClass("ballgown",
 	  data = "list",			# coverage data
 	  indexes = "list",			# reference information
 	  structure = "list",		# assembly information
-	  dirs = "character",		# directories where data is stored
+	  dirs = "character",		# directories where ballgown data is stored
 	  mergedDate = "character"	# date the object was created
 	)
 )
@@ -164,9 +164,10 @@ setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; 
 
 
 # here is a subset method - can subset by anything in the transcript table.
-setMethod("subset", "ballgown", function(x, cond){
-	ctext = deparse(substitute(cond))
-	trans = subset(data(x)$trans, eval(parse(text=ctext)))
+setMethod("subset", "ballgown", function(x, cond, global=TRUE){
+
+	ctext = ifelse(global, deparse(substitute(cond)), cond) # this means that inside another function, you can make a string argument to give to subset.
+	trans = subset(data(x)$trans, eval(parse(text=ctext)))	
 	
 	thetx = trans$t_id
 	
@@ -406,17 +407,17 @@ plotMeans = function(gene, gown, groupvar, groupname, dattype = "cov", legend = 
 
 
 ### code for testing (run locally on my machine)
-#setwd("~/Google Drive/hopkins/research/_cufflinks visualization project")
-#load("small_gown.rda")
-#tinygown = new("ballgown", data=gown$data, indexes=gown$indexes, structure=gown$structure, dirs=gown$dirs, mergedDate=gown$mergedDate)
-# some fixeruppers (all changed in the new read function)
-#indexes(tinygown)$t2g$g_id[indexes(tinygown)$t2g$t_id %in% data(tinygown)$trans$t_id] <- data(tinygown)$trans$gene_id
-#indexes(tinygown)$pData <- read.table("~/Desktop/phenotypes_all.txt", stringsAsFactors=FALSE, sep="\t", header=TRUE)
-#indexes(tinygown)$pData$dirname[18] <- NA
-#theorder = sapply(names(dirs(tinygown)), function(x) which(indexes(tinygown)$pData$dirname==x))
-#indexes(tinygown)$pData = indexes(tinygown)$pData[theorder,]
+# setwd("~/Google Drive/hopkins/research/_cufflinks visualization project")
+# load("small_gown.rda")
+# tinygown = new("ballgown", data=gown$data, indexes=gown$indexes, structure=gown$structure, dirs=gown$dirs, mergedDate=gown$mergedDate)
+# ###some fixeruppers (all changed in the new read function)
+# indexes(tinygown)$t2g$g_id[indexes(tinygown)$t2g$t_id %in% data(tinygown)$trans$t_id] <- data(tinygown)$trans$gene_id
+# indexes(tinygown)$pData <- read.table("~/Desktop/phenotypes_all.txt", stringsAsFactors=FALSE, sep="\t", header=TRUE)
+# indexes(tinygown)$pData$dirname[18] <- NA
+# theorder = sapply(names(dirs(tinygown)), function(x) which(indexes(tinygown)$pData$dirname==x))
+# indexes(tinygown)$pData = indexes(tinygown)$pData[theorder,]
 
-#plotTranscripts("XLOC_000002", "rcount.orbFrontalF2", tinygown, colorby="exon")
+#plotTranscripts("XLOC_000002", "cov.orbFrontalF2", tinygown, colorby="exon")
 #plotTranscripts("XLOC_000002", "FPKM.orbFrontalF2", tinygown, colorby="transcript")
 #plotTranscripts("XLOC_000011", "rcount.orbFrontalF2", tinygown, colorby="exon")
 #plotTranscripts("XLOC_000011", "cov.orbFrontalF2", tinygown, colorby="transcript")
@@ -435,18 +436,31 @@ bpset = function(tra){
 	unique(unlist(sapply(1:length(ranges(tra)), function(i) c(start(tra[i,]):end(tra[i,])))))
 }
 
-transcriptOverlaps = function(gene, gown){
+transcriptOverlaps = function(gene, gown, userefseq = TRUE, gtf = NULL, genome = "hg19", position = "txStart"){
+	
+	require(GenomicRanges)
 	
 	txnames = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id == gene]
 	strucnames = as.numeric(substr(names(structure(gown)$trans),3,nchar(names(structure(gown)$trans))))
 	inds = which(strucnames %in% txnames)
 	tx = structure(gown)$trans[inds]
 	
-	overlapMat = matrix(NA, nrow=length(inds), ncol=length(inds))
+	if(userefseq){
+		reftx = getRefSeq(gene, gown, gtf, genome, position)$gtf
+		txchrs = seqlevels(tx)
+		refseqchrs = seqlevels(reftx)
+		if( any(!(refseqchrs %in% txchrs)) ){
+			# I will assume for now that this means our transcripts are labeled "1", "2", ... and RefSeq is labeled "chr1", "chr2", etc. this can be fixed later.
+			seqlevels(tx) = as.character(sapply(seqlevels(tx), function(x) paste0("chr",x)))
+		}
+		tx = append(tx, reftx)
+	}
+	
+	overlapMat = matrix(NA, nrow=length(tx), ncol=length(tx))
 	rownames(overlapMat) = colnames(overlapMat) = names(tx)
 	diag(overlapMat) = 1
-	for(ii in 1:length(inds)){
-		for(jj in 1:length(inds)){
+	for(ii in 1:length(tx)){
+		for(jj in 1:length(tx)){
 			if(ii==jj) next
 			bpsi = bpset(tx[[ii]])
 			bpsj = bpset(tx[[jj]])
@@ -457,6 +471,169 @@ transcriptOverlaps = function(gene, gown){
 	return(overlapMat)
 }  #number in row i, column j answers the question "what percentage of transcript i is overlapped by transcript j?"
 
+### we could use this method later, but no need right now since it's slower.
+# transcriptIntersections = function(gene, gown){
+	# txnames = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id == gene]
+	# strucnames = as.numeric(substr(names(structure(gown)$trans),3,nchar(names(structure(gown)$trans))))
+	# inds = which(strucnames %in% txnames)
+	# tx = structure(gown)$trans[inds]
+	
+	# overlapMat = matrix(NA, nrow=length(inds), ncol=length(inds))
+	# rownames(overlapMat) = colnames(overlapMat) = names(tx)
+	# diag(overlapMat) = 1
+	
+	# for(i in 1:length(inds)){
+		# for(j in 1:length(inds)){
+			# if(i==j) next
+			# theintersection = intersect(tx[[i]], tx[[j]])
+			# overlapMat[i,j] = sum(width(ranges(theintersection)))/sum(width(ranges(tx[[i]])))
+		# }
+	# }
+
+	# return(overlapMat)
+
+# } #it seems that trancsriptOverlaps is faster than this...8.4 sec compared to 14 sec.  Will investigate later.
+
+# attempt k-means clustering...
+dmat = 100*(1-transcriptOverlaps("XLOC_000002", tinygown))
+# library(gdata)
+# dmat.sym = dmat
+# upperTriangle(dmat.sym) = upperTriangle(t(dmat))
+km = kmeans(dmat, centers=3)
+# km.sym = kmeans(dmat.sym, centers=3)
+# so it appears an asymmetrical matrix is OK...
+# pctvar = NULL
+# for(i in 1:(nrow(dmat)-1)){
+	# km = kmeans(dmat, centers=i)
+	# pctvar[i] = km$betweenss/km$totss
+# }
+# pctvar
+# plot(1:(nrow(dmat)-1), pctvar, type="o", col="blue", ylim=c(0.7,1))
+# abline(h=0.9, col="gray70", lty=2)
+
+
+
+
+km = kmeans(dmat, centers=3)
+
+# function for clustering transcripts & plotting the clusters:
+plotLatentTranscripts = function(gene, gown, km = NULL, k = NULL, userefseq = TRUE, gtf = NULL, genome="hg19", position="txStart", returnkm = TRUE, ...){
+	
+	### ... are extra arguments for getRefSeq
+	
+	# work with reasonably small gown object
+	cond = paste0("gene_id == \"", gene, "\"")
+	gown = subset(gown, cond, global=FALSE)
+
+	require(RColorBrewer)
+	
+	# plot setup:
+	ma = IRanges::as.data.frame(structure(gown)$trans)
+	thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
+	thetranscripts = paste0("tx", thetranscripts)
+	gtrans = subset(ma, element %in% thetranscripts)
+#	gtrans$tid = as.numeric(sapply(gtrans$element, function(x) as.numeric(substr(x,3,nchar(x))))) #why?
+	
+	if(userefseq){
+		refinfo = getRefSeq(gene, gown, gtf, genome = genome, position = position)
+#		refinfo$gtf$tid = refinfo$gtf$element  #???
+		gtrans = rbind(gtrans, IRanges::as.data.frame(refinfo$gtf))
+	}
+	
+	xax = seq(min(gtrans$start), max(gtrans$end), by=1)
+    
+	# these might mess w/ refseq stuff.
+    # if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
+    # if(length(unique(gtrans$strand)) > 1) stop("Your gene appears to contain exons from both strands, which is potentially interesting but also kind of confusing, so please choose another gene until we figure this sucker out.")
+    
+
+	if(is.null(km)){
+		dmat = 100*(1-transcriptOverlaps(gene, gown, userefseq = userefseq, gtf))
+		# option 1: do k-means clustering with automatic choice of k
+		if(is.null(k)){
+			for(i in 1:(nrow(dmat)-1)){
+				km = kmeans(dmat, centers=i)
+				pctvar = km$betweenss/km$totss
+				if(pctvar>=0.9) break
+			}
+			if(i==(nrow(dmat)-1)){
+				# this means nothing explained 90% of the variation
+				plotTranscripts(gene, samp = indexes(gown)$pData$dirname[1], gown, legend = TRUE, colorby="transcript")
+				warning("best choice of k is approximately the # of assembled transcripts. we recommend either not clustering these at all, or using the # of RefSeq transcripts for k")
+			}
+		}
+		# option 2: do k-means clustering with fixed k
+		if(!is.null(k)){
+			km = kmeans(dmat, centers = k)
+		}
+	}
+	
+	# PLOT:
+	plot(xax, rep(0,length(xax)), ylim=c(0,nrow(dmat)+1), type="n", xlab="genomic position", yaxt = "n", ylab="")
+
+   	par(mar=c(5,2,4,2))
+	
+	
+	cols = brewer.pal(length(unique(km$cluster)), "Dark2")
+	for(tx in names(sort(km$cluster))){
+		txind = which(names(sort(km$cluster))==tx)
+		gtsub = gtrans[gtrans$element==tx,]
+		gtsub = gtsub[order(gtsub$start),]
+		for(exind in 1:dim(gtsub)[1]){
+			mycolor = ifelse(substr(tx,1,2)=="tx", cols[sort(km$cluster)[txind]], "gray70")
+			bcolor = ifelse(substr(tx,1,2)=="tx", "black", cols[sort(km$cluster)[txind]])
+			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4, txind+0.4, txind+0.4, txind-0.4), col=mycolor, border=bcolor)
+			if(exind != dim(gtsub)[1]){
+				lines(c(gtsub$end[exind], gtsub$start[exind+1]), c(txind, txind), lty=2, col="gray60")
+			}
+		}
+	}
+	
+	k = length(km$size)
+	title(paste0(gene,": transcripts clustered with k-means, k=",k))
+	if(returnkm){
+		return(km)
+	}
+}
+
+plotLatentTranscripts("XLOC_000002", tinygown, gtf = refseq.ex)
+plotLatentTranscripts("XLOC_000011", tinygown, userefseq = FALSE)
+plotLatentTranscripts("XLOC_000011", tinygown, gtf = refseq.ex)
+
+plotTranscripts("XLOC_000011", "cov.orbFrontalF2", tinygown, colorby = "exon")
+
+
+# downloaded from UCSC on 1 May 2013
+refseq = gffRead("~/Google Drive/hopkins/research/_annotations/hg19_refseq.gtf")
+refseq$txid = getAttributeField(refseq$attributes, "transcript_id", attrsep="; ")
+refseq$geneid = getAttributeField(refseq$attributes, "gene_id", attrsep="; ")
+refseq$txid = sapply(refseq$txid, function(x) substr(x, 2, nchar(x)-1))
+refseq$geneid = sapply(refseq$geneid, function(x) substr(x, 2, nchar(x)-1))
+refseq = refseq[,-c(2,6,7,9)]
+refseq.ex = subset(refseq, feature=="exon")
+isdup = grepl("dup",refseq.ex$txid) # to remove duplicate transcripts...
+
+
+
+# functions for finding/counting the RefSeq transcripts for a given gene/locus:
+getRefSeq = function(gene, gown, gtf, genome = "hg19", position="txStart"){
+	cond = paste0("gene_id ==\"", gene,"\"")
+	gown = subset(gown, cond, global = FALSE)
+	chrom = unique(data(gown)$trans$chr)
+	midp = (min(start(ranges(structure(gown)$exon))) + max(end(ranges(structure(gown)$exon))))/2
+	if(substr(chrom,1,1)!="c") chrom = paste0("chr",chrom) ### THIS MAY NEED SOME EDITING
+	require(ACME)
+	gname = as.character(findClosestGene(chrom, pos = midp, genome = genome, position = position )$name)
+	gtf.tmp = subset(gtf, (geneid %in% gname) & seqname==chrom )
+	isdup = grepl("dup", gtf.tmp$txid)
+	gtf.df = gtf.tmp[!isdup,]
+	txlist = split(gtf.df, gtf.df$txid)
+	require(GenomicRanges)
+	txlist = lapply(txlist, function(x) GRanges(seqnames = Rle(x$seqname), ranges=IRanges(start=x$start, end=x$end), strand = x$strand, id = rep(0,length(x$strand)) , transcripts=rep("NA", length(x$strand)) ) )
+	ret = list(gene=gname, gtf = GRangesList(txlist))
+	return(ret)
+	}
+
 
 # testing (to be run locally)
 #system.time(transcriptOverlaps("XLOC_000002", tinygown)) #8 seconds elapsed time
@@ -465,17 +642,43 @@ transcriptOverlaps = function(gene, gown){
 #plotMeans("XLOC_000011", tinygown, "outcome", "control", colorby="exon")
 
 
-#(2) decide which transcripts to combine into one.  (I vote for the "reduce" function but what do I know?)
+
+
+kk = plotLatentTranscripts("XLOC_000011", tinygown, gtf = refseq.ex) 
+
 
 
 
 ########### DIFFERENTIAL EXPRESSION TESTS ###########
 # here is a way we can do differential expression (the test formerly known as "cufffix")
-difftest = function(gown, feature = "transcript", method = "DESeq", dattype = "cov", ...){
+
+difftest = function(gown, feature = "transcript", method = "DESeq", dattype = "cov", collapse = TRUE, ...){
 	if(feature=="transcript"){
 		if(dattype!="cov" & dattype!="FPKM") stop("transcripts only have cov and FPKM measurements")
 		coltypes = as.character(sapply(names(data(gown)$trans), gettype))
 		inds = which(coltypes==dattype)
+		
+		if(collapse){
+			# merge the transcripts using k-means, reduce, and sum function
+			# this will be super slow at first, since we have to do merging for all the genes...this overlap stuff needs to be way faster.
+			for(g in unique(data(gown)$trans$gene_id)){
+				dmat = 100*(1-transcriptOverlaps(gene, gown, userefseq = userefseq, gtf))
+				## choose k:
+				for(i in 1:(nrow(dmat)-1)){
+					km = kmeans(dmat, centers=i)
+					pctvar = km$betweenss/km$totss
+					if(pctvar>=0.9) break
+				}
+				if(i==(nrow(dmat)-1)){
+					km = kmeans(dmat, centers = nrow(dmat)-1)
+					warning(paste0("gene ", g,": number of clusters is approx. number of transcripts")
+				}
+				
+				
+
+		}
+		
+		
 		tab = data(gown)$trans[,inds]
 	}
 	if(feature=="exon"){
@@ -494,6 +697,6 @@ difftest = function(gown, feature = "transcript", method = "DESeq", dattype = "c
 	}
 	if(!(feature %in% c("transcript","exon","junction","intron"))) stop(paste0("unknown feature: ",feature,". Please choose one of transcript, exon, intron, or junction.  (\"intron\" and \"junction\" are the same test)."))
 	
-	# now do stuff!
+	
 	
 }
