@@ -27,18 +27,20 @@ getsamp = function(x) last(strsplit(x, split="\\.")[[1]])
 ### MAIN FUNCTION
 plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcript"){
 	
+	if(class(gown)!="ballgown") stop("gown must be a ballgown object")
+	
 	suppressMessages(library(GenomicRanges))
 	
 	# if "samp" is the character name of the column:
 	if(is.character(samp)){
 		if(colorby == "transcript"){
-			col = which(names(gown$data$trans)==samp)
+			col = which(names(data(gown)$trans)==samp)
 			if(gettype(samp)!="cov" & gettype(samp)!="FPKM") stop("transcripts only have cov and FPKM measurements")
 		}
 		if(colorby == "exon"){
 			exontypes = unique(as.character(sapply(names(gown$data$exon)[-c(1:5)], gettype)))
 			if(!(gettype(samp) %in% exontypes)) stop(paste0("exons only have the following measurements: ", paste(exontypes, collapse=", ")))
-			col = which(names(gown$data$exon)==samp)
+			col = which(names(data(gown)$exon)==samp)
 		}
 		sampname = samp
 	}
@@ -46,19 +48,19 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
 	if(is.numeric(samp)){
 		col = samp
 		if(colorby == "transcript"){
-			sampname = names(gown$data$trans)[samp]	
+			sampname = names(data(gown)$trans)[samp]	
 			if(gettype(sampname)!="cov" & gettype(sampname)!="FPKM") stop("transcripts only have cov and FPKM measurements")
 
 		}
 		if(colorby == "exon"){
-			sampname = names(gown$data$exon)[samp]
+			sampname = names(data(gown)$exon)[samp]
 			if(!(gettype(sampname) %in% exontypes)) stop(paste0("exons only have the following measurements: ", paste(exontypes, collapse=", ")))
 
 		}
 	}
 	
-	ma = IRanges::as.data.frame(gown$structure$trans)
-	thetranscripts = gown$indexes$t2g$t_id[gown$indexes$t2g$g_id==gene]
+	ma = IRanges::as.data.frame(structure(gown)$trans)
+	thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
 	thetranscripts = paste0("tx", thetranscripts)
 	gtrans = subset(ma, element %in% thetranscripts)
 	gtrans$tid = as.numeric(sapply(gtrans$element, function(x) as.numeric(substr(x,3,nchar(x)))))
@@ -77,30 +79,30 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
     # set color scale:
 	sampcoltype = gettype(samp)
     if(colorby == "transcript"){
-    	smalldat = subset(gown$data$trans, gene_id==gene)
-		coltype = as.character(sapply(names(gown$data$trans), gettype))
+    	smalldat = subset(data(gown)$trans, gene_id==gene)
+		coltype = as.character(sapply(names(data(gown)$trans), gettype))
     }
     if(colorby == "exon"){
-	   	smalldat = subset(gown$data$exon, e_id %in% gtrans$id)
-    	coltype = as.character(sapply(names(gown$data$exon), gettype))
+	   	smalldat = subset(data(gown)$exon, e_id %in% gtrans$id)
+    	coltype = as.character(sapply(names(data(gown)$exon), gettype))
     }
     maxcol = quantile(as.matrix(smalldat[,coltype==sampcoltype]), 0.99)
     colscale = seq(0,maxcol,length.out=200)
     
     
     # draw the transcripts
-    introntypes = unique(as.character(sapply(names(gown$data$intron)[-c(1:5)], gettype)))
+    introntypes = unique(as.character(sapply(names(data(gown)$intron)[-c(1:5)], gettype)))
     color.introns = ifelse(gettype(samp) %in% introntypes, TRUE, FALSE)
     for(tx in unique(gtrans$tid)){
     	if(colorby == "transcript"){
-    		mycolor = closestColor(gown$data$trans[,col][which(gown$data$trans$t_id==tx)], colscale)
+    		mycolor = closestColor(data(gown)$trans[,col][which(data(gown)$trans$t_id==tx)], colscale)
     	}
     	txind = which(unique(gtrans$tid)==tx)
     	gtsub = gtrans[gtrans$tid==tx,]
     	gtsub = gtsub[order(gtsub$start),]
     	for(exind in 1:dim(gtsub)[1]){
     		if(colorby == "exon"){
-    			mycolor = closestColor(gown$data$exon[,col][which(gown$data$exon$e_id==gtsub$id[exind])], colscale)
+    			mycolor = closestColor(data(gown)$exon[,col][which(data(gown)$exon$e_id==gtsub$id[exind])], colscale)
     		}
 			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), col=mycolor)
 			if(exind!=dim(gtsub)[1]){
