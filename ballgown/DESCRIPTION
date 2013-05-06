@@ -26,4 +26,3 @@ Collate:
     'plotMeans.R'
     'plotTranscripts.R'
     'transcriptOverlaps.R'
-    'difftest.R'
