@@ -1,0 +1,1 @@
+getsamp = function(x) last(strsplit(x, split="\\.")[[1]])
