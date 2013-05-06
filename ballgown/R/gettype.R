@@ -1,1 +1,0 @@
-gettype = function(x) strsplit(x, split="\\.")[[1]][1]
