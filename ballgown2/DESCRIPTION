@@ -1,0 +1,23 @@
+Package: ballgown2
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Author: alyssafrazee
+Version: 1.0
+License: GPL-3
+Title: 
+Description: 
+Suggests:
+    testthat,
+    roxygen2
+Collate:
+    'ballgown2-package.r'
+    'ballgown-class.R'
+    'bpset.R'
+    'closestColor.R'
+    'getRefSeq.R'
+    'getsamp.R'
+    'gettype.R'
+    'last.R'
+    'plotLatentTranscripts.R'
+    'plotMeans.R'
+    'plotTranscripts.R'
+    'transcriptOverlaps.R'
