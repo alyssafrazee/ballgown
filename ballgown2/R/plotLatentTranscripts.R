@@ -22,11 +22,11 @@ plotLatentTranscripts = function(gene, gown, km = NULL, k = NULL, userefseq = TR
 	}
 	
 	xax = seq(min(gtrans$start), max(gtrans$end), by=1)
-    
+	
 	# these might mess w/ refseq stuff.
-    # if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
-    # if(length(unique(gtrans$strand)) > 1) stop("Your gene appears to contain exons from both strands, which is potentially interesting but also kind of confusing, so please choose another gene until we figure this sucker out.")
-    
+	# if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
+	# if(length(unique(gtrans$strand)) > 1) stop("Your gene appears to contain exons from both strands, which is potentially interesting but also kind of confusing, so please choose another gene until we figure this sucker out.")
+
 
 	if(is.null(km)){
 		dmat = 100*(1-transcriptOverlaps(gene, gown, userefseq = userefseq, gtf))
@@ -52,7 +52,7 @@ plotLatentTranscripts = function(gene, gown, km = NULL, k = NULL, userefseq = TR
 	# PLOT:
 	plot(xax, rep(0,length(xax)), ylim=c(0,nrow(dmat)+1), type="n", xlab="genomic position", yaxt = "n", ylab="")
 
-   	par(mar=c(5,2,4,2))
+	par(mar=c(5,2,4,2))
 	
 	
 	cols = brewer.pal(length(unique(km$cluster)), "Dark2")
