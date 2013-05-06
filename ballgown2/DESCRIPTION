@@ -5,9 +5,13 @@ Version: 1.0
 License: GPL-3
 Title: 
 Description: 
-Suggests:
-    testthat,
-    roxygen2
+Depends:
+    methods,
+    GenomicRanges,
+    plyr,
+    RColorBrewer,
+    ACME,
+    DESeq
 Collate:
     'ballgown2-package.r'
     'ballgown-class.R'
