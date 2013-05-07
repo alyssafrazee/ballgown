@@ -25,3 +25,5 @@ Collate:
     'plotMeans.R'
     'plotTranscripts.R'
     'transcriptOverlaps.R'
+    'getAttributeField.R'
+    'gffRead.R'
