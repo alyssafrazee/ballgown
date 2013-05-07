@@ -166,6 +166,7 @@ setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; 
 
 
 # here is a subset method - can subset by anything in the transcript table.
+setGeneric("subset", function(x) standardGeneric("subset"))
 setMethod("subset", "ballgown", function(x, cond, global=TRUE){
 
 	ctext = ifelse(global, deparse(substitute(cond)), cond) # this means that inside another function, you can make a string argument to give to subset.
