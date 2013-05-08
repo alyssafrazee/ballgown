@@ -39,7 +39,7 @@ plotLatentTranscripts = function(gene, gown, km = NULL, k = NULL, userefseq = TR
 			}
 			if(i==(nrow(dmat)-1)){
 				# this means nothing explained 90% of the variation
-				plotTranscripts(gene, samp = as.character(indexes(gown)$pData$dirname[1]), gown, legend = TRUE, colorby="transcript")
+				plotTranscripts(gene, samp = paste0("cov.",as.character(indexes(gown)$pData$dirname[1])), gown, legend = TRUE, colorby="transcript")
 				warning("best choice of k is approximately the # of assembled transcripts. we recommend either not clustering these at all, or using the # of RefSeq transcripts for k")
 			}
 		}
