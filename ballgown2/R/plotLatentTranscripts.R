@@ -41,6 +41,7 @@ plotLatentTranscripts = function(gene, gown, km = NULL, k = NULL, userefseq = TR
 				# this means nothing explained 90% of the variation
 				plotTranscripts(gene, samp = paste0("cov.",as.character(indexes(gown)$pData$dirname[1])), gown, legend = TRUE, colorby="transcript")
 				warning("best choice of k is approximately the # of assembled transcripts. we recommend either not clustering these at all, or using the # of RefSeq transcripts for k")
+				return(NULL)
 			}
 		}
 		# option 2: do k-means clustering with fixed k
