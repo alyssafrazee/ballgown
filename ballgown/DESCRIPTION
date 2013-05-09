@@ -1,6 +1,6 @@
-Package: ballgown2
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Author: alyssafrazee
+Package: ballgown
+Maintainer: Alyssa Frazee <acfrazee@gmail.com>
+Author: Alyssa Frazee, Jeff Leek, Leonardo Collado Torres, et al.
 Version: 1.0
 License: GPL-3
 Title: 
