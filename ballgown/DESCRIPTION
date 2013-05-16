@@ -27,3 +27,4 @@ Collate:
     'transcriptOverlaps.R'
     'getAttributeField.R'
     'gffRead.R'
+    'clusterTranscripts.R'
