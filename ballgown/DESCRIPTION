@@ -14,7 +14,6 @@ Depends:
     DESeq
 Collate:
     'ballgown-package.r'
-    'ballgown2-package.r'
     'ballgown-class.R'
     'bpset.R'
     'closestColor.R'
