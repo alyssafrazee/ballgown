@@ -14,7 +14,7 @@ clusterTranscripts = function(gene, gown, k=NULL, method=c("kmeans", "hclust")){
   maxbp = max(endpos)
   
   compactrles = lapply(covs, function(x) Rle(values = runValue(x)[-1], lengths = runLength(x)[-1]))
-  expanded = lapply(compactrles, as.vector)
+  expanded = lapply(compactrles, IRanges::as.vector)
   tnames = names(expanded)
   expanded = lapply(1:length(expanded), function(i){
     out = expanded[[i]]
