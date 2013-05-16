@@ -1,5 +1,5 @@
-#' ballgown2
+#' ballgown
 #'
-#' @name ballgown2
+#' @name ballgown
 #' @docType package
 NULL
