@@ -1,7 +1,21 @@
-plotLatentTranscripts = function(gene, gown, km = NULL, k = NULL, userefseq = TRUE, gtf = NULL, genome="hg19", position="txStart", returnkm = TRUE, ...){
-	
-	### ... are extra arguments for getRefSeq
-	
+plotLatentTranscripts = function(gene, gown, k = NULL, choosek = c("var90", "thumb"), returncluster = TRUE, method=c("hclust", "kmeans")){
+	  
+  if(length(choosek)==2){
+    choosek = "preset"
+  }
+  
+  if(choosek=="var90" & method!="kmeans"){
+    stop("need to use method=\"kmeans\" when choosek is \"var90\"")
+  }
+  
+  if(is.null(k) & choosek=="preset"){
+    stop("must specify either k or a method of choosing k (var90 or thumb)")
+  }
+  
+  if(length(method)==2){
+    stop("please specify a method (hclust or kmeans)")
+  }
+  
 	# work with reasonably small gown object
 	cond = paste0("gene_id == \"", gene, "\"")
 	gown = subset(gown, cond, global=FALSE)
@@ -14,66 +28,61 @@ plotLatentTranscripts = function(gene, gown, km = NULL, k = NULL, userefseq = TR
 	thetranscripts = paste0("tx", thetranscripts)
 	gtrans = subset(ma, element %in% thetranscripts)
 #	gtrans$tid = as.numeric(sapply(gtrans$element, function(x) as.numeric(substr(x,3,nchar(x))))) #why?
-	
-	if(userefseq){
-		refinfo = getRefSeq(gene, gown, gtf, genome = genome, position = position)
-#		refinfo$gtf$tid = refinfo$gtf$element  #???
-		gtrans = rbind(gtrans, IRanges::as.data.frame(refinfo$gtf))
-	}
-	
+		
 	xax = seq(min(gtrans$start), max(gtrans$end), by=1)
 	
-	# these might mess w/ refseq stuff.
-	# if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
-	# if(length(unique(gtrans$strand)) > 1) stop("Your gene appears to contain exons from both strands, which is potentially interesting but also kind of confusing, so please choose another gene until we figure this sucker out.")
+	if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
+	if(length(unique(gtrans$strand)) > 1) stop("Your gene appears to contain exons from both strands, which is potentially interesting but also kind of confusing, so please choose another gene until we figure this sucker out.")
+  
+  if(!is.null(k)){
+    cl = clusterTranscripts(gene=gene, gown=gown, method=method, k=k)
+  }
+  
+  if(choosek=="thumb"){
+    k = ceiling(sqrt(length(thetranscripts)/2))
+    cl = clusterTranscripts(gene, gown=gown, method=method, k=k)
+  }
 
-
-	if(is.null(km)){
-		dmat = 100*(1-transcriptOverlaps(gene, gown, userefseq = userefseq, gtf))
-		# option 1: do k-means clustering with automatic choice of k
-		if(is.null(k)){
-			for(i in 1:(nrow(dmat)-1)){
-				km = kmeans(dmat, centers=i)
-				pctvar = km$betweenss/km$totss
-				if(pctvar>=0.9) break
-			}
-			if(i==(nrow(dmat)-1)){
-				# this means nothing explained 90% of the variation
-				plotTranscripts(gene, samp = paste0("cov.",as.character(indexes(gown)$pData$dirname[1])), gown, legend = TRUE, colorby="transcript")
-				warning("best choice of k is approximately the # of assembled transcripts. we recommend either not clustering these at all, or using the # of RefSeq transcripts for k")
-				return(NULL)
-			}
-		}
-		# option 2: do k-means clustering with fixed k
-		if(!is.null(k)){
-			km = kmeans(dmat, centers = k)
-		}
-	}
+  if(choosek == "var90"){
+    for(i in 1:(length(thetranscripts)-1)){
+      cl = clusterTranscripts(gene=gene, gown=gown, method="kmeans", k=i)
+      if(cl$pctvar>=0.9) break
+    }
+    if(i==length(thetranscripts)-1){
+      # nothing explained 90% of variation:
+      plotTranscripts(gene=gene, gown=gown, samp=NULL, colorby="none")
+      warning("k = n-1 did not explain 90% of variation. we recommend not clustering this gene or pre-specifying a reasonable k for this gene.")
+      return(NULL) #this function is now done.
+    }
+  }
+  
 	
 	# PLOT:
-	plot(xax, rep(0,length(xax)), ylim=c(0,nrow(dmat)+1), type="n", xlab="genomic position", yaxt = "n", ylab="")
+  par(mar=c(5,2,4,2))
+  plot(xax, rep(0,length(xax)), ylim=c(0,length(thetranscripts)+1), type="n", xlab="genomic position", yaxt = "n", ylab="")
+  
+	cols = suppressWarnings(brewer.pal(length(unique(cl$clusters$cluster)), "Dark2"))
+  # suppress warnings because we want to be able to have a 2-color graph w/o a warning
 
-	par(mar=c(5,2,4,2))
-	
-	
-	cols = brewer.pal(length(unique(km$cluster)), "Dark2")
-	for(tx in names(sort(km$cluster))){
-		txind = which(names(sort(km$cluster))==tx)
+  tx.new = cl$clusters$tname
+  cid = cl$clusters$cluster
+  
+	for(tx in tx.new){
+		txind = which(tx.new==tx)
 		gtsub = gtrans[gtrans$element==tx,]
 		gtsub = gtsub[order(gtsub$start),]
 		for(exind in 1:dim(gtsub)[1]){
-			mycolor = ifelse(substr(tx,1,2)=="tx", cols[sort(km$cluster)[txind]], "gray70")
-			bcolor = ifelse(substr(tx,1,2)=="tx", "black", cols[sort(km$cluster)[txind]])
-			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4, txind+0.4, txind+0.4, txind-0.4), col=mycolor, border=bcolor)
+			mycolor = cols[cid[txind]]
+			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4, txind+0.4, txind+0.4, txind-0.4), col=mycolor)
 			if(exind != dim(gtsub)[1]){
 				lines(c(gtsub$end[exind], gtsub$start[exind+1]), c(txind, txind), lty=2, col="gray60")
 			}
 		}
 	}
 	
-	k = length(km$size)
-	title(paste0(gene,": transcripts clustered with k-means, k=",k))
-	if(returnkm){
-		return(km)
+  numclust = length(unique(cl$clusters$cluster))
+	title(paste0(gene,": transcripts clustered with ",method,", k=",numclust))
+	if(returncluster){
+		return(cl)
 	}
 }
