@@ -1,9 +1,16 @@
-plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcript"){
+plotTranscripts = function(gene, samp = NULL, gown, legend = TRUE, colorby = "transcript"){
 	
 	if(class(gown)!="ballgown") stop("gown must be a ballgown object")
 	
 	suppressMessages(library(GenomicRanges))
 	
+  if(colorby!="none" & is.null(samp)) stop("to color by transcript or exon abundances, you must provide a specific sample. (use names(data(gown)$trans) or names(data(gown)$exon) to see sample names).")
+  
+  if(colorby=="none"){
+    legend = FALSE
+  }
+  
+  if(colorby!="none"){
 	# if "samp" is the character name of the column:
 	if(is.character(samp)){
 		if(colorby == "transcript"){
@@ -29,31 +36,38 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
 			sampname = names(data(gown)$exon)[samp]
 			if(!(gettype(sampname) %in% exontypes)) stop(paste0("exons only have the following measurements: ", paste(exontypes, collapse=", ")))
 
-		}
-	}
-	
+		} #end if colorby=="exon"
+	} #end is.numeric(samp)
+  } #end if colorby != "none"
+  
 	ma = IRanges::as.data.frame(structure(gown)$trans)
 	thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
 	thetranscripts = paste0("tx", thetranscripts)
 	gtrans = subset(ma, element %in% thetranscripts)
 	gtrans$tid = as.numeric(sapply(gtrans$element, function(x) as.numeric(substr(x,3,nchar(x)))))
 	xax = seq(min(gtrans$start), max(gtrans$end), by=1)
-    numtx = length(unique(thetranscripts))
-    par(mar=c(5,2,4,2))
-    ymax = ifelse(legend, numtx+1.5, numtx+1)
+  numtx = length(unique(thetranscripts))
+  par(mar=c(5,2,4,2))
+  ymax = ifelse(legend, numtx+1.5, numtx+1)
     
     if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
     if(length(unique(gtrans$strand)) > 1) stop("Your gene appears to contain exons from both strands, which is potentially interesting but also kind of confusing, so please choose another gene until we figure this sucker out.")
     
     # plot base:
-    plot(xax, rep(0,length(xax)), ylim=c(0,ymax), type="n", xlab="genomic position", main=paste0(gene,": ",sampname), yaxt = "n", ylab="", )
-    
-    
+    plot(xax, rep(0,length(xax)), ylim=c(0,ymax), type="n", xlab="genomic position", yaxt = "n", ylab="")
+    if(colorby!="none"){
+      title(paste0(gene,": ",sampname))
+    }
+    if(colorby=="none"){
+      title(gene)
+    }  
+  
     # set color scale:
-	sampcoltype = gettype(samp)
+	  if(colorby!="none"){
+    sampcoltype = gettype(samp)
     if(colorby == "transcript"){
     	smalldat = subset(data(gown)$trans, gene_id==gene)
-		coltype = as.character(sapply(names(data(gown)$trans), gettype))
+		  coltype = as.character(sapply(names(data(gown)$trans), gettype))
     }
     if(colorby == "exon"){
 	   	smalldat = subset(data(gown)$exon, e_id %in% gtrans$id)
@@ -61,15 +75,23 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
     }
     maxcol = quantile(as.matrix(smalldat[,coltype==sampcoltype]), 0.99)
     colscale = seq(0,maxcol,length.out=200)
-    
+	  }
     
     # draw the transcripts
-    introntypes = unique(as.character(sapply(names(data(gown)$intron)[-c(1:5)], gettype)))
-    color.introns = ifelse(gettype(samp) %in% introntypes, TRUE, FALSE)
+    if(colorby!="none"){
+      introntypes = unique(as.character(sapply(names(data(gown)$intron)[-c(1:5)], gettype)))
+      color.introns = ifelse(gettype(samp) %in% introntypes, TRUE, FALSE)      
+    }
+    if(colorby=="none"){
+      color.introns = FALSE
+    }
     for(tx in unique(gtrans$tid)){
     	if(colorby == "transcript"){
     		mycolor = closestColor(data(gown)$trans[,col][which(data(gown)$trans$t_id==tx)], colscale)
     	}
+      if(colorby == "none"){
+        mycolor = "gray70"
+      }
     	txind = which(unique(gtrans$tid)==tx)
     	gtsub = gtrans[gtrans$tid==tx,]
     	gtsub = gtsub[order(gtsub$start),]
@@ -77,11 +99,11 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
     		if(colorby == "exon"){
     			mycolor = closestColor(data(gown)$exon[,col][which(data(gown)$exon$e_id==gtsub$id[exind])], colscale)
     		}
-			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), col=mycolor)
-			if(exind!=dim(gtsub)[1]){
-				if(!color.introns){
-					lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind, txind), lty=2, col="gray60")
-				}
+			  polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), col=mycolor)
+			  if(exind!=dim(gtsub)[1]){
+				  if(!color.introns){
+					  lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind, txind), lty=2, col="gray60")
+				  }
 				if(color.introns){
 					intronindex = which(data(gown)$intron$start == gtsub$end[exind]+1 & data(gown)$intron$end == gtsub$start[exind+1]-1 & data(gown)$intron$chr==unique(gtsub$seqnames) & data(gown)$intron$strand == unique(gtsub$strand))
 					icolumnind = which(names(data(gown)$intron) == samp)
@@ -102,8 +124,7 @@ plotTranscripts = function(gene, samp, gown, legend = TRUE, colorby = "transcrip
 		for(i in 1:length(colscale)){
 			polygon(x = c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]), y = c(ymax-0.3, ymax, ymax, ymax-0.3), border=NA, col = rev(heat.colors(length(colscale)))[i])
 		}
-		text(x = seq(min(xax)+1, max(xax)-1, length = 20), y = rep(ymax+0.1, 20), labels = round(colscale,2)[seq(1,length(colscale), length=20)], cex=0.5 )	
-		text(x = median(xax), y = ymax-0.5, labels=paste("expression, by",  colorby), cex=0.5)
+		  text(x = seq(min(xax)+1, max(xax)-1, length = 20), y = rep(ymax+0.1, 20), labels = round(colscale,2)[seq(1,length(colscale), length=20)], cex=0.5 )	
+		  text(x = median(xax), y = ymax-0.5, labels=paste("expression, by",  colorby), cex=0.5)
 		}
 }
-
