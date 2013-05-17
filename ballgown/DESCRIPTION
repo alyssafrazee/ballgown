@@ -28,3 +28,4 @@ Collate:
     'getAttributeField.R'
     'gffRead.R'
     'clusterTranscripts.R'
+    'collapseTranscripts.R'
