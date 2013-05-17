@@ -36,6 +36,7 @@ plotLatentTranscripts = function(gene, gown, k = NULL, choosek = c("var90", "thu
   
   if(!is.null(k)){
     cl = clusterTranscripts(gene=gene, gown=gown, method=method, k=k)
+    print("done!")
   }
   
   if(choosek=="thumb"){
@@ -63,9 +64,11 @@ plotLatentTranscripts = function(gene, gown, k = NULL, choosek = c("var90", "thu
   
 	cols = suppressWarnings(brewer.pal(length(unique(cl$clusters$cluster)), "Dark2"))
   # suppress warnings because we want to be able to have a 2-color graph w/o a warning
-
-  tx.new = cl$clusters$tname
-  cid = cl$clusters$cluster
+  
+  clusters.sorted = cl$clusters[order(cl$clusters$cluster),]
+  
+  tx.new = clusters.sorted$tname
+  cid = clusters.sorted$cluster
   
 	for(tx in tx.new){
 		txind = which(tx.new==tx)
