@@ -1,4 +1,4 @@
-clusterTranscripts = function(gene, gown, k=NULL, method=c("kmeans", "hclust")){
+clusterTranscripts = function(gene, gown, k=NULL, method="hclust"){
   txnames = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id == gene]
   strucnames = as.numeric(substr(names(structure(gown)$trans),3,nchar(names(structure(gown)$trans))))
   inds = which(strucnames %in% txnames)
