@@ -5,7 +5,7 @@ clusterTranscripts = function(gene, gown, k=NULL, method="hclust"){
   tx = structure(gown)$trans[inds]
   chr = data(gown)$trans$chr[inds[1]] #add error check later, in case the tx's are on different chromosomes.  ugh.
   
-  covind = unique(as.numeric(lapply(tx, function(x) runValue(seqnames(x)))))
+  covind = unique(as.numeric(lapply(tx, function(x) IRanges::runValue(seqnames(x)))))
   covs = lapply(tx, function(x) coverage(x)[[covind]])
   
   startpos = unlist(lapply(covs, function(x) runLength(x)[1]+1))
