@@ -1,5 +1,6 @@
 import(methods)
 import(IRanges)
+import(GenomicRanges)
 export(bpset)
 export(closestColor)
 export(getRefSeq)
