@@ -10,7 +10,6 @@ Depends:
     GenomicRanges,
     plyr,
     RColorBrewer,
-    ACME,
     DESeq
 Collate:
     'ballgown-package.r'
@@ -30,3 +29,4 @@ Collate:
     'clusterTranscripts.R'
     'collapseTranscripts.R'
     'checkAssembledTx.R'
+    'gff2grlist.R'
