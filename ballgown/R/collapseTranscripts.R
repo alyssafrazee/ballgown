@@ -20,7 +20,6 @@ collapseTranscripts = function(gown, dattype, method="hclust"){
     
   # for each gene, cluster transcripts & sum counts to fill table:
   for(g in genes.uniq){
-    counter = counter+1
     ind = which(genes.uniq == g)
     if(ind==1) tabinds = c(1:(cumsum(k)[1]))
     if(ind!=1) tabinds = c((cumsum(k)[ind-1]+1):(cumsum(k)[ind]))
