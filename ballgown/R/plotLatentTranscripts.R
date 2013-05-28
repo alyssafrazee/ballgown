@@ -70,7 +70,7 @@ plotLatentTranscripts = function(gene, gown, k = NULL, choosek = c("var90", "thu
 		gtsub = gtsub[order(gtsub$start),]
 		for(exind in 1:dim(gtsub)[1]){
 			mycolor = cols[cid[txind]]
-			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4, txind+0.4, txind+0.4, txind-0.4), col=mycolor)
+			polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4, txind+0.4, txind+0.4, txind-0.4), col=mycolor, border = mycolor)
 			if(exind != dim(gtsub)[1]){
 				lines(c(gtsub$end[exind], gtsub$start[exind+1]), c(txind, txind), lty=2, col="gray60")
 			}
