@@ -89,7 +89,8 @@ readGown <- function(dataDir, samplePattern, bamfiles = NULL, pData = NULL, verb
   colnames(trans) <- c("t_id", "chr", "strand", "start", "end", "t_name", "num_exons", "length", "gene_id", "gene_name", paste(c("cov", "FPKM"), rep(names(dirs), each=2), sep="."))
 
    ## Make transcripts into a GRanges list object
-   transgrl = split(exongr[e2t$e_id], e2t$t_id)
+   mm = match(e2t$e_id,mcols(exongr)$id)
+   transgrl = split(exongr[mm], e2t$t_id)
    names(transgrl) = paste0("tx", names(transgrl))
 
    ## Connect transcripts to genes:
