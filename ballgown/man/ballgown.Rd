@@ -4,6 +4,6 @@
 \alias{ballgown-package}
 \title{ballgown}
 \description{
-  downstream analysis of transcript- and exon-level gene expression data.
+  ballgown
 }
 
