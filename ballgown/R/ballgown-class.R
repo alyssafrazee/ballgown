@@ -1,7 +1,4 @@
 ### the ballgown class
-### AF 6 may 2013
-
-
 
 setClass("ballgown", 
 	representation(
@@ -193,3 +190,36 @@ setMethod("subset", "ballgown", function(x, cond, global=TRUE){
 	
 	return(new("ballgown", data = list(intron=intron, exon=exon, trans=trans), indexes = list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles = indexes(x)$bamfiles, pData = indexes(x)$pData), structure=list(intron = introngr, exon=exongr, trans=transgrl), dirs = dirs(x), mergedDate=mergedDate(x)))
 } )
+
+
+# methods for nice ways of accessing things (inspired by ExpressionSet syntax)
+setGeneric("pData", function(x) standardGeneric("pData"))
+setMethod("pData", "ballgown", function(x){
+  return(indexes(x)$pData)
+})
+
+setGeneric("texpr", function(x) standardGeneric("texpr"))
+setMethod("texpr", "ballgown", function(x){
+  return(data(x)$trans)
+})
+
+setGeneric("eexpr", function(x) standardGeneric("eexpr"))
+setMethod("eexpr", "ballgown", function(x){
+  return(data(x)$exon)
+})
+
+setGeneric("iexpr", function(x) standardGeneric("iexpr"))
+setMethod("iexpr", "ballgown", function(x){
+  return(data(x)$intron)
+})
+
+
+
+
+
+
+
+
+
+
+
