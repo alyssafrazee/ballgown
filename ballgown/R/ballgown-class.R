@@ -112,11 +112,14 @@ ballgown = function(dataDir, samplePattern, bamfiles = NULL, pData = NULL, verbo
    t2g = data.frame(t_id = trans$t_id, g_id = trans$gene_id)
 
    ## Read phenotype table, if given:
-   if(!is.null(pData)){
+   if(is.character(pData)){
        if(verbose) message(paste0(date(),": Reading phenotype table"))
        phx = read.table(pData, stringsAsFactors=FALSE, ...)
        theorder = sapply(names(dirs), function(x) which(phx$dirname==x))
        phx = phx[theorder,]
+   }
+   if(is.data.frame(pData)){
+        phx = pData
    }
    if(is.null(pData)) phx = NULL
 
