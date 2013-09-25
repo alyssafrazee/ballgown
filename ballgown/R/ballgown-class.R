@@ -39,10 +39,6 @@ setClass("ballgown",
 ballgown = function(dataDir, samplePattern, bamfiles = NULL, pData = NULL, verbose=TRUE, ...) {
   if(verbose) message(date())
 
-  ## Load required pkgs
-  suppressMessages(library(plyr))
-  suppressMessages(library(GenomicRanges))
-
   ## Identify the sample directories
   dirs <- list.files(path=dataDir, pattern=samplePattern, full.names=TRUE)
   names(dirs) <- list.files(path=dataDir, pattern=samplePattern)
@@ -212,12 +208,6 @@ setGeneric("iexpr", function(x) standardGeneric("iexpr"))
 setMethod("iexpr", "ballgown", function(x){
   return(data(x)$intron)
 })
-
-
-
-
-
-
 
 
 
