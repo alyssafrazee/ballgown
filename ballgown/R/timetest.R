@@ -2,9 +2,19 @@
 
 timetest = function(gown, mod = NULL, mod0 = NULL, df = 4, 
 	feature = c("gene", "exon", "intron", "transcript"),
+    expression_meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
 	timevar){
 
 	feature = match.arg(feature)
+    expression_meas = match.arg(expression_meas)
+
+    if((feature == "gene" | feature == "transcript") & 
+        !(expression_meas %in% c("cov", "FPKM"))){
+        stop("genes/transcripts only have cov and FPKM measurements")
+    }
+    if((feature == "exon" | feature == "intron") & expression_meas == "FPKM"){
+        stop("exons and introns do not have FPKM measurements")
+    }
 
 	if(feature == "gene"){
         gnames = indexes(gown)$t2g$g_id
@@ -16,6 +26,9 @@ timetest = function(gown, mod = NULL, mod0 = NULL, df = 4,
 	if(feature == "exon") expr = eexpr(gown)[,-c(1:5)]
 	if(feature == "intron") expr = iexpr(gown)[,-c(1:5)]
 	if(feature == "transcript") expr = texpr(gown)[,-c(1:10)]
+
+    ## subset to only the right measurement
+    expr = expr[,grepl(expression_meas, colnames(expr))]
 
 	n = ncol(expr)
 
