@@ -6,3 +6,5 @@ make_package.R
 *.pdf
 *.pptx
 ballgown/R/clusterTranscripts.GR.R
+.RData
+*.Rout
