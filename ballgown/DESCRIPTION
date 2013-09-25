@@ -18,6 +18,7 @@ Collate:
     'ballgown-package.r'
     'ballgown-class.R'
     'bpset.R'
+    'checkAssembledTx.R'
     'closestColor.R'
     'clusterTranscripts.R'
     'collapseTranscripts.R'
