@@ -5,7 +5,7 @@ plotMeans = function(gene, gown, groupvar, groupname,
     dattype = match.arg(dattype)
     colorby = match.arg(colorby)
 
-    if(colorby == "transcript" & !(dattype %in% c("cov", "FPKM")){
+    if(colorby == "transcript" & !(dattype %in% c("cov", "FPKM"))){
         stop("transcripts only have cov and FPKM measurements")
     }
     if(colorby == "exon" & dattype=="FPKM"){
