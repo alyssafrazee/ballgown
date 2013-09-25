@@ -5,28 +5,32 @@ Version: 1.0
 License: GPL-3
 Title: 
 Description: 
-Depends:
+Imports:
     methods,
+    IRanges,
     GenomicRanges,
     plyr,
     RColorBrewer,
-    DESeq
+    DESeq,
+    matrixStats,
+    splines
 Collate:
     'ballgown-package.r'
     'ballgown-class.R'
     'bpset.R'
     'closestColor.R'
+    'clusterTranscripts.R'
+    'collapseTranscripts.R'
+    'f.pvalue.R'
+    'getAttributeField.R'
     'getRefSeq.R'
     'getsamp.R'
     'gettype.R'
+    'gff2grlist.R'
+    'gffRead.R'
     'last.R'
     'plotLatentTranscripts.R'
     'plotMeans.R'
     'plotTranscripts.R'
+    'timetest.R'
     'transcriptOverlaps.R'
-    'getAttributeField.R'
-    'gffRead.R'
-    'clusterTranscripts.R'
-    'collapseTranscripts.R'
-    'checkAssembledTx.R'
-    'gff2grlist.R'
