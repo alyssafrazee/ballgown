@@ -4,9 +4,6 @@ timetest = function(gown, mod = NULL, mod0 = NULL, df = 4,
 	feature = c("gene", "exon", "intron", "transcript"),
 	timevar){
 
-	require(matrixStats)
-	require(splines)
-
 	feature = match.arg(feature)
 
 	if(feature == "gene"){
