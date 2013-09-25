@@ -1,7 +1,7 @@
 import(methods)
 import(IRanges)
 import(GenomicRanges)
-import(plyr)
+importFrom(plyr, join_all)
 import(RColorBrewer)
 import(DESeq)
 import(matrixStats)
