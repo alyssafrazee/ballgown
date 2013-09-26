@@ -27,8 +27,8 @@ timetest = function(gown, mod = NULL, mod0 = NULL, df = 4,
 	if(feature == "intron") expr = iexpr(gown)[,-c(1:5)]
 	if(feature == "transcript") expr = texpr(gown)[,-c(1:10)]
 
-    ## subset to only the right measurement
-    expr = expr[,grepl(expression_meas, colnames(expr))]
+    ## subset to only the right measurement and convert to matrix
+    expr = as.matrix(expr[,grepl(expression_meas, colnames(expr))])
 
 	n = ncol(expr)
 
