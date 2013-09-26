@@ -1,8 +1,10 @@
-plotTranscripts = function(gene, samp = NULL, gown, legend = TRUE, colorby = "transcript"){
+plotTranscripts = function(gene, samp = NULL, gown, 
+	legend = TRUE, labelTranscripts = FALSE, 
+	colorby = c("transcript", "exon", "none")){
 	if(class(gown)!="ballgown") stop("gown must be a ballgown object")
 	if(colorby!="none" & is.null(samp)) stop("to color by transcript or exon abundances, you must provide a specific sample. (use names(data(gown)$trans) or names(data(gown)$exon) to see sample names).")
-
-	suppressMessages(library(GenomicRanges))
+    
+    colorby = match.arg(colorby)
 
 	if(colorby=="none") legend = FALSE
 	if(colorby!="none"){
