@@ -42,12 +42,8 @@ plotTranscripts = function(gene, samp = NULL, gown,
 	gtrans$tid = as.numeric(sapply(gtrans$element, function(x) as.numeric(substr(x,3,nchar(x)))))
 	xax = seq(min(gtrans$start), max(gtrans$end), by=1)
 	numtx = length(unique(thetranscripts))
-	if(labelTranscripts){
-		marvals = c(5,4,4,2)
-	}else{
-		marvals = c(5,2,4,2)
-	}
-	par(mar=marvals)
+	westval = ifelse(labelTranscripts, 4, 2)
+	par(mar=c(5, westval, 4, 2))
 	ymax = ifelse(legend, numtx+1.5, numtx+1)
     
 	if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
