@@ -3,7 +3,7 @@
 timetest = function(gown, mod = NULL, mod0 = NULL, df = 4, 
 	feature = c("gene", "exon", "intron", "transcript"),
     expression_meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
-	timevar){
+	timevar, adjustvars = NULL){
 
 	feature = match.arg(feature)
     expression_meas = match.arg(expression_meas)
@@ -44,12 +44,21 @@ timetest = function(gown, mod = NULL, mod0 = NULL, df = 4,
         tme = pData(gown)[,time_col_ind]
         
         ## create model matrices
-        mod0 = model.matrix(~ med_expr)
-        mod = model.matrix(~ ns(tme, df = df) + med_expr)
+        if(!is.null(adjustvars)){
+            variable_list = ""
+            for(i in seq_along(adjustvars)){
+                column_ind = which(names(pData(gown)) == adjustvars[i])
+                eval(parse(text=paste0(adjustvars[i], " <- pData(gown)[,",i,"]")))
+                variable_list = paste(variable_list, adjustvars[i], sep="+")
+            }
+            eval(parse(text=paste0("mod0 = model.matrix(~ med_expr",variable_list,")")))
+            eval(parse(text=paste0("mod = model.matrix(~ ns(tme, df = ",df,") + med_expr",variable_list,")")))
+        } else {
+            mod0 = model.matrix(~ med_expr)
+            mod = model.matrix(~ ns(tme, df = df) + med_expr)
+        }
     }
 
     results = f.pvalue(log2(expr + 1), mod, mod0)
-
-    return(data.frame(id=rownames(expr), pval = results))
-
+    return(data.frame(feature=rep(feature, nrow(expr)), id=rownames(expr), pval = results, qval=p.adjust(results, "fdr")))
 }
