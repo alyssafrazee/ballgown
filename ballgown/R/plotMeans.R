@@ -4,7 +4,8 @@ plotMeans = function(gene, gown,
     groupname = "none", 
 	dattype = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
 	colorby = c("transcript", "exon"),
-    legend = TRUE){
+    legend = TRUE,
+    labelTranscripts = FALSE){
     
     dattype = match.arg(dattype)
     colorby = match.arg(colorby)
@@ -56,7 +57,8 @@ plotMeans = function(gene, gown,
     }
     
     # plot base:
-    par(mar=c(5,2,4,2), mfrow = mf)
+    westval = ifelse(labelTranscripts, 4, 2)
+    par(mar=c(5, westval, 4, 2), mfrow = mf)
     ymax = ifelse(legend, numtx+1.5, numtx+1)
 
     # the for-loop only has >1 iteration if groupname == "all"
@@ -113,6 +115,8 @@ plotMeans = function(gene, gown,
             text(x = seq(min(xax)+1, max(xax)-1, length = 20), y = rep(ymax+0.1, 20), labels = round(colscale,2)[seq(1,length(colscale), length=20)], cex=0.5 )	
             text(x = median(xax), y = ymax-0.5, labels=paste("mean expression, by",  colorby), cex=0.5)
         }
+
+        if(labelTranscripts) axis(side=2, at=c(1:numtx), labels=unique(gtrans$tid), cex.axis=0.75, las=1)
     }
 }
 
