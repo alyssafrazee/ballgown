@@ -29,6 +29,7 @@ Collate:
     'gettype.R'
     'gff2grlist.R'
     'gffRead.R'
+    'grouptest.R'
     'last.R'
     'plotLatentTranscripts.R'
     'plotMeans.R'
