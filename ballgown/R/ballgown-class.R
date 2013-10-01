@@ -198,18 +198,42 @@ setMethod("pData", "ballgown", function(x){
 })
 
 setGeneric("texpr", function(x) standardGeneric("texpr"))
-setMethod("texpr", "ballgown", function(x){
-  return(data(x)$trans)
+setMethod("texpr", "ballgown", function(x, meas="all"){
+  meas = match.arg(meas, c("cov","FPKM","all"))
+  if(meas!="all"){
+    expr = data(x)$trans[,-c(1:10)]
+    expr = expr[,grepl(meas, colnames(expr))]
+    rownames(expr) = data(x)$trans$t_id
+  }else{
+    expr = data(x)$trans
+  }
+  return(expr)
 })
 
 setGeneric("eexpr", function(x) standardGeneric("eexpr"))
-setMethod("eexpr", "ballgown", function(x){
-  return(data(x)$exon)
+setMethod("eexpr", "ballgown", function(x, meas="all"){
+  meas = match.arg(meas, c("rcount","ucount","mrcount","cov","mcov","all"))
+  if(meas!="all"){
+    expr = data(x)$exon[,-c(1:5)]
+    expr = expr[,grepl(meas, colnames(expr))]
+    rownames(expr) = data(x)$exon$e_id
+  }else{
+    expr = data(x)$exon
+  }
+  return(expr)
 })
 
 setGeneric("iexpr", function(x) standardGeneric("iexpr"))
-setMethod("iexpr", "ballgown", function(x){
-  return(data(x)$intron)
+setMethod("iexpr", "ballgown", function(x, meas="all"){
+  meas = match.arg(meas, c("rcount","ucount","mrcount","all"))
+  if(meas!="all"){
+    expr = data(x)$intron[,-c(1:5)]
+    expr = expr[,grepl(meas, colnames(expr))]
+    rownames(expr) = data(x)$i_id
+  }else{
+    expr = data(x)$intron
+  }
+  return(expr)
 })
 
 
