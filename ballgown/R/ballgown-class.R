@@ -197,7 +197,7 @@ setMethod("pData", "ballgown", function(x){
   return(indexes(x)$pData)
 })
 
-setGeneric("texpr", function(x) standardGeneric("texpr"))
+setGeneric("texpr", function(x, ...) standardGeneric("texpr"))
 setMethod("texpr", "ballgown", function(x, meas="all"){
   meas = match.arg(meas, c("cov","FPKM","all"))
   if(meas!="all"){
@@ -210,7 +210,7 @@ setMethod("texpr", "ballgown", function(x, meas="all"){
   return(expr)
 })
 
-setGeneric("eexpr", function(x) standardGeneric("eexpr"))
+setGeneric("eexpr", function(x, ...) standardGeneric("eexpr"))
 setMethod("eexpr", "ballgown", function(x, meas="all"){
   meas = match.arg(meas, c("rcount","ucount","mrcount","cov","mcov","all"))
   if(meas!="all"){
@@ -223,7 +223,7 @@ setMethod("eexpr", "ballgown", function(x, meas="all"){
   return(expr)
 })
 
-setGeneric("iexpr", function(x) standardGeneric("iexpr"))
+setGeneric("iexpr", function(x, ...) standardGeneric("iexpr"))
 setMethod("iexpr", "ballgown", function(x, meas="all"){
   meas = match.arg(meas, c("rcount","ucount","mrcount","all"))
   if(meas!="all"){
