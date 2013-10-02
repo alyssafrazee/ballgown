@@ -9,7 +9,7 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     df = 4){
 
 	feature = match.arg(feature)
-    expression_meas = match.arg(expression_meas)
+    meas = match.arg(meas)
 
     ## check input
     if((feature == "gene" | feature == "transcript") & 
