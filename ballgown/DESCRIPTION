@@ -5,10 +5,11 @@ Version: 1.0
 License: GPL-3
 Title: 
 Description: 
+Depends:
+    GenomicRanges
 Imports:
     methods,
     IRanges,
-    GenomicRanges,
     plyr,
     RColorBrewer,
     DESeq,
