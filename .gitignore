@@ -8,3 +8,5 @@ make_package.R
 ballgown/R/clusterTranscripts.GR.R
 .RData
 *.Rout
+ballgown/R/timetest.R
+ballgown/R/grouptest.R
