@@ -27,8 +27,9 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
 	if(feature == "gene"){
         gnames = indexes(gown)$t2g$g_id
         inds_by_gene = split(seq(along=gnames), gnames)
+        tmeas = texpr(gown, meas)
         expr = t(sapply(inds_by_gene, function(i){
-        	colSums(texpr(gown, meas)[i,,drop=FALSE])}
+        	colSums(tmeas[i,,drop=FALSE])}
         ))
 	}
 	if(feature == "exon") expr = eexpr(gown, meas)
