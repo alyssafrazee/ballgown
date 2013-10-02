@@ -2,7 +2,7 @@
 
 stattest = function(gown, mod = NULL, mod0 = NULL, 
 	feature = c("gene", "exon", "intron", "transcript"),
-    expression_meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
+    meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
     timecourse = FALSE,
     covariate = NULL,
     adjustvars = NULL,
@@ -13,10 +13,10 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
 
     ## check input
     if((feature == "gene" | feature == "transcript") & 
-        !(expression_meas %in% c("cov", "FPKM"))){
+        !(meas %in% c("cov", "FPKM"))){
         stop("genes/transcripts only have cov and FPKM measurements")
     }
-    if((feature == "exon" | feature == "intron") & expression_meas == "FPKM"){
+    if((feature == "exon" | feature == "intron") & meas == "FPKM"){
         stop("exons and introns do not have FPKM measurements")
     }
     if(xor(is.null(mod), is.null(mod0))){
@@ -28,7 +28,7 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
         gnames = indexes(gown)$t2g$g_id
         inds_by_gene = split(seq(along=gnames), gnames)
         expr = t(sapply(inds_by_gene, function(i){
-        	colSums(texpr(gown)[i,-c(1:10),drop=FALSE])}
+        	colSums(texpr(gown, meas)[i,,drop=FALSE])}
         ))
 	}
 	if(feature == "exon") expr = eexpr(gown, meas)
