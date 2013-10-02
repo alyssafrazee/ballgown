@@ -13,7 +13,8 @@ Imports:
     RColorBrewer,
     DESeq,
     matrixStats,
-    splines
+    splines,
+    sva
 Collate:
     'ballgown-package.r'
     'ballgown-class.R'
@@ -22,18 +23,16 @@ Collate:
     'closestColor.R'
     'clusterTranscripts.R'
     'collapseTranscripts.R'
-    'f.pvalue.R'
     'getAttributeField.R'
     'getRefSeq.R'
     'getsamp.R'
     'gettype.R'
     'gff2grlist.R'
     'gffRead.R'
-    'grouptest.R'
     'last.R'
     'pctOverlap.R'
     'plotLatentTranscripts.R'
     'plotMeans.R'
     'plotTranscripts.R'
-    'timetest.R'
+    'stattest.R'
     'transcriptOverlaps.R'
