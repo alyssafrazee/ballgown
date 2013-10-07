@@ -1,20 +1,23 @@
 # statistical tests for differential expression in ballgown
 
 stattest = function(gown, mod = NULL, mod0 = NULL, 
-	feature = c("gene", "exon", "intron", "transcript"),
+    feature = c("gene", "exon", "intron", "transcript"),
     meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
     timecourse = FALSE,
     covariate = NULL,
     adjustvars = NULL,
     df = 4){
 
-	feature = match.arg(feature)
+    feature = match.arg(feature)
     meas = match.arg(meas)
 
     ## check input
-    if((feature == "gene" | feature == "transcript") & 
+    if(feature == "transcript" & 
         !(meas %in% c("cov", "FPKM"))){
-        stop("genes/transcripts only have cov and FPKM measurements")
+        stop("transcripts only have cov and FPKM measurements")
+    }
+    if(feature == "gene" & meas != "FPKM"){
+        stop("gene tests can only be done on FPKM measurements")
     }
     if((feature == "exon" | feature == "intron") & meas == "FPKM"){
         stop("exons and introns do not have FPKM measurements")
@@ -24,7 +27,7 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     }
 
     ## extract the right expression measurements
-	if(feature == "gene"){
+    if(feature == "gene"){
         gnames = indexes(gown)$t2g$g_id
         inds_by_gene = split(seq(along=gnames), gnames)
         tmeas = texpr(gown, "FPKM")
@@ -38,16 +41,16 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
         }) ## 7 minutes, too slow still but manageable
         tfrags = matrix(unlist(tfrags, use.names=FALSE), nrow=length(tfrags), byrow=TRUE)
         expr = t(sapply(1:length(inds_by_gene), function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
-	}
-	if(feature == "exon") expr = eexpr(gown, meas)
-	if(feature == "intron") expr = iexpr(gown, meas)
-	if(feature == "transcript") expr = texpr(gown, meas)
+    }
+    if(feature == "exon") expr = eexpr(gown, meas)
+    if(feature == "intron") expr = iexpr(gown, meas)
+    if(feature == "transcript") expr = texpr(gown, meas)
 
     expr = as.matrix(expr)
-	n = ncol(expr)
+    n = ncol(expr)
 
     ## library size adjustment
-	med_expr = colMedians(expr)
+    med_expr = colMedians(expr)
 
     if(is.null(mod) & is.null(mod0)){
         ## by default, just test whether the given covariate is important
