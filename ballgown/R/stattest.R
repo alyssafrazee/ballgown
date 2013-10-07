@@ -27,10 +27,17 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
 	if(feature == "gene"){
         gnames = indexes(gown)$t2g$g_id
         inds_by_gene = split(seq(along=gnames), gnames)
-        tmeas = texpr(gown, meas)
-        expr = t(sapply(inds_by_gene, function(i){
-        	colSums(tmeas[i,,drop=FALSE])}
-        ))
+        tmeas = texpr(gown, "FPKM")
+        gid_by_exon = lapply(1:nrow(texpr(gown)), function(i){rep(texpr(gown)$gene_id[i], texpr(gown)$num_exons[i])})
+        ulstruct = unlist(structure(gown)$trans)
+        glist = split(ulstruct, unlist(gid_by_exon))
+        glengths = sapply(width(reduce(glist)), sum)
+        tlengths = sapply(width(structure(gown)$trans), sum)
+        tfrags = lapply(1:nrow(tmeas), function(i){
+            (tlengths[i]/1000) * tmeas[i,]
+        }) ## 7 minutes, too slow still but manageable
+        tfrags = matrix(unlist(tfrags, use.names=FALSE), nrow=length(tfrags), byrow=TRUE)
+        expr = t(sapply(1:length(inds_by_gene), function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
 	}
 	if(feature == "exon") expr = eexpr(gown, meas)
 	if(feature == "intron") expr = iexpr(gown, meas)
