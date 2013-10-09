@@ -22,6 +22,7 @@ gff2grlist = function(gtf, txidentifier = "transcript_id", exonsonly = TRUE){
   if(exonsonly) gtf.dataframe = subset(gtf.dataframe, feature=="exon")
   gtf.list = split(gtf.dataframe, gtf.dataframe$txid)
   gtf.grl = lapply(gtf.list, function(x){
+    x$strand[x$strand=="."] = "*"
     GRanges(seqnames=x$seqname, ranges=IRanges(start=x$start, end=x$end), strand = x$strand, id=rep(0, length(x$seqname)), transcripts=rep("NA", length(x$seqname)))
   })
   return(GRangesList(gtf.grl))
