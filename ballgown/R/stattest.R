@@ -41,6 +41,7 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
         }) ## 7 minutes, too slow still but manageable
         tfrags = matrix(unlist(tfrags, use.names=FALSE), nrow=length(tfrags), byrow=TRUE)
         expr = t(sapply(1:length(inds_by_gene), function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
+        rownames(expr) = names(inds_by_gene)
     }
     if(feature == "exon") expr = eexpr(gown, meas)
     if(feature == "intron") expr = iexpr(gown, meas)
@@ -87,3 +88,4 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     results = f.pvalue(log2(expr + 1), mod, mod0)
     return(data.frame(feature=rep(feature, nrow(expr)), id=rownames(expr), pval = results, qval=p.adjust(results, "fdr")))
 }
+
