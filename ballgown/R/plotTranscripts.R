@@ -3,8 +3,8 @@ plotTranscripts = function(gene, samp = NULL, gown,
 	colorby = c("transcript", "exon", "none")){
 	if(class(gown)!="ballgown") stop("gown must be a ballgown object")
 	if(colorby!="none" & is.null(samp)) stop("to color by transcript or exon abundances, you must provide a specific sample. (use names(data(gown)$trans) or names(data(gown)$exon) to see sample names).")
-    
-    colorby = match.arg(colorby)
+	
+	colorby = match.arg(colorby)
 
 	if(colorby=="none") legend = FALSE
 	if(colorby!="none"){
@@ -45,7 +45,7 @@ plotTranscripts = function(gene, samp = NULL, gown,
 	westval = ifelse(labelTranscripts, 4, 2)
 	par(mar=c(5, westval, 4, 2))
 	ymax = ifelse(legend, numtx+1.5, numtx+1)
-    
+	
 	if(length(unique(gtrans$seqnames)) > 1) stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of annoying, R-wise.  Please choose another gene until additional functionality is added!")
 	if(length(unique(gtrans$strand)) > 1) stop("Your gene appears to contain exons from both strands, which is potentially interesting but also kind of confusing, so please choose another gene until we figure this sucker out.")
     
