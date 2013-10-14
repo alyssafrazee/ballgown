@@ -1,6 +1,8 @@
 plotTranscripts = function(gene, samp = NULL, gown, 
 	legend = TRUE, labelTranscripts = FALSE, 
-	colorby = c("transcript", "exon", "none")){
+	colorby = c("transcript", "exon", "none"),
+	main = NULL){
+
 	if(class(gown)!="ballgown") stop("gown must be a ballgown object")
 	if(colorby!="none" & is.null(samp)) stop("to color by transcript or exon abundances, you must provide a specific sample. (use names(data(gown)$trans) or names(data(gown)$exon) to see sample names).")
 	
@@ -51,8 +53,16 @@ plotTranscripts = function(gene, samp = NULL, gown,
     
 	# plot base:
 	plot(xax, rep(0,length(xax)), ylim=c(0,ymax), type="n", xlab="genomic position", yaxt = "n", ylab="")
-	if(colorby!="none") title(paste0(gene,": ",sampname))
-	if(colorby=="none") title(gene)
+	if(!is.null(main)){
+		mytitle = main
+	}else{
+		if(colorby!="none"){
+			mytitle = paste0(gene:": ",sampname)
+		}else{
+			mytitle = gene
+		}
+	}
+	title(mytitle)
 
 	# set color scale
 	if(colorby!="none"){
