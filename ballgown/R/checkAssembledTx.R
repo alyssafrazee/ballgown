@@ -1,4 +1,4 @@
-checkAssembledTx = function(tx.assembled, tx.annotated, ind = 1){
+checkAssembledTx = function(tx.assembled, tx.annotated, ind = 1, main = NULL){
   #tx.assembled & tx.used should be GRangesList objects containing the assembled transcripts (this is in the ballgown object) and the annotated transcripts (user needs to make this - maybe I will write a function later).  ind tells which annotated transcript you would like to check.
   
   ol = findOverlaps(tx.annotated, tx.assembled)
@@ -59,6 +59,7 @@ checkAssembledTx = function(tx.assembled, tx.annotated, ind = 1){
     diffs = st.compare-en.compare
     if(any(diffs<0)) warning(paste("overlapping exons in assembled transcript",tx), call.=FALSE)
   }
-  title("Assembled and Annotated Transcripts")
+  if(is.null(main)) main = "Assembled and Annotated Transcripts"
+  title(main)
   axis(side=2, at=c(median(1:length(unique(annot.df$element))), median(1:length(unique(asmbl.df$element)))+length(unique(annot.df$element))+0.5), labels=c("annotated", "assembled"), tick=FALSE)
 }
