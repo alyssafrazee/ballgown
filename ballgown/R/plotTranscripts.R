@@ -57,7 +57,7 @@ plotTranscripts = function(gene, samp = NULL, gown,
 		mytitle = main
 	}else{
 		if(colorby!="none"){
-			mytitle = paste0(gene:": ",sampname)
+			mytitle = paste0(gene,": ",sampname)
 		}else{
 			mytitle = gene
 		}
