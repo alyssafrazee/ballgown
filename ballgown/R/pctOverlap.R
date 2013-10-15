@@ -1,8 +1,9 @@
 # function to calculate percent overlap between 2 GRanges objects
 
 pctOverlap = function(tx1, tx2){
-	thechr = runValue(c(seqnames(tx1), seqnames(tx2)))
-	stopifnot(length(thechr) == 1)
+    ch1 = as.character(runValue(seqnames(tx1)))
+    ch2 = as.character(runValue(seqnames(tx2)))
+	stopifnot(ch1 == ch2)
 	ntcov = coverage(c(tx1, tx2))
 	ind = which(names(ntcov)==thechr)
 	covrle = ntcov[[ind]]
