@@ -5,7 +5,7 @@ pctOverlap = function(tx1, tx2){
     ch2 = as.character(runValue(seqnames(tx2)))
 	stopifnot(ch1 == ch2)
 	ntcov = coverage(c(tx1, tx2))
-	ind = which(names(ntcov)==thechr)
+	ind = which(names(ntcov)==ch1)
 	covrle = ntcov[[ind]]
 	covrle_val = runValue(covrle)
 	covrle_len = runLength(covrle)
