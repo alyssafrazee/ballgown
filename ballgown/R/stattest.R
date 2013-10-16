@@ -1,4 +1,18 @@
-# statistical tests for differential expression in ballgown
+#' statistical tests for differential expression in ballgown
+#'
+#' @param gown name of an object of class \code{ballgown}
+#' @param mod object of class \code{model.matrix} representing the design matrix for the linear regression model including covariates of interest
+#' @param mod0 object of class \code{model.matrix} representing the design matrix for the linear regression model without the covariates of interest.
+#' @param feature the type of genomic feature to be tested for differential expression. Must be one of \code{"gene"}, \code{"transcript"}, \code{"exon"}, or \code{"intron"}.
+#' @param meas the expression measurement to use for statistical tests.  Must be one of \code{"cov"}, \code{"FPKM"}, \code{"rcount"}, \code{"ucount"}, \code{"mrcount"}, or \code{"mcov"}. Not all expression measurements are available for all features.
+#' @param timecourse if \code{TRUE}, tests whether or not the expression profiles of genomic features vary over time in the study.  Default \code{FALSE}.
+#' @param covariate string representing the name of the covariate of interest for the differential expression tests.  Must correspond to the name of a column of \code{pData(gown)}. If \code{timecourse=TRUE}, this should be the study's time variable.
+#' @param adjustvars optional vector of strings representing the names of potential confounders.  Must correspond to names of columns of \code{pData(gown)}.
+#' @param df degrees of freedom used for modeling expression over time with natural cubic splines.  Default 4.  Only used if \code{timecourse=TRUE}.
+#' @details \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is specified, you must also specify \code{mod0}.  If neither are specified, \code{mod0} defaults to the design matrix for a model including only a library-size adjustment, and \code{mod} defaults to the design matrix for a model including a library-size adjustment and \code{covariate}.
+#' @return data frame containing the columns \code{feature}, \code{id} representing feature id, \code{pval} representing the p-value for testing whether this feature was differentially expressed according to \code{covariate}, and \code{qval}, the estimated false discovery rate using this feature's signal strength as a significance cutoff.
+#' @export
+#' @author Alyssa Frazee, Jeff Leek
 
 stattest = function(gown, mod = NULL, mod0 = NULL, 
     feature = c("gene", "exon", "intron", "transcript"),
