@@ -11,3 +11,4 @@ ballgown/R/clusterTranscripts.GR.R
 ballgown/R/timetest.R
 ballgown/R/grouptest.R
 ballgown/R/f.pvalue.R
+ballgown/R/transcriptOverlaps.R
