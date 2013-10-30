@@ -36,4 +36,3 @@ Collate:
     'plotMeans.R'
     'plotTranscripts.R'
     'stattest.R'
-    'transcriptOverlaps.R'
