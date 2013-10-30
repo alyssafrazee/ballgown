@@ -197,7 +197,7 @@ setMethod("pData", "ballgown", function(x){
   return(indexes(x)$pData)
 })
 setGeneric("pData<-", function(x, value) standardGeneric("pData<-"))
-setReplaceMethod("pData", "ballgown", function(x, value) {x@indexes$pData <- value; x})
+setMethod("pData<-", "ballgown", function(x, value) {x@indexes$pData <- value; x})
 
 
 setGeneric("texpr", function(x, ...) standardGeneric("texpr"))
