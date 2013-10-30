@@ -255,6 +255,7 @@ setMethod("gexpr", "ballgown", function(x){
     tfrags = matrix(unlist(tfrags, use.names=FALSE), nrow=length(tfrags), byrow=TRUE)
     expr = t(sapply(1:length(inds_by_gene), function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
     rownames(expr) = names(inds_by_gene)
+    return(expr)
 })
 
 
