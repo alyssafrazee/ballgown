@@ -36,12 +36,22 @@ setClass("ballgown",
   return(trans)
 }
 
-ballgown = function(dataDir, samplePattern, bamfiles = NULL, pData = NULL, verbose=TRUE, ...) {
+ballgown = function(dirs=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL, pData = NULL, verbose=TRUE, ...) {
   if(verbose) message(date())
 
-  ## Identify the sample directories
-  dirs <- list.files(path=dataDir, pattern=samplePattern, full.names=TRUE)
-  names(dirs) <- list.files(path=dataDir, pattern=samplePattern)
+  if(all(c(is.null(dirs),is.null(dataDir),is.null(samplePattern)))) stop("must provide either dirs or both dataDir and samplePattern")
+
+  ## Determine where data is located
+  if(is.null(dirs)){
+    if(is.null(samplePattern)|is.null(dataDir)) stop("must provide one of dataDir or samplePattern if dirs is NULL.")
+    dirs <- list.files(path=dataDir, pattern=samplePattern, full.names=TRUE)
+    names(dirs) <- list.files(path=dataDir, pattern=samplePattern)
+  }else{
+    names(dirs) = sapply(dirs, function(x){
+      tail(strsplit(x, split="/")[[1]],n=1)
+    }, USE.NAMES=FALSE)
+  }
+
   n <- length(dirs)
 
   ## Read linking tables
