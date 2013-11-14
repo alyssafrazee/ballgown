@@ -71,7 +71,11 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     n = ncol(expr)
 
     ## library size adjustment
-    med_expr = colMedians(expr)
+    lib_adj = apply(expr, 2, function(x){
+        q3 = quantile(x, 0.75)
+        sum(x[x<q3])
+    })
+
 
     if(is.null(mod) & is.null(mod0)){
         ## by default, just test whether the given covariate is important
@@ -89,18 +93,18 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
                 eval(parse(text=paste0(adjustvars[i], " <- pData(gown)[,",i,"]")))
                 variable_list = paste(variable_list, adjustvars[i], sep="+")
             }
-            eval(parse(text=paste0("mod0 = model.matrix(~ med_expr",variable_list,")")))
+            eval(parse(text=paste0("mod0 = model.matrix(~ lib_adj",variable_list,")")))
             if(timecourse){
-                eval(parse(text=paste0("mod = model.matrix(~ ns(x, df = ",df,") + med_expr",variable_list,")")))
+                eval(parse(text=paste0("mod = model.matrix(~ ns(x, df = ",df,") + lib_adj",variable_list,")")))
             } else {
-                eval(parse(text=paste0("mod = model.matrix(~ as.factor(x) + med_expr",variable_list,")")))
+                eval(parse(text=paste0("mod = model.matrix(~ as.factor(x) + lib_adj",variable_list,")")))
             }
         } else {
-            mod0 = model.matrix(~ med_expr)
+            mod0 = model.matrix(~ lib_adj)
             if(timecourse){
-                mod = model.matrix(~ ns(x, df = df) + med_expr)
+                mod = model.matrix(~ ns(x, df = df) + lib_adj)
             } else {
-                mod = model.matrix(~ as.factor(x) + med_expr)
+                mod = model.matrix(~ as.factor(x) + lib_adj)
             }
         }
     }
