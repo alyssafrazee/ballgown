@@ -8,6 +8,7 @@
 #' @param timecourse if \code{TRUE}, tests whether or not the expression profiles of genomic features vary over time in the study.  Default \code{FALSE}.
 #' @param covariate string representing the name of the covariate of interest for the differential expression tests.  Must correspond to the name of a column of \code{pData(gown)}. If \code{timecourse=TRUE}, this should be the study's time variable.
 #' @param adjustvars optional vector of strings representing the names of potential confounders.  Must correspond to names of columns of \code{pData(gown)}.
+#' @param gexpr optional data frame that is the result of calling \code{gexp(gown))}.  Used to speed this up by pre-creating \code{gexp(gown)}.
 #' @param df degrees of freedom used for modeling expression over time with natural cubic splines.  Default 4.  Only used if \code{timecourse=TRUE}.
 #' @details \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is specified, you must also specify \code{mod0}.  If neither are specified, \code{mod0} defaults to the design matrix for a model including only a library-size adjustment, and \code{mod} defaults to the design matrix for a model including a library-size adjustment and \code{covariate}.
 #' @return data frame containing the columns \code{feature}, \code{id} representing feature id, \code{pval} representing the p-value for testing whether this feature was differentially expressed according to \code{covariate}, and \code{qval}, the estimated false discovery rate using this feature's signal strength as a significance cutoff.
@@ -20,6 +21,7 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     timecourse = FALSE,
     covariate = NULL,
     adjustvars = NULL,
+    gexpr = NULL,
     df = 4){
 
     feature = match.arg(feature)
@@ -42,20 +44,24 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
 
     ## extract the right expression measurements
     if(feature == "gene"){
-        gnames = indexes(gown)$t2g$g_id
-        inds_by_gene = split(seq(along=gnames), gnames)
-        tmeas = texpr(gown, "FPKM")
-        gid_by_exon = lapply(1:nrow(texpr(gown)), function(i){rep(texpr(gown)$gene_id[i], texpr(gown)$num_exons[i])})
-        ulstruct = unlist(structure(gown)$trans)
-        glist = split(ulstruct, unlist(gid_by_exon))
-        glengths = sapply(width(reduce(glist)), sum)
-        tlengths = sapply(width(structure(gown)$trans), sum)
-        tfrags = lapply(1:nrow(tmeas), function(i){
-            (tlengths[i]/1000) * tmeas[i,]
-        }) ## 7 minutes, too slow still but manageable
-        tfrags = matrix(unlist(tfrags, use.names=FALSE), nrow=length(tfrags), byrow=TRUE)
-        expr = t(sapply(1:length(inds_by_gene), function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
-        rownames(expr) = names(inds_by_gene)
+        if(is.null(gexpr)){
+            gnames = indexes(gown)$t2g$g_id
+            inds_by_gene = split(seq(along=gnames), gnames)
+            tmeas = texpr(gown, "FPKM")
+            gid_by_exon = lapply(1:nrow(texpr(gown)), function(i){rep(texpr(gown)$gene_id[i], texpr(gown)$num_exons[i])})
+            ulstruct = unlist(structure(gown)$trans)
+            glist = split(ulstruct, unlist(gid_by_exon))
+            glengths = sapply(width(reduce(glist)), sum)
+            tlengths = sapply(width(structure(gown)$trans), sum)
+            tfrags = lapply(1:nrow(tmeas), function(i){
+                (tlengths[i]/1000) * tmeas[i,]
+            }) ## 7 minutes, too slow still but manageable
+            tfrags = matrix(unlist(tfrags, use.names=FALSE), nrow=length(tfrags), byrow=TRUE)
+            expr = t(sapply(1:length(inds_by_gene), function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
+            rownames(expr) = names(inds_by_gene)
+        }else{
+            expr = gexpr
+        }
     }
     if(feature == "exon") expr = eexpr(gown, meas)
     if(feature == "intron") expr = iexpr(gown, meas)
