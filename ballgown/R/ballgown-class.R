@@ -164,6 +164,10 @@ setMethod("show", "ballgown",
 # define slot setters (still need to finish)
 setGeneric("indexes<-", function(x, value) standardGeneric("indexes<-"))
 setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; x})
+setGeneric("data<-", function(x, value) standardGeneric("data<-"))
+setReplaceMethod("data", "ballgown", function(x, value) {x@data <- value; x})
+
+
 ###### AFTER DEFINING A VALIDITY METHOD:
 #setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; validObject(x); x})
 
