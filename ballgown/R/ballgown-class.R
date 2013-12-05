@@ -81,8 +81,9 @@ ballgown = function(dirs=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL
   intron$strand[intron$strand=="."] <- "*"
   #B. get names of transcripts each intron belongs to
   tnamesin = split(i2t$t_id, i2t$i_id)
+  tnamesin.ord = as.character(tnamesin)[match(intron$i_id, names(tnamesin))]
   #C. make the GRanges object
-  introngr = GRanges(seqnames = Rle(intron$chr), ranges = IRanges(start=intron$start, end=intron$end), strand = Rle(intron$strand), id=intron$i_id, transcripts = as.character(tnamesin))
+  introngr = GRanges(seqnames = Rle(intron$chr), ranges = IRanges(start=intron$start, end=intron$end), strand = Rle(intron$strand), id=intron$i_id, transcripts = tnamesin.ord)
 
   ## Read read counts and raw coverage info for all exons in <reference_transcripts>
   if(verbose) message(paste0(date(), ": Reading exon data files"))
@@ -101,7 +102,8 @@ ballgown = function(dirs=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL
   #B. get names of transcripts each exon belongs to
   tnamesex = split(e2t$t_id, e2t$e_id)
   #C. make the GRanges object
-  exongr = GRanges(seqnames = Rle(exon$chr), ranges = IRanges(start=exon$start, end=exon$end), strand = Rle(exon$strand), id=exon$e_id, transcripts = as.character(tnamesex))
+  tnamesex.ord = as.character(tnamesex)[match(exon$e_id, names(tnamesex))]
+  exongr = GRanges(seqnames = Rle(exon$chr), ranges = IRanges(start=exon$start, end=exon$end), strand = Rle(exon$strand), id=exon$e_id, transcripts = tnamesex.ord)
 
   ## Read transcript data
   if(verbose) message(paste0(date(), ": Reading transcript data files"))
@@ -113,25 +115,25 @@ ballgown = function(dirs=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL
   trans <- join_all(transAll, by=c("t_id", "chr", "strand", "start", "end", "t_name", "num_exons", "length", "gene_id", "gene_name"), type="left")
   colnames(trans) <- c("t_id", "chr", "strand", "start", "end", "t_name", "num_exons", "length", "gene_id", "gene_name", paste(c("cov", "FPKM"), rep(names(dirs), each=2), sep="."))
 
-   ## Make transcripts into a GRanges list object
-   mm = match(e2t$e_id,mcols(exongr)$id)
-   transgrl = split(exongr[mm], e2t$t_id)
-   names(transgrl) = paste0("tx", names(transgrl))
+  ## Make transcripts into a GRanges list object
+  mm = match(e2t$e_id, mcols(exongr)$id)
+  transgrl = split(exongr[mm], e2t$t_id)
+  names(transgrl) = paste0("tx", names(transgrl))
 
-   ## Connect transcripts to genes:
-   t2g = data.frame(t_id = trans$t_id, g_id = trans$gene_id)
+  ## Connect transcripts to genes:
+  t2g = data.frame(t_id = trans$t_id, g_id = trans$gene_id)
 
-   ## Read phenotype table, if given:
-   if(is.character(pData)){
-       if(verbose) message(paste0(date(),": Reading phenotype table"))
-       phx = read.table(pData, stringsAsFactors=FALSE, ...)
-       theorder = sapply(names(dirs), function(x) which(phx$dirname==x))
-       phx = phx[theorder,]
-   }
-   if(is.data.frame(pData)){
-        phx = pData
-   }
-   if(is.null(pData)) phx = NULL
+  ## Read phenotype table, if given:
+  if(is.character(pData)){
+      if(verbose) message(paste0(date(),": Reading phenotype table"))
+      phx = read.table(pData, stringsAsFactors=FALSE, ...)
+      theorder = sapply(names(dirs), function(x) which(phx$dirname==x))
+      phx = phx[theorder,]
+  }
+  if(is.data.frame(pData)){
+       phx = pData
+  }
+  if(is.null(pData)) phx = NULL
 
   if(verbose) message("Wrapping up the results")
   result <- new("ballgown", data = list(intron=intron, exon=exon, trans=trans), indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles = bamfiles, pData = phx), structure = list(intron = introngr, exon = exongr, trans = transgrl), dirs=dirs, mergedDate=date())
