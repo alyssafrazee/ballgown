@@ -117,6 +117,10 @@ ballgown = function(dirs=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL
 
   ## Make transcripts into a GRanges list object
   mm = match(e2t$e_id, mcols(exongr)$id)
+  if(any(is.na(mm))){
+    warning(paste('the following exon(s) did not appear in e_data.ctab:',
+      paste(e2t$e_id[which(is.na(mm))], collapse=", ")))
+  }
   transgrl = split(exongr[mm[!is.na(mm)]], e2t$t_id[!is.na(mm)])
   names(transgrl) = paste0("tx", names(transgrl))
 
