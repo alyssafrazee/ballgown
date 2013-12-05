@@ -117,7 +117,7 @@ ballgown = function(dirs=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL
 
   ## Make transcripts into a GRanges list object
   mm = match(e2t$e_id, mcols(exongr)$id)
-  transgrl = split(exongr[mm], e2t$t_id)
+  transgrl = split(exongr[mm[!is.na(mm)]], e2t$t_id[!is.na(mm)])
   names(transgrl) = paste0("tx", names(transgrl))
 
   ## Connect transcripts to genes:
