@@ -43,7 +43,7 @@ ballgown = function(dirs=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL
 
   ## Determine where data is located
   if(is.null(dirs)){
-    if(is.null(samplePattern)|is.null(dataDir)) stop("must provide one of dataDir or samplePattern if dirs is NULL.")
+    if(is.null(samplePattern)|is.null(dataDir)) stop("must provide both dataDir and samplePattern if dirs is NULL.")
     dirs <- list.files(path=dataDir, pattern=samplePattern, full.names=TRUE)
     names(dirs) <- list.files(path=dataDir, pattern=samplePattern)
   }else{
