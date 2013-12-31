@@ -1,4 +1,12 @@
-checkAssembledTx = function(tx.assembled, tx.annotated, ind = 1, main = NULL){
+#' plot annotated and assembled transcripts together
+#'
+#' @param tx.assembled a GRangesList object where the GRanges objects in the list represent sets of exons comprising assembled transcripts
+#' @param tx.annotated a GRangesList object where the GRanges objects in the list represent sets of exons comprising annotated transcripts
+#' @param ind integer; index of \code{tx.annotated} specifying which annotated transcript to plot.  All transcripts (assembled and annotated) overlapping \code{tx.annotated[[ind]]} will be plotted.  Default 1.
+#' @param main optional character string giving the title for the resulting plot.  Default: "Assembled and Annotated Transcripts"
+#' @return No return value, but a plot is produced with annotated transcripts on the bottom panel (shaded in gray) and assembled transcripts on the top panel (shaded with diagonal lines).
+#' @export
+checkAssembledTx = function(tx.assembled, tx.annotated, ind = 1, main = 'Assembled and Annotated Transcripts'){
   #tx.assembled & tx.used should be GRangesList objects containing the assembled transcripts (this is in the ballgown object) and the annotated transcripts (user needs to make this - maybe I will write a function later).  ind tells which annotated transcript you would like to check.
   
   ol = findOverlaps(tx.annotated, tx.assembled)
