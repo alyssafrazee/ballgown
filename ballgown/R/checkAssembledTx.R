@@ -67,7 +67,6 @@ checkAssembledTx = function(tx.assembled, tx.annotated, ind = 1, main = 'Assembl
     diffs = st.compare-en.compare
     if(any(diffs<0)) warning(paste("overlapping exons in assembled transcript",tx), call.=FALSE)
   }
-  if(is.null(main)) main = "Assembled and Annotated Transcripts"
   title(main)
   axis(side=2, at=c(median(1:length(unique(annot.df$element))), median(1:length(unique(asmbl.df$element)))+length(unique(annot.df$element))+0.5), labels=c("annotated", "assembled"), tick=FALSE)
 }
