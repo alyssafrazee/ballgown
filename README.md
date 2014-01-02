@@ -4,7 +4,7 @@ R package for downstream analysis of transcript assemblies. This is the bleeding
 ## (0) installation
 After installing the `devtools` package from CRAN and the `GenomicRanges` package from Bioconductor, run:
 
-```
+```S
 library(devtools)
 install_github('ballgown', 'alyssafrazee', subdir = 'ballgown')
 ```
@@ -70,7 +70,7 @@ awesome_experiment/
 ```
 Then, in your R session, assuming your working directory is `awesome_experiment`, you can run:
 
-```
+```S
 library(ballgown)
 dirs <- c('sample01_output', 'sample02_output')
 awesome_bg <- ballgown(dirs = dirs)
@@ -79,7 +79,7 @@ save(awesome_bg, file = 'awesome_bg.rda')
 
 If you have a big experiment, loading the data might require a lot of memory and a lot of time, so it might be best to do this as a non-interactive batch job.  You only have to do this once, though.  The resulting `rda` file is usually only a few Gb on disk, even for large experiments, and usually only takes a reasonable amount of memory to work with.  (It's the creation of the object that's the memory-hog).  After initial creation of the object, whenever you want to work with this assembly, you can just fire up R and load it in:
 
-```
+```S
 library(ballgown)
 load('awesome_bg.rda')
 awesome_bg
@@ -88,14 +88,14 @@ awesome_bg
 ## (3) accessing assembly data
 A `ballgown` object has three main components: `structure`, `data`, and `indexes`.  The `structure` component,  depending heavily on the `GenomicRanges` Bioconductor package, specifies the strucutre (i.e., genomic locations and relationships between exons, introns, and transcripts) of your assembly.  It's convenient to represent exons and introns as intervals and to represent transcripts as a set of intervals (exons), so the assembled exons and introns are available as `GRanges` objects, and the assembled transcripts are available as a `GRangesList` object.  This means that useful range operations, such as `findOverlaps` and `reduce`, are readily available for your assembled features. You can easily extract these objects from the main `ballgown` object or examine them directly:
 
-```
+```S
 structure(awesome_bg)$exon
 structure(awesome_bg)$intron
 transcript_struct <- structure(awesome_bg)$trans
 ```
 The second main component of a `ballgown` object is `data`, i.e., tables containing expression data for the genomic features.  These tables are very similar to the `*_data.ctab` tables described in section (1).  In general, you can extract expression data using the syntax `*expr(ballgown_object_name, <EXPRESSION_MEASUREMENT>)`, where `*` is either e for exon, i for intron, t for transcript, or g for gene, and <EXPRESSION MEASUREMENT> is an expression-measurement column name from the appropriate `.ctab` file.  Gene-level measurements are calculated by appropriately aggregating the transcript-level measurements for that gene.  All of the following are valid ways to extract expression data from the `awesome_bg` ballgown object:
 
-```
+```S
 transcript_fpkm <- texpr(awesome_bg, 'FPKM')
 transcript_cov <- texpr(awesome_bg, 'cov')
 whole_tx_table <- texpr(awesome_bg)
@@ -110,7 +110,7 @@ Finally, the `indexes` component of the ballgown object connects the various pie
 
 You can assign `pData` in several different ways, two fo which are shown below.  It's probably easiest to assign in as you load the data, so you don't have to re-save the object, but if you forget, no biggie.
 
-```
+```S
 ## creating pData as you create the object:
 dirs <- c('sample01_output', 'sample02_output')
 pData <- data.frame(dirname = dirs, population = c('normal', 'cancer'))
@@ -124,7 +124,7 @@ save(awesome_bg, file = 'awesome_bg.rda') #re-save the object with associated pD
 ```
 The other components of `indexes` are the `e2t` and `i2t` tables described in section (1), as well as a `t2g` table denoting which transcripts belong to which genes.  There is also a `bamfiles` component, designed to hold the file paths to the read alignment files for each sample.  Again, make sure this is in the same order as the `dirname` column of `pData`.  The `bamfiles` component isn't currently used by any ballgown functions, but we imagine it could be useful for fans of `RSamtools` or similar packages.  Here are some examples of how to extract `indexes` components from ballgown objects:
 
-```
+```S
 exon_transcript_table <- indexes(awesome_bg)$e2t
 transcript_gene_table <- indexes(awesome_bg)$t2g
 alignment_files <- indexes(awesome_bg)$bamfiles
