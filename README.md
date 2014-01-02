@@ -79,17 +79,65 @@ save(awesome_bg, file = 'awesome_bg.rda')
 
 If you have a big experiment, loading the data might require a lot of memory and a lot of time, so it might be best to do this as a non-interactive batch job.  You only have to do this once, though.  The resulting `rda` file is usually only a few Gb on disk, even for large experiments, and usually only takes a reasonable amount of memory to work with.  (It's the creation of the object that's the memory-hog).  After initial creation of the object, whenever you want to work with this assembly, you can just fire up R and load it in:
 
-```R
+```
 library(ballgown)
 load('awesome_bg.rda')
 awesome_bg
+# ballgown instance with 109283 assembled transcripts
+```
+## (3) accessing assembly data
+A `ballgown` object has three main components: `structure`, `data`, and `indexes`.  The `structure` component,  depending heavily on the `GenomicRanges` Bioconductor package, specifies the strucutre (i.e., genomic locations and relationships between exons, introns, and transcripts) of your assembly.  It's convenient to represent exons and introns as intervals and to represent transcripts as a set of intervals (exons), so the assembled exons and introns are available as `GRanges` objects, and the assembled transcripts are available as a `GRangesList` object.  This means that useful range operations, such as `findOverlaps` and `reduce`, are readily available for your assembled features. You can easily extract these objects from the main `ballgown` object or examine them directly:
+
+```
+structure(awesome_bg)$exon
+structure(awesome_bg)$intron
+transcript_struct <- structure(awesome_bg)$trans
+```
+The second main component of a `ballgown` object is `data`, i.e., tables containing expression data for the genomic features.  These tables are very similar to the `*_data.ctab` tables described in section (1).  In general, you can extract expression data using the syntax `*expr(ballgown_object_name, <EXPRESSION_MEASUREMENT>)`, where `*` is either e for exon, i for intron, t for transcript, or g for gene, and <EXPRESSION MEASUREMENT> is an expression-measurement column name from the appropriate `.ctab` file.  Gene-level measurements are calculated by appropriately aggregating the transcript-level measurements for that gene.  All of the following are valid ways to extract expression data from the `awesome_bg` ballgown object:
+
+```
+transcript_fpkm <- texpr(awesome_bg, 'FPKM')
+transcript_cov <- texpr(awesome_bg, 'cov')
+whole_tx_table <- texpr(awesome_bg)
+exon_mcov <- eexpr(awesome_bg, 'mcov')
+junction_cov <- iexpr(awesome_bg, 'cov')
+whole_intron_table <- iexpr(awesome_bg)
+gene_expression <- gexpr(awesome_bg)
+```
+Calculating the gene-level expression measurements can be slow for large experiments, so you may want to run the `gexpr` call as a batch job and save the result as an rda file for later use. 
+
+Finally, the `indexes` component of the ballgown object connects the various pieces of the assembly and provides other information about your experiment.  Importantly, there is a slot called `pData` that holds a data frame of phenotype information for the samples.  Usually you have to create this manually.  **Make sure of two things: (a) the column of this data frame that identifies the samples is called `dirname` and (b) that column is ordered the same way as the tables in the `data` component.**  You can check the order by running something like `names(texpr(awesome_bg))`, or you can ensure the sample directories are in alphabetical order (i.e., in the order they'd appear if you ran an `ls` on the root directory). 
+
+You can assign `pData` in several different ways, two fo which are shown below.  It's probably easiest to assign in as you load the data, so you don't have to re-save the object, but if you forget, no biggie.
+
+```
+## creating pData as you create the object:
+dirs <- c('sample01_output', 'sample02_output')
+pData <- data.frame(dirname = dirs, population = c('normal', 'cancer'))
+awesome_bg <- ballgown(dirs = dirs, pData = pData)
+
+## creating pData after the object has been created:
+load('awesome_bg.rda')
+dirs <- c('sample01_output', 'sample02_output')
+pData(awesome_bg) <- data.frame(dirname = dirs, population = c('normal', 'cancer'))
+save(awesome_bg, file = 'awesome_bg.rda') #re-save the object with associated pData
+```
+The other components of `indexes` are the `e2t` and `i2t` tables described in section (1), as well as a `t2g` table denoting which transcripts belong to which genes.  There is also a `bamfiles` component, designed to hold the file paths to the read alignment files for each sample.  Again, make sure this is in the same order as the `dirname` column of `pData`.  The `bamfiles` component isn't currently used by any ballgown functions, but we imagine it could be useful for fans of `RSamtools` or similar packages.  Here are some examples of how to extract `indexes` components from ballgown objects:
+
+```
+exon_transcript_table <- indexes(awesome_bg)$e2t
+transcript_gene_table <- indexes(awesome_bg)$t2g
+alignment_files <- indexes(awesome_bg)$bamfiles
+phenotype_table <- pData(awesome_bg)
 ```
 
-## visualizing transcript structure
+
+
+## (4) visualizing transcript structure
 
 There are some great plotting functions here!
 
-## differential expression analysis
+## (5) differential expression analysis
 
 You can choose from a wide selection of simple, fast statistical methods for testing whether transcripts are differentially expressed between experimental conditions or across time.
 
