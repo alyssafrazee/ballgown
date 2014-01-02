@@ -141,7 +141,7 @@ You can see what the assembled transcripts look like for each gene using the `pl
 plotTranscripts(gene = 'XLOC_000043', gown = awesome_bg, samp = 'FPKM.sample01_output', colorby = 'transcript', main = 'transcripts from gene XLOC_000043: sample 1, FPKM')
 ```
 
-<!--![example plot](https://raw.github.com/alyssafrazee/ballgown/master/explot.png)-->
+![example plot](https://raw.github.com/alyssafrazee/ballgown/master/explot.png)
 
 
 ## (5) differential expression analysis
