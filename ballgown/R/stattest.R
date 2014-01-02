@@ -90,7 +90,7 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
             variable_list = ""
             for(i in seq_along(adjustvars)){
                 column_ind = which(names(pData(gown)) == adjustvars[i])
-                eval(parse(text=paste0(adjustvars[i], " <- pData(gown)[,",i,"]")))
+                eval(parse(text=paste0(adjustvars[i], " <- pData(gown)[,",column_ind,"]")))
                 variable_list = paste(variable_list, adjustvars[i], sep="+")
             }
             eval(parse(text=paste0("mod0 = model.matrix(~ lib_adj",variable_list,")")))
