@@ -1,5 +1,11 @@
-# function to calculate percent overlap between 2 GRanges objects
-
+#' calculate percent overlap between two GRanges objects
+#'
+#' @param tx1 GRanges object
+#' @param tx2 GRanges object
+#' @return percent overlap between \code{tx1} and \code{tx2}, as defined by the ratio of the intersection of \code{tx1} and \code{tx2} to the union of \code{tx1} and \code{tx2}.
+#' @details In the ballgown context, \code{tx1} and \code{tx2} are two transcripts, each represented by GRanges objects whose ranges represent the exons comprising the transcripts.  The percent overlap is the number of nucleotides falling within both transcripts divided by the number of nucleotides falling within either transcript.  Useful as a measure of transcript closeness. 
+#' @author Alyssa Frazee
+#' @export
 pctOverlap = function(tx1, tx2){
     ch1 = as.character(runValue(seqnames(tx1)))
     ch2 = as.character(runValue(seqnames(tx2)))
