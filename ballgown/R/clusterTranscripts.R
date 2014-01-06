@@ -6,7 +6,8 @@
 #' @return vector of nucleotide positions included in the transcript
 #' @seealso \code{\link{transcriptOverlaps}} which is this function's wrapper
 #' @export
-clusterTranscripts = function(gene, gown, k=NULL, method="hclust"){
+clusterTranscripts = function(gene, gown, k=NULL, method=c("hclust", "kmeans")){
+    method = match.arg(method)
     txnames = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id == gene]
     strucnames = as.numeric(substr(names(structure(gown)$trans),3,nchar(names(structure(gown)$trans))))
     inds = which(strucnames %in% txnames)
