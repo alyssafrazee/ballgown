@@ -1,3 +1,14 @@
+#' cluster a gene's transcripts and calculate cluster-level expression
+#'
+#' @param gown ballgown object containing experimental data
+#' @param dattype which transcript-level expression measurement to use (\code{'cov'}, average per-base coverage, or \code{'FPKM'})
+#' @param method which clustering method to use (\code{'hclust'}, hierarchical clustering, or \code{'kmeans'}, k-means clustering)
+#' @return data frame with one row per transcript cluster and one column per sample, where entries are summed expression measurements for all the transcripts in the appropriate cluster
+#' @details Transcript clustering methods are in development, so use this function with caution: for example, it's not clear that the appropriate cluster-level expression measurement is the sum.  
+#' 
+#' Also, this function runs clustering and collapsing on the entire ballgown object and could be very slow, so you may want to check out the \code{\link{subset}} method for ballgown objects and run this function on small chunks of genes.
+#' @seealso \code{\link{hclust}}, \code{\link{\kmeans}}, \code{\link{clusterTranscripts}} for gene-level transcript clustering, \code{\link{plotLatentTranscripts}} for visualizing transcript clusters
+#' @export
 collapseTranscripts = function(gown, dattype=c('cov','FPKM'), method=c('hclust', 'kmeans')){
   dattype = match.arg(dattype)
   method = match.arg(method)
