@@ -1,5 +1,6 @@
 \docType{methods}
-\name{structure}
+\name{ballgown-methods}
+\alias{ballgown-methods}
 \alias{data}
 \alias{data<-}
 \alias{dirs}
@@ -89,6 +90,7 @@ the specified expression measurement in the cells, or all
 possible expression measurements if none was specified.
 }
 \description{
-methods for objects of class \code{ballgown}
+The following methods are available for the S4 class
+\code{ballgown}.
 }
 

@@ -5,7 +5,7 @@
 #' @param k number of clusters to use
 #' @param method clustering method to use.  Must be one of \code{"hclust"}, for hierarchical clustering, or \code{"kmeans"}, for k-means clustering. 
 #' @return list with elements \code{clusters} and \code{pctvar}.  \code{clusters} contains columns "cluster", "tname", and "tid", and denotes which transcripts belong to which clusters.  \code{pctvar} is only non-NULL when using k-means clustering and is the percentage of variation explained by these clusters, defined as the ratio of the between-cluster sum of squares to the total sum of squares.
-#' @seealso \code{\link{hclust}}, \code{\link{kmeans}}, \code{\link{\plotLatentTranscripts}} for visualizing the transcript clusters
+#' @seealso \code{\link{hclust}}, \code{\link{kmeans}}, \code{\link{plotLatentTranscripts}} for visualizing the transcript clusters
 #' @author Alyssa Frazee
 #' @export
 clusterTranscripts = function(gene, gown, k=NULL, method=c("hclust", "kmeans")){
