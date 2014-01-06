@@ -1,3 +1,11 @@
+#' read in GTF/GFF file as a data frame
+#'
+#' @param gffFile name of GTF/GFF on disk
+#' @param nrows optional argument; number of rows to read in (default -1, which means read all rows)
+#' @return data frame representing the GTF/GFF file
+#' @seealso \code{\link{getAttributeField}} to extract data from "attributes" column; \link{http://useast.ensembl.org/info/website/upload/gff.html} for more information on GTF/GFF files.
+#' @author Kasper Hansen
+#' @export
 gffRead <- function (gffFile, nrows = -1) 
 {
     cat("Reading ", gffFile, ": ", sep = "")
@@ -12,3 +20,5 @@ gffRead <- function (gffFile, nrows = -1)
     stopifnot(!any(is.na(gff$start)), !any(is.na(gff$end)))
     return(gff)
 }
+
+# source: https://stat.ethz.ch/pipermail/bioconductor/2008-October/024669.html
