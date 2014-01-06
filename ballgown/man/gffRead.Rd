@@ -1,0 +1,28 @@
+\name{gffRead}
+\alias{gffRead}
+\title{read in GTF/GFF file as a data frame}
+\usage{
+gffRead(gffFile, nrows = -1)
+}
+\arguments{
+  \item{gffFile}{name of GTF/GFF on disk}
+
+  \item{nrows}{optional argument; number of rows to read in
+  (default -1, which means read all rows)}
+}
+\value{
+data frame representing the GTF/GFF file
+}
+\description{
+read in GTF/GFF file as a data frame
+}
+\author{
+Kasper Hansen
+}
+\seealso{
+\code{\link{getAttributeField}} to extract data from
+"attributes" column;
+\link{http://useast.ensembl.org/info/website/upload/gff.html}
+for more information on GTF/GFF files.
+}
+
