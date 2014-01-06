@@ -171,7 +171,10 @@ ballgown = function(dirs=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL
 # generic function definitions for the ballgown class
 
 #' methods for objects of class \code{ballgown}
-#' @name structure
+#'
+#' The following methods are available for the S4 class \code{ballgown}.
+#' @name ballgown-methods
+#' @aliases structure
 #' @export
 #' @docType methods
 #' @rdname ballgown-methods
