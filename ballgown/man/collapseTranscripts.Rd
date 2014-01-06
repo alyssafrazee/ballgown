@@ -42,7 +42,7 @@ genes.
 Alyssa Frazee
 }
 \seealso{
-\code{\link{hclust}}, \code{\link{\kmeans}},
+\code{\link{hclust}}, \code{\link{kmeans}},
 \code{\link{clusterTranscripts}} for gene-level transcript
 clustering, \code{\link{plotLatentTranscripts}} for
 visualizing transcript clusters
