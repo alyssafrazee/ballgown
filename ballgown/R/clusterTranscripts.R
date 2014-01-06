@@ -2,12 +2,14 @@
 #'
 #' @param gene name of gene whose transcripts will be clustered.  When using Cufflinks output, usually of the form \code{"XLOC_######"}
 #' @param gown ballgown object containing experimental data
-#' @k number of clusters to use
-#' @return vector of nucleotide positions included in the transcript
-#' @seealso \code{\link{transcriptOverlaps}} which is this function's wrapper
+#' @param k number of clusters to use
+#' @param method clustering method to use.  Must be one of \code{"hclust"}, for hierarchical clustering, or \code{"kmeans"}, for k-means clustering. 
+#' @return list with elements \code{clusters} and \code{pctvar}.  \code{clusters} contains columns "cluster", "tname", and "tid", and denotes which transcripts belong to which clusters.  \code{pctvar} is only non-NULL when using k-means clustering and is the percentage of variation explained by these clusters, defined as the ratio of the between-cluster sum of squares to the total sum of squares.
+#' @seealso \code{\link{hclust}}, \code{\link{kmeans}}, \code{\link{\plotLatentTranscripts}} for visualizing the transcript clusters
 #' @export
 clusterTranscripts = function(gene, gown, k=NULL, method=c("hclust", "kmeans")){
     method = match.arg(method)
+
     txnames = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id == gene]
     strucnames = as.numeric(substr(names(structure(gown)$trans),3,nchar(names(structure(gown)$trans))))
     inds = which(strucnames %in% txnames)
