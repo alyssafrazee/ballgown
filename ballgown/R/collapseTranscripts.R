@@ -8,6 +8,7 @@
 #' 
 #' Also, this function runs clustering and collapsing on the entire ballgown object and could be very slow, so you may want to check out the \code{\link{subset}} method for ballgown objects and run this function on small chunks of genes.
 #' @seealso \code{\link{hclust}}, \code{\link{\kmeans}}, \code{\link{clusterTranscripts}} for gene-level transcript clustering, \code{\link{plotLatentTranscripts}} for visualizing transcript clusters
+#' @author Alyssa Frazee
 #' @export
 collapseTranscripts = function(gown, dattype=c('cov','FPKM'), method=c('hclust', 'kmeans')){
   dattype = match.arg(dattype)

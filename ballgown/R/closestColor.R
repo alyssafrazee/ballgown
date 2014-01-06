@@ -4,6 +4,7 @@
 #' @param colscale vector representing range of numbers the color scale is representing
 #' @return color (from \code{heat.colors}) that most closely matches \code{x} in the given scale
 #' @details internal function for \code{plotTranscripts} - not intended for direct use
+#' @author Alyssa Frazee
 #' @seealso \link{\code{plotTranscripts}}
 
 closestColor = function(x, colscale){
