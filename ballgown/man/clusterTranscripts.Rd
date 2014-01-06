@@ -34,7 +34,7 @@ Alyssa Frazee
 }
 \seealso{
 \code{\link{hclust}}, \code{\link{kmeans}},
-\code{\link{\plotLatentTranscripts}} for visualizing the
+\code{\link{plotLatentTranscripts}} for visualizing the
 transcript clusters
 }
 
