@@ -1,5 +1,6 @@
 \docType{class}
 \name{ballgown-class}
+\alias{Ballgown}
 \alias{ballgown-class}
 \title{Ballgown}
 \description{
