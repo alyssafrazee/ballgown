@@ -3,7 +3,7 @@
 #' @param gene name of gene whose transcripts will be plotted.  When using Cufflinks output, usually of the form \code{"XLOC_######"}
 #' @param samp name of sample whose abundances dictate transcript colors.  Can be \code{NULL} if no colors are desired. Usually prefixed with the transcript expression measurement followed by a dot, e.g., \code{"cov.sample1"}
 #' @param gown ballgown object containing experimental and phenotype data
-#' @param legend if \code{TRUE} (as it is by default), a color legend is drawn on top of the plot indicating scales for transcript abundances.
+#' @param legend if \code{TRUE} (as it is by default), a color legend is drawn on top of the plot indicating scales for feature abundances.
 #' @param labelTranscripts if \code{TRUE}, transcript ids are labeled on the left side of the plot. Default \code{FALSE}.
 #' @param colorby one of \code{"transcript"}, \code{"exon"}, or \code{"none"}, indicating which feature's abundances should dictate plot coloring.  If \code{"none"}, all transcripts are drawn in gray.
 #' @param main optional string giving the desired plot title.
