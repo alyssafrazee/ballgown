@@ -26,3 +26,8 @@ getAttributeField <- function (x, field, attrsep = "; ")
         return(rv)
     })
 }
+
+### needs attribution
+### https://stat.ethz.ch/pipermail/bioconductor/2008-October/024669.html
+### this function comes from the davidTiling package, but I changed the default attribute separator
+### don't want to import the whole package, but would like to include this function in ballgowns
