@@ -13,7 +13,7 @@
 #' @details \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is specified, you must also specify \code{mod0}.  If neither are specified, \code{mod0} defaults to the design matrix for a model including only a library-size adjustment, and \code{mod} defaults to the design matrix for a model including a library-size adjustment and \code{covariate}.
 #' @return data frame containing the columns \code{feature}, \code{id} representing feature id, \code{pval} representing the p-value for testing whether this feature was differentially expressed according to \code{covariate}, and \code{qval}, the estimated false discovery rate using this feature's signal strength as a significance cutoff.
 #' @export
-#' @author Alyssa Frazee, Jeff Leek
+#' @author Jeff Leek, Alyssa Frazee
 
 stattest = function(gown, mod = NULL, mod0 = NULL, 
     feature = c("gene", "exon", "intron", "transcript"),

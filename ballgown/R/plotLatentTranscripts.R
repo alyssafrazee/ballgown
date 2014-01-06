@@ -8,6 +8,7 @@
 #' @param returncluster if TRUE (as it is by default), return the results of the call to \code{clusterTrancsripts} so the data is available for later use.  Nothing is returned if FALSE.
 #' @return if \code{returncluster} is TRUE, the transcript clusters are returned as described in \link{\code{clusterTranscripts}}. A plot of the transcript clusters is also produced, in the style of \link{\code{plotTranscripts}}.
 #' @seealso \code{\link{clusterTranscripts}}
+#' @author Alyssa Frazee
 #' @export
 
 plotLatentTranscripts = function(gene, gown, method = c("hclust", "kmeans"), k = NULL, choosek = c("var90", "thumb"), returncluster = TRUE){
