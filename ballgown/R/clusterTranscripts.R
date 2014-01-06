@@ -29,7 +29,7 @@ clusterTranscripts = function(gene, gown, k=NULL, method=c("hclust", "kmeans")){
     tnames = names(expanded)
     expanded = lapply(1:length(expanded), function(i){
         out = expanded[[i]]
-        if(startpos[i] >= minbp){
+        if(startpos[i] > minbp){
             out = c(rep(0, startpos[i]-minbp), out)
         }
         if(endpos[i] < maxbp){
