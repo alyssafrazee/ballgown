@@ -2,6 +2,7 @@
 #'
 #' S4 class for storing and manipulating expression data from assembled transcriptomes
 #'
+#' @aliases Ballgown
 #' @slot data tables containing expression data for genomic features (introns, exons, transcripts)
 #' @slot structure genomic locations of features and their relationships to one another
 #' @slot indexes tables connecting components of the assembly and providing other experimental information (e.g., phenotype data and locations of read alignment files)
