@@ -1,5 +1,6 @@
-collapseTranscripts = function(gown, dattype, method="hclust"){
-  if(dattype!="cov" & dattype!="FPKM") stop("dattype must be one of cov or FPKM")
+collapseTranscripts = function(gown, dattype=c('cov','FPKM'), method=c('hclust', 'kmeans')){
+  dattype = match.arg(dattype)
+  method = match.arg(method)
   
   # number of transcripts for each gene:
   txnums = table(data(gown)$trans$gene_id)
