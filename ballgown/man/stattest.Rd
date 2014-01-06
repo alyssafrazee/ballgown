@@ -1,0 +1,77 @@
+\name{stattest}
+\alias{stattest}
+\title{statistical tests for differential expression in ballgown}
+\usage{
+stattest(gown, mod = NULL, mod0 = NULL, feature = c("gene", "exon",
+  "intron", "transcript"), meas = c("cov", "FPKM", "rcount", "ucount",
+  "mrcount", "mcov"), timecourse = FALSE, covariate = NULL,
+  adjustvars = NULL, gexpr = NULL, df = 4)
+}
+\arguments{
+  \item{gown}{name of an object of class \code{ballgown}}
+
+  \item{mod}{object of class \code{model.matrix}
+  representing the design matrix for the linear regression
+  model including covariates of interest}
+
+  \item{mod0}{object of class \code{model.matrix}
+  representing the design matrix for the linear regression
+  model without the covariates of interest.}
+
+  \item{feature}{the type of genomic feature to be tested
+  for differential expression. Must be one of
+  \code{"gene"}, \code{"transcript"}, \code{"exon"}, or
+  \code{"intron"}.}
+
+  \item{meas}{the expression measurement to use for
+  statistical tests.  Must be one of \code{"cov"},
+  \code{"FPKM"}, \code{"rcount"}, \code{"ucount"},
+  \code{"mrcount"}, or \code{"mcov"}. Not all expression
+  measurements are available for all features.}
+
+  \item{timecourse}{if \code{TRUE}, tests whether or not
+  the expression profiles of genomic features vary over
+  time in the study.  Default \code{FALSE}.}
+
+  \item{covariate}{string representing the name of the
+  covariate of interest for the differential expression
+  tests.  Must correspond to the name of a column of
+  \code{pData(gown)}. If \code{timecourse=TRUE}, this
+  should be the study's time variable.}
+
+  \item{adjustvars}{optional vector of strings representing
+  the names of potential confounders.  Must correspond to
+  names of columns of \code{pData(gown)}.}
+
+  \item{gexpr}{optional data frame that is the result of
+  calling \code{gexp(gown))}.  Used to speed this up by
+  pre-creating \code{gexp(gown)}.}
+
+  \item{df}{degrees of freedom used for modeling expression
+  over time with natural cubic splines.  Default 4.  Only
+  used if \code{timecourse=TRUE}.}
+}
+\value{
+data frame containing the columns \code{feature}, \code{id}
+representing feature id, \code{pval} representing the
+p-value for testing whether this feature was differentially
+expressed according to \code{covariate}, and \code{qval},
+the estimated false discovery rate using this feature's
+signal strength as a significance cutoff.
+}
+\description{
+statistical tests for differential expression in ballgown
+}
+\details{
+\code{mod} and \code{mod0} are optional arguments.  If
+\code{mod} is specified, you must also specify \code{mod0}.
+If neither are specified, \code{mod0} defaults to the
+design matrix for a model including only a library-size
+adjustment, and \code{mod} defaults to the design matrix
+for a model including a library-size adjustment and
+\code{covariate}.
+}
+\author{
+Jeff Leek, Alyssa Frazee
+}
+

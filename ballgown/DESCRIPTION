@@ -16,23 +16,3 @@ Imports:
     matrixStats,
     splines,
     sva
-Collate:
-    'ballgown-package.r'
-    'ballgown-class.R'
-    'bpset.R'
-    'checkAssembledTx.R'
-    'closestColor.R'
-    'clusterTranscripts.R'
-    'collapseTranscripts.R'
-    'getAttributeField.R'
-    'getRefSeq.R'
-    'getsamp.R'
-    'gettype.R'
-    'gff2grlist.R'
-    'gffRead.R'
-    'last.R'
-    'pctOverlap.R'
-    'plotLatentTranscripts.R'
-    'plotMeans.R'
-    'plotTranscripts.R'
-    'stattest.R'

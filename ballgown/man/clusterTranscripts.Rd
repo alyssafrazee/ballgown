@@ -1,0 +1,40 @@
+\name{clusterTranscripts}
+\alias{clusterTranscripts}
+\title{group a gene's assembled transcripts into clusters}
+\usage{
+clusterTranscripts(gene, gown, k = NULL, method = c("hclust", "kmeans"))
+}
+\arguments{
+  \item{gene}{name of gene whose transcripts will be
+  clustered.  When using Cufflinks output, usually of the
+  form \code{"XLOC_######"}}
+
+  \item{gown}{ballgown object containing experimental data}
+
+  \item{k}{number of clusters to use}
+
+  \item{method}{clustering method to use.  Must be one of
+  \code{"hclust"}, for hierarchical clustering, or
+  \code{"kmeans"}, for k-means clustering.}
+}
+\value{
+list with elements \code{clusters} and \code{pctvar}.
+\code{clusters} contains columns "cluster", "tname", and
+"tid", and denotes which transcripts belong to which
+clusters.  \code{pctvar} is only non-NULL when using
+k-means clustering and is the percentage of variation
+explained by these clusters, defined as the ratio of the
+between-cluster sum of squares to the total sum of squares.
+}
+\description{
+group a gene's assembled transcripts into clusters
+}
+\author{
+Alyssa Frazee
+}
+\seealso{
+\code{\link{hclust}}, \code{\link{kmeans}},
+\code{\link{\plotLatentTranscripts}} for visualizing the
+transcript clusters
+}
+
