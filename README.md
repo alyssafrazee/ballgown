@@ -6,7 +6,7 @@ After installing the `devtools` package from CRAN and the `GenomicRanges` packag
 
 ```S
 library(devtools)
-install_github('ballgown', 'alyssafrazee', subdir = 'ballgown')
+install_github('ballgown', 'alyssafrazee')
 ```
 
 ## (1) preprocessing: preparing transcript assemblies for analysis
