@@ -154,7 +154,7 @@ ballgown = function(dirs=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL
         warning(paste('the following exon(s) did not appear in e_data.ctab:',
         paste(e2t$e_id[which(is.na(mm))], collapse=", ")))
     }
-    transgrl = GRangesList(split(exongr[mm[!is.na(mm)]], e2t$t_id[!is.na(mm)]))
+    transgrl = split(exongr[mm[!is.na(mm)]], e2t$t_id[!is.na(mm)])
     names(transgrl) = paste0("tx", names(transgrl))
 
     ## Connect transcripts to genes:
