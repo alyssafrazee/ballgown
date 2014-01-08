@@ -11,6 +11,8 @@
 #' @name ballgown-class
 #' @rdname ballgown-class
 #' @exportClass ballgown
+#' @import GenomicRanges
+#' @import IRanges
 #' @import methods
 #' @import RColorBrewer
 #' @import DESeq
