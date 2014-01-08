@@ -1,4 +1,4 @@
-setMethod("iexpr", "ballgown", function(x, meas="all"){
+setMethod("iexpr", "ballgown", function(x, meas="rcount"){
   meas = match.arg(meas, c("rcount","ucount","mrcount","all"))
   if(meas!="all"){
     expr = data(x)$intron[,-c(1:5)]

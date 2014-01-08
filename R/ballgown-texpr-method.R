@@ -1,4 +1,4 @@
-setMethod("texpr", "ballgown", function(x, meas="all"){
+setMethod("texpr", "ballgown", function(x, meas="FPKM"){
   meas = match.arg(meas, c("cov","FPKM","all"))
   if(meas!="all"){
     expr = data(x)$trans[,-c(1:10)]

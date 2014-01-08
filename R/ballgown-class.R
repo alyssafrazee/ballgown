@@ -274,7 +274,8 @@ setGeneric("iexpr", function(x, ...) standardGeneric("iexpr"))
 #' @export
 #' @docType methods
 #' @rdname ballgown-methods
-#' @return for \code{*expr} methods: a feature-by-sample table with the specified expression measurement in the cells, or all possible expression measurements if none was specified.
+#' @param meas expression measurement to extract (for use with \code{*expr} methods).  Defaults to FPKM for \code{texpr} and \code{rcount} for \code{eexpr} and \code{iexpr}. Specifying \code{"all"} will return all expression measurements as well as extra feature-level information.
+#' @return for \code{*expr} methods: a feature-by-sample table with the specified expression measurement(s) in the cells.
 setGeneric("gexpr", function(x) standardGeneric("gexpr"))
 
 

@@ -1,4 +1,4 @@
-setMethod("eexpr", "ballgown", function(x, meas="all"){
+setMethod("eexpr", "ballgown", function(x, meas="rcount"){
   meas = match.arg(meas, c("rcount","ucount","mrcount","cov","mcov","all"))
   if(meas!="all"){
     expr = data(x)$exon[,-c(1:5)]
