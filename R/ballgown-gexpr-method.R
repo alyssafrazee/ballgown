@@ -2,7 +2,7 @@ setMethod("gexpr", "ballgown", function(x){
     gnames = indexes(x)$t2g$g_id
     inds_by_gene = split(seq(along=gnames), gnames)
     tmeas = texpr(x, "FPKM")
-    gid_by_exon = lapply(1:nrow(texpr(x)), function(i){rep(texpr(x)$gene_id[i], texpr(x)$num_exons[i])})
+    gid_by_exon = lapply(1:nrow(tmeas), function(i){rep(texpr(x, 'all')$gene_id[i], texpr(x, 'all')$num_exons[i])})
     ulstruct = unlist(structure(x)$trans)
     glist = split(ulstruct, unlist(gid_by_exon))
     glengths = sapply(width(reduce(glist)), sum)
