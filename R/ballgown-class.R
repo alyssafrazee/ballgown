@@ -101,13 +101,17 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
 
     ## Read counts for all introns 
     if(verbose) message(paste0(date(), ": Reading intron data files"))
-    intronFiles <- sapply(dirs, list.files, pattern="i_data.ctab", full.names=TRUE)
+    intronFiles <- sapply(samples, list.files, pattern="i_data.ctab", full.names=TRUE)
     intronAll <- lapply(intronFiles, .readIntron)
 
     ## Merge the intron results
     if(verbose) message(paste0(date(), ": Merging intron data"))
-    intron <- join_all(intronAll, by=c("i_id", "chr", "strand", "start", "end"), type="left")
-    colnames(intron)  <- c("i_id", "chr", "strand", "start", "end", paste(c("rcount", "ucount", "mrcount"), rep(names(dirs), each=3), sep="."))
+    #[ensure ctab files all contain same introns]
+    sumdiff <- sapply(intronAll, function(x) sum(x$i_id != intronAll[[1]]$i_id))
+    stopifnot(all(sumdiff==0))
+    idataOnly <- lapply(intronAll[2:length(intronAll)], function(x) x[,6:ncol(x)]);
+    intron <- data.frame(intronAll[[1]], as.data.frame(idataOnly))
+    colnames(intron)  <- c("i_id", "chr", "strand", "start", "end", paste(c("rcount", "ucount", "mrcount"), rep(names(samples), each=3), sep="."))
 
     ## Make intron data into GRanges object
     #A. fix strand information for compatibility w/ GRanges
@@ -121,13 +125,17 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
 
     ## Read exon data
     if(verbose) message(paste0(date(), ": Reading exon data files"))
-    exonFiles <- sapply(dirs, list.files, pattern="e_data.ctab", full.names=TRUE)
+    exonFiles <- sapply(samples, list.files, pattern="e_data.ctab", full.names=TRUE)
     exonAll <- lapply(exonFiles, .readExon)
 
     ## Merge the exon results
     if(verbose) message(paste0(date(), ": Merging exon data"))
-    exon <- join_all(exonAll, by=c("e_id", "chr", "strand", "start", "end"), type="left")
-    colnames(exon) <- c("e_id", "chr", "strand", "start", "end", paste(c("rcount", "ucount", "mrcount", "cov", "cov_sd", "mcov", "mcov_sd"), rep(names(dirs), each=7), sep="."))
+    #[ensure ctab files all contain same exons]
+    sumdiffex <- sapply(exonAll, function(x) sum(x$e_id != exonAll[[1]]$e_id))
+    stopifnot(all(sumdiffex==0))
+    edataOnly <- lapply(exonAll[2:length(exonAll)], function(x) x[,6:ncol(x)])
+    exon <- data.frame(exonAll[[1]], as.data.frame(edataOnly))
+    colnames(exon) <- c("e_id", "chr", "strand", "start", "end", paste(c("rcount", "ucount", "mrcount", "cov", "cov_sd", "mcov", "mcov_sd"), rep(names(samples), each=7), sep="."))
 
     ## Make exon data into GRanges object
     #A. fix strand information for compatibility w/ GRanges
@@ -141,13 +149,17 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
 
     ## Read transcript data
     if(verbose) message(paste0(date(), ": Reading transcript data files"))
-    transFiles <- sapply(dirs, list.files, pattern="t_data.ctab", full.names=TRUE)
+    transFiles <- sapply(samples, list.files, pattern="t_data.ctab", full.names=TRUE)
     transAll <- lapply(transFiles, .readTrans)
 
     ## Merge transcript results
     if(verbose) message(paste0(date(),": Merging transcript data"))
-    trans <- join_all(transAll, by=c("t_id", "chr", "strand", "start", "end", "t_name", "num_exons", "length", "gene_id", "gene_name"), type="left")
-    colnames(trans) <- c("t_id", "chr", "strand", "start", "end", "t_name", "num_exons", "length", "gene_id", "gene_name", paste(c("cov", "FPKM"), rep(names(dirs), each=2), sep="."))
+    #[ensure ctab files all contain same transcripts]
+    sumdifft <- sapply(transAll, function(x) sum(x$t_id != transAll[[1]]$t_id))
+    stopifnot(all(sumdifft==0))
+    tdataOnly <- lapply(transAll[2:length(transAll)], function(x) x[,11:ncol(x)])
+    trans <- data.frame(transAll[[1]], as.data.frame(tdataOnly))
+    colnames(trans) <- c("t_id", "chr", "strand", "start", "end", "t_name", "num_exons", "length", "gene_id", "gene_name", paste(c("cov", "FPKM"), rep(names(samples), each=2), sep="."))
 
     ## Make transcripts into a GRanges list object
     mm = match(e2t$e_id, mcols(exongr)$id)
@@ -165,14 +177,14 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     if(is.character(pData)){
         if(verbose) message(paste0(date(),": Reading phenotype table"))
         phx = read.table(pData, stringsAsFactors=FALSE, ...)
-        theorder = sapply(names(dirs), function(x) which(phx$dirname==x))
+        theorder = sapply(names(samples), function(x) which(phx$dirname==x))
         phx = phx[theorder,]
         }
     if(is.data.frame(pData)) phx = pData
     if(is.null(pData)) phx = NULL
 
     if(verbose) message("Wrapping up the results")
-    result <- new("ballgown", data = list(intron=intron, exon=exon, trans=trans), indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles = bamfiles, pData = phx), structure = list(intron = introngr, exon = exongr, trans = transgrl), dirs=dirs, mergedDate=date())
+    result <- new("ballgown", data = list(intron=intron, exon=exon, trans=trans), indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles = bamfiles, pData = phx), structure = list(intron = introngr, exon = exongr, trans = transgrl), dirs=samples, mergedDate=date())
 
     if(verbose) message(date())
     return(result)
