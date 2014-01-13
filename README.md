@@ -72,8 +72,8 @@ Then, in your R session, assuming your working directory is `awesome_experiment`
 
 ```S
 library(ballgown)
-dirs <- c('sample01_output', 'sample02_output')
-awesome_bg <- ballgown(dirs = dirs)
+sample_directories <- c('sample01_output', 'sample02_output')
+awesome_bg <- ballgown(samples = sample_directories)
 save(awesome_bg, file = 'awesome_bg.rda')
 ```
 
@@ -98,10 +98,10 @@ The second main component of a `ballgown` object is `data`, i.e., tables contain
 ```S
 transcript_fpkm <- texpr(awesome_bg, 'FPKM')
 transcript_cov <- texpr(awesome_bg, 'cov')
-whole_tx_table <- texpr(awesome_bg)
+whole_tx_table <- texpr(awesome_bg, 'all')
 exon_mcov <- eexpr(awesome_bg, 'mcov')
 junction_cov <- iexpr(awesome_bg, 'cov')
-whole_intron_table <- iexpr(awesome_bg)
+whole_intron_table <- iexpr(awesome_bg, 'all')
 gene_expression <- gexpr(awesome_bg)
 ```
 Calculating the gene-level expression measurements can be slow for large experiments, so you may want to run the `gexpr` call as a batch job and save the result as an rda file for later use. 
@@ -112,14 +112,14 @@ You can assign `pData` in several different ways, two of which are shown below. 
 
 ```S
 ## creating pData as you create the object:
-dirs <- c('sample01_output', 'sample02_output')
-pData <- data.frame(dirname = dirs, population = c('normal', 'cancer'))
-awesome_bg <- ballgown(dirs = dirs, pData = pData)
+sample_directories <- c('sample01_output', 'sample02_output')
+pData <- data.frame(dirname = sample_directories, population = c('normal', 'cancer'))
+awesome_bg <- ballgown(samples = sample_directories, pData = pData)
 
 ## creating pData after the object has been created:
 load('awesome_bg.rda')
-dirs <- c('sample01_output', 'sample02_output')
-pData(awesome_bg) <- data.frame(dirname = dirs, population = c('normal', 'cancer'))
+sample_directories <- c('sample01_output', 'sample02_output')
+pData(awesome_bg) <- data.frame(dirname = sample_directories, population = c('normal', 'cancer'))
 save(awesome_bg, file = 'awesome_bg.rda') #re-save the object with associated pData
 ```
 The other components of `indexes` are the `e2t` and `i2t` tables described in section (1), as well as a `t2g` table denoting which transcripts belong to which genes.  There is also a `bamfiles` component, designed to hold the file paths to the read alignment files for each sample.  Again, make sure this is in the same order as the `dirname` column of `pData`.  The `bamfiles` component isn't currently used by any ballgown functions, but we imagine it could be useful for fans of `RSamtools` or similar packages.  Here are some examples of how to extract `indexes` components from ballgown objects:
@@ -138,7 +138,7 @@ phenotype_table <- pData(awesome_bg)
 You can see what the assembled transcripts look like for each gene using the `plotTranscripts` function.  Transcripts or exons can be colored by expression level.  Features can also be colored by mean expression level for a population or for the entire experiment.  The possibilities are endless!  
 
 ```S
-plotTranscripts(gene = 'XLOC_000043', gown = awesome_bg, samp = 'FPKM.sample01_output', colorby = 'transcript', main = 'transcripts from gene XLOC_000043: sample 1, FPKM')
+plotTranscripts(gene = 'XLOC_000043', gown = awesome_bg, samples = 'sample01_output', meas = 'FPKM', colorby = 'transcript', main = 'transcripts from gene XLOC_000043: sample 1, FPKM')
 ```
 
 ![example plot](https://raw.github.com/alyssafrazee/ballgown/master/explot.png)
