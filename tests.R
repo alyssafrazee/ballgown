@@ -43,3 +43,10 @@ cat('\n\n')
 
 sink()
 
+# a load function to use locally
+# (I always forget where this file lives)
+bg = ballgown(dataDir = '~/Google Drive/hopkins/research/_ballgown/simgown', samplePattern = 'sample')
+
+
+
+
