@@ -20,8 +20,9 @@ plotTranscripts = function(gene, gown, samples = NULL,
 
 
     if(class(gown)!="ballgown") stop("gown must be a ballgown object")
-    if(colorby!="none" & is.null(samples)){
-        stop("to color by transcript or exon abundances, you must provide samples. (use sampleNames(gown) to see choices.)")
+    if(is.null(samples)){
+        samples = sampleNames(gown)[1]
+        if(colorby!='none') message(paste('defaulting to sample',samples))
     }
     
     stopifnot(colorby %in% c('transcript', 'exon', 'none'))
