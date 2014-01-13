@@ -2,23 +2,32 @@
 \alias{plotTranscripts}
 \title{visualize structure of assembled transcripts}
 \usage{
-plotTranscripts(gene, samp = NULL, gown, legend = TRUE,
-  labelTranscripts = FALSE, colorby = c("transcript", "exon", "none"),
-  main = NULL)
+plotTranscripts(gene, gown, samples = NULL, colorby = "transcript",
+  meas = "FPKM", legend = TRUE, labelTranscripts = FALSE, main = NULL,
+  colorBorders = FALSE)
 }
 \arguments{
   \item{gene}{name of gene whose transcripts will be
   plotted.  When using Cufflinks output, usually of the
   form \code{"XLOC_######"}}
 
-  \item{samp}{name of sample whose abundances dictate
-  transcript colors.  Can be \code{NULL} if no colors are
-  desired. Usually prefixed with the transcript expression
-  measurement followed by a dot, e.g.,
-  \code{"cov.sample1"}}
-
   \item{gown}{ballgown object containing experimental and
   phenotype data}
+
+  \item{samples}{vector of sample(s) to plot. Can be
+  \code{'none'} if only one plot (showing transcript
+  structure in gray) is desired. Use
+  \code{sampleNames(gown)} to see sample names for
+  \code{gown}. Defaults to \code{sampleNames(gown)[1]}.}
+
+  \item{colorby}{one of \code{"transcript"}, \code{"exon"},
+  or \code{"none"}, indicating which feature's abundances
+  should dictate plot coloring.  If \code{"none"}, all
+  transcripts are drawn in gray.}
+
+  \item{meas}{which expression measurement to color
+  features by, if any. Must match an available measurement
+  for whatever feature you're plotting.}
 
   \item{legend}{if \code{TRUE} (as it is by default), a
   color legend is drawn on top of the plot indicating
@@ -28,13 +37,14 @@ plotTranscripts(gene, samp = NULL, gown, legend = TRUE,
   are labeled on the left side of the plot. Default
   \code{FALSE}.}
 
-  \item{colorby}{one of \code{"transcript"}, \code{"exon"},
-  or \code{"none"}, indicating which feature's abundances
-  should dictate plot coloring.  If \code{"none"}, all
-  transcripts are drawn in gray.}
-
   \item{main}{optional string giving the desired plot
   title.}
+
+  \item{colorBorders}{if \code{TRUE}, exon borders are also
+  drawn in color (instead of black, as they are by
+  default). Useful for visualizing abundances for skinny
+  exons and/or smaller plots, as often happens when
+  \code{length(samples)} is large.}
 }
 \value{
 produces a plot of the transcript structure for the
