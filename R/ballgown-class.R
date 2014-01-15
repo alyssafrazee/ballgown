@@ -177,7 +177,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     if(is.character(pData)){
         if(verbose) message(paste0(date(),": Reading phenotype table"))
         phx = read.table(pData, stringsAsFactors=FALSE, ...)
-        theorder = sapply(names(samples), function(x) which(phx$dirname==x))
+        theorder = sapply(names(samples), function(x) which(phx[,1]==x))
         phx = phx[theorder,]
         }
     if(is.data.frame(pData)) phx = pData
