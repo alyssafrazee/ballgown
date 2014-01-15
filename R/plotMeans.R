@@ -64,11 +64,11 @@ plotMeans = function(gene, gown,
         plot_titles = ifelse(groupname=="none", "mean across groups", groupname)
     }
     if(overall){
-        samples = list(pData(gown)$dirname)
+        samples = list(pData(gown)[,1])
     }else if(groupname == "all"){
-        samples = split(pData(gown)$dirname, pData(gown)[,pdatacol])
+        samples = split(pData(gown)[,1], pData(gown)[,pdatacol])
     }else{
-        samples = list(pData(gown)$dirname[pData(gown)[,pdatacol]==groupname]) 
+        samples = list(pData(gown)$[,1][pData(gown)[,pdatacol]==groupname]) 
     }
     
     # plot base:

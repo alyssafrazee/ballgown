@@ -106,23 +106,23 @@ gene_expression <- gexpr(awesome_bg)
 ```
 Calculating the gene-level expression measurements can be slow for large experiments, so you may want to run the `gexpr` call as a batch job and save the result as an rda file for later use. 
 
-Finally, the `indexes` component of the ballgown object connects the various pieces of the assembly and provides other information about your experiment.  Importantly, there is a slot called `pData` that holds a data frame of phenotype information for the samples.  Usually you have to create this manually.  **Make sure of two things: (a) the column of this data frame that identifies the samples is called `dirname` and (b) that column is ordered the same way as the tables in the `data` component.**  You can check the order by running something like `names(texpr(awesome_bg))`, or you can ensure the sample directories are in alphabetical order (i.e., in the order they'd appear if you ran an `ls` on the root directory). 
+Finally, the `indexes` component of the ballgown object connects the various pieces of the assembly and provides other information about your experiment.  Importantly, there is a slot called `pData` that holds a data frame of phenotype information for the samples.  Usually you have to create this manually.  **Make sure of two things: (a) the column of this data frame that identifies the samples the first (i.e., leftmost) column and (b) that column is ordered the same way as the tables in the `data` component.**  You can check the order by running  `sampleNames(awesome_bg)`.  
 
 You can assign `pData` in several different ways, two of which are shown below.  It's probably easiest to assign in as you load the data, so you don't have to re-save the object, but if you forget, no biggie.
 
 ```S
 ## creating pData as you create the object:
 sample_directories <- c('sample01_output', 'sample02_output')
-pData <- data.frame(dirname = sample_directories, population = c('normal', 'cancer'))
+pData <- data.frame(sampleid = sample_directories, population = c('normal', 'cancer'))
 awesome_bg <- ballgown(samples = sample_directories, pData = pData)
 
 ## creating pData after the object has been created:
 load('awesome_bg.rda')
 sample_directories <- c('sample01_output', 'sample02_output')
-pData(awesome_bg) <- data.frame(dirname = sample_directories, population = c('normal', 'cancer'))
+pData(awesome_bg) <- data.frame(sampleid = sample_directories, population = c('normal', 'cancer'))
 save(awesome_bg, file = 'awesome_bg.rda') #re-save the object with associated pData
 ```
-The other components of `indexes` are the `e2t` and `i2t` tables described in section (1), as well as a `t2g` table denoting which transcripts belong to which genes.  There is also a `bamfiles` component, designed to hold the file paths to the read alignment files for each sample.  Again, make sure this is in the same order as the `dirname` column of `pData`.  The `bamfiles` component isn't currently used by any ballgown functions, but we imagine it could be useful for fans of `RSamtools` or similar packages.  Here are some examples of how to extract `indexes` components from ballgown objects:
+The other components of `indexes` are the `e2t` and `i2t` tables described in section (1), as well as a `t2g` table denoting which transcripts belong to which genes.  There is also a `bamfiles` component, designed to hold the file paths to the read alignment files for each sample.  Again, make sure this is in the same order as the first column of `pData`.  The `bamfiles` component isn't currently used by any ballgown functions, but we imagine it could be useful for fans of `RSamtools` or similar packages.  Here are some examples of how to extract `indexes` components from ballgown objects:
 
 ```S
 exon_transcript_table <- indexes(awesome_bg)$e2t
