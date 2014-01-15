@@ -259,7 +259,7 @@ setGeneric("data<-", function(x, value) standardGeneric("data<-"))
 #'   names of \code{texpr(x, "all")} (if \code{genomesubset} is \code{TRUE}) or of \code{pData(x)}
 #'   (if \code{genomesubset} is \code{FALSE}). For example, if you wanted a ballgown object for only
 #'   chromosome 22, you might call \code{subset(x, "chr == 'chr22'")}. (Be sure to handle quotes within
-#'   character strings appropriately).
+#'   character strings appropriately). Note that \code{genomesubset} is \code{TRUE} by default.
 setGeneric("subset", function(x, ...) standardGeneric("subset"))
 
 #' @name pData
@@ -278,7 +278,7 @@ setGeneric("pData<-", function(x, value) standardGeneric("pData<-"))
 #' @export
 #' @docType methods
 #' @rdname ballgown-methods
-#' @param ... for \code{subset}: arguments are \code{cond}, a string giving a subset condition (see details) and \code{genomesubsest}, which is \code{TRUE} if you want a ballgown object for only part of the genome, and \code{FALSE} if you want a ballgown object containing only some of the samples in the experiment.  For \code{*expr} methods: one of \code{'cov'}, \code{'FPKM'}, \code{'rcount'}, \code{'ucount'}, \code{'mrcount'}, \code{'cov_sd'}, \code{'mcov'}, or \code{'mcov_sd'}, depending on which type of expression measurement is desired.  Leave \code{...} blank to select all expression measurements.
+#' @param ... for \code{subset}: arguments are \code{cond}, a string giving a subset condition (see details) and \code{genomesubsest}, which is \code{TRUE} if you want a ballgown object for only part of the genome, and \code{FALSE} if you want a ballgown object containing only some of the samples in the experiment. \code{genomesubset} is \code{TRUE} by default. For \code{*expr} methods: one of \code{'cov'}, \code{'FPKM'}, \code{'rcount'}, \code{'ucount'}, \code{'mrcount'}, \code{'cov_sd'}, \code{'mcov'}, or \code{'mcov_sd'}, depending on which type of expression measurement is desired.  Leave \code{...} blank to select all expression measurements.
 setGeneric("texpr", function(x, ...) standardGeneric("texpr"))
 
 #' @name eexpr
