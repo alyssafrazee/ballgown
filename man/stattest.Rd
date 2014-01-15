@@ -5,7 +5,7 @@
 stattest(gown, mod = NULL, mod0 = NULL, feature = c("gene", "exon",
   "intron", "transcript"), meas = c("cov", "FPKM", "rcount", "ucount",
   "mrcount", "mcov"), timecourse = FALSE, covariate = NULL,
-  adjustvars = NULL, gexpr = NULL, df = 4)
+  adjustvars = NULL, gexpr = NULL, df = 4, getFC = FALSE)
 }
 \arguments{
   \item{gown}{name of an object of class \code{ballgown}}
@@ -50,6 +50,11 @@ stattest(gown, mod = NULL, mod0 = NULL, feature = c("gene", "exon",
   \item{df}{degrees of freedom used for modeling expression
   over time with natural cubic splines.  Default 4.  Only
   used if \code{timecourse=TRUE}.}
+
+  \item{getFC}{if \code{TRUE}, also return estimated fold
+  changes (adjusted for library size and confounders)
+  between populations. Only available for 2-group
+  comparisons at the moment. Default \code{FALSE}.}
 }
 \value{
 data frame containing the columns \code{feature}, \code{id}
