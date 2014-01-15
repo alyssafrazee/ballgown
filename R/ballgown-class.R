@@ -15,11 +15,8 @@
 #' @import IRanges
 #' @import methods
 #' @import RColorBrewer
-#' @import DESeq
-#' @import matrixStats
 #' @import splines
 #' @importFrom sva f.pvalue
-#' @importFrom plyr join_all
 #' @author Alyssa Frazee, Leonardo Collado Torres, Jeff Leek
 setClass("ballgown", 
     representation(
