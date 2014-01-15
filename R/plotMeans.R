@@ -68,7 +68,7 @@ plotMeans = function(gene, gown,
     }else if(groupname == "all"){
         samples = split(pData(gown)[,1], pData(gown)[,pdatacol])
     }else{
-        samples = list(pData(gown)$[,1][pData(gown)[,pdatacol]==groupname]) 
+        samples = list(pData(gown)[,1][pData(gown)[,pdatacol]==groupname]) 
     }
     
     # plot base:
