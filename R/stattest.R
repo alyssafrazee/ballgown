@@ -37,8 +37,11 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     if(feature == "gene" & meas != "FPKM"){
         stop("gene tests can only be done on FPKM measurements")
     }
-    if((feature == "exon" | feature == "intron") & meas == "FPKM"){
-        stop("exons and introns do not have FPKM measurements")
+    if((feature == "exon") & meas == "FPKM"){
+        stop("exons do not have FPKM measurements")
+    }
+    if((feature == "intron") & !(meas %in% c("rcount", "ucount", "mrcount"))){
+        stop("introns only have rcount, ucount, and mrcount measurements")
     }
     if(xor(is.null(mod), is.null(mod0))){
         stop("please provide both null and full models, or use the defaults")
