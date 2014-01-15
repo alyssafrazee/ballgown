@@ -10,9 +10,6 @@ Depends:
 Imports:
     methods,
     IRanges,
-    plyr,
     RColorBrewer,
-    DESeq,
-    matrixStats,
     splines,
     sva
