@@ -10,6 +10,7 @@
 #' @param adjustvars optional vector of strings representing the names of potential confounders.  Must correspond to names of columns of \code{pData(gown)}.
 #' @param gexpr optional data frame that is the result of calling \code{gexp(gown))}.  Used to speed this up by pre-creating \code{gexp(gown)}.
 #' @param df degrees of freedom used for modeling expression over time with natural cubic splines.  Default 4.  Only used if \code{timecourse=TRUE}.
+#' @param getFC if \code{TRUE}, also return estimated fold changes (adjusted for library size and confounders) between populations. Only available for 2-group comparisons at the moment. Default \code{FALSE}.
 #' @details \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is specified, you must also specify \code{mod0}.  If neither are specified, \code{mod0} defaults to the design matrix for a model including only a library-size adjustment, and \code{mod} defaults to the design matrix for a model including a library-size adjustment and \code{covariate}.
 #' @return data frame containing the columns \code{feature}, \code{id} representing feature id, \code{pval} representing the p-value for testing whether this feature was differentially expressed according to \code{covariate}, and \code{qval}, the estimated false discovery rate using this feature's signal strength as a significance cutoff.
 #' @export
@@ -22,7 +23,8 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     covariate = NULL,
     adjustvars = NULL,
     gexpr = NULL,
-    df = 4){
+    df = 4,
+    getFC = FALSE){
 
     feature = match.arg(feature)
     meas = match.arg(meas)
@@ -106,6 +108,18 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
             } else {
                 mod = model.matrix(~ as.factor(x) + lib_adj)
             }
+        }
+    }
+
+    if(getFC){
+        if(length(table(x)) != 2){
+            warning('fold changes only available for 2-group comparisons')
+        }else{
+            require(limma)
+            lmodels = lmFit(log2(expr+1), design=mod)
+            estFC = 2^(lmodels$coefficients[,2])
+            results = f.pvalue(log2(expr + 1), mod, mod0)
+            return(data.frame(feature=rep(feature, nrow(expr)), id=rownames(expr), fc = estFC, pval = results, qval=p.adjust(results, "fdr")))             
         }
     }
 
