@@ -16,6 +16,7 @@
 #' @import methods
 #' @import RColorBrewer
 #' @import splines
+#' @import limma
 #' @importFrom sva f.pvalue
 #' @author Alyssa Frazee, Leonardo Collado Torres, Jeff Leek
 setClass("ballgown", 
