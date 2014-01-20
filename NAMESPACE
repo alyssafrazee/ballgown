@@ -1,6 +1,7 @@
 export("data<-")
 export("indexes<-")
 export("pData<-")
+export(assmb2annot)
 export(ballgown)
 export(checkAssembledTx)
 export(clusterTranscripts)
