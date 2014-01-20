@@ -4,7 +4,7 @@
 #' @param chr which chromosome is your assembled transcript of interest on? Should be formatted the same way as chromosomes in \code{gtf}.
 #' @param assembled GRangesList object, with each set of ranges representing exons of an assembled transcript.
 #' @return a GRangesList containing the corresponding annotated transcript(s) that most overlap \code{assembled}.
-#' @details the \code{elementMetadata} slot of each \code{GRanges} object in the returned \code{GRangesList} contains the annotated \code{gene_id} and the assembled \code{transcript_id}. The \code{names} component of this \code{GRangesList} gives the annotated transcript names. 
+#' @details the \code{elementMetadata} slot of each \code{GRanges} object in the returned \code{GRangesList} contains the annotated \code{gene_id} and \code{transcript_id}. The \code{names} component of this \code{GRangesList} gives the assembled transcript ids. 
 #' 
 #' Also be careful not to confuse this with \code{annot2assmb}, which finds the closest \emph{assembled} transcript to each \emph{annotated} transcript. That function is more useful in simulations; this one is more useful for getting biological information out of an assembly.
 #' @author Alyssa Frazee
@@ -55,12 +55,14 @@ assmb2annot = function(gtf, assembled){
     olList = split(allInfo[,c(2,3)], allInfo$assembled)
     olTx = lapply(olList, function(x) x[which(x[,2] == max(x[,2])), 1])
     ret = annotgr[as.numeric(olTx)]
+    ann_names = names(ret)
     ret = lapply(seq_along(ret), function(i){
         ambInd = as.numeric(names(olTx)[i])
         addedEMD = ret[[i]]
-        elementMetadata(addedEMD)$asmbtx_id = rep(names(assembled)[ambInd], nrow(elementMetadata(addedEMD)))
+        elementMetadata(addedEMD)$transcript_id = rep(ann_names[i], length(ret[[i]]))
         return(addedEMD)
     })
+    names(ret) = names(assembled)[as.numeric(names(olList))]
     return(GRangesList(ret))
 }
 
