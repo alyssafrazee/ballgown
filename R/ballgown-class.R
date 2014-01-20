@@ -166,7 +166,6 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
         paste(e2t$e_id[which(is.na(mm))], collapse=", ")))
     }
     transgrl = split(exongr[mm[!is.na(mm)]], e2t$t_id[!is.na(mm)])
-    names(transgrl) = paste0("tx", names(transgrl))
 
     ## Connect transcripts to genes:
     t2g = data.frame(t_id = trans$t_id, g_id = trans$gene_id)
