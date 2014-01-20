@@ -2,38 +2,41 @@
 #' 
 #' @param gtf path to a GTF file containing locations of annotated transcripts
 #' @param chr which chromosome is your assembled transcript of interest on? Should be formatted the same way as chromosomes in \code{gtf}.
-#' @param assembled GRanges object, with ranges representing the assembled transcript's exons. 
-#' @return a GRangesList containing the annotated transcript(s) that most overlap \code{assembled}.
+#' @param assembled GRangesList object, with each set of ranges representing exons of an assembled transcript.
+#' @return a GRangesList containing the corresponding annotated transcript(s) that most overlap \code{assembled}.
+#' @details the \code{elementMetadata} slot of each \code{GRanges} object in the returned \code{GRangesList} contains the annotated \code{gene_id} and the assembled \code{transcript_id}. The \code{names} component of this \code{GRangesList} gives the annotated transcript names. 
+#' 
+#' Also be careful not to confuse this with \code{annot2assmb}, which finds the closest \emph{assembled} transcript to each \emph{annotated} transcript. That function is more useful in simulations; this one is more useful for getting biological information out of an assembly.
 #' @author Alyssa Frazee
 #' @export
 
-assmb2annot = function(gtf, chr, assembled){
+assmb2annot = function(gtf, assembled){
     # read in annotation and convert to GRangesList
+    require(GenomicRanges)
     annot = gffRead(gtf)
-    annotChr = subset(annot, feature=="exon" & seqname==chr)
-    annotChr$transcript_id = getAttributeField(annotChr$attributes, "transcript_id")
-    annotChr$transcript_id = sapply(annotChr$transcript_id, function(x) substr(x, 2, nchar(x)-1))
-    annotChr$gene_id = getAttributeField(annotChr$attributes, "gene_id")
-    annotChr$gene_id = sapply(annotChr$gene_id, function(x) substr(x, 2, nchar(x)-1))
-    annotgr = split(GRanges(seqnames=Rle(chr),
-        ranges=IRanges(start=annotChr$start, end=annotChr$end),
-        strand=annotChr$strand, gene_id=annotChr$gene_id), annotChr$transcript_id)
-
-    # make assembled transcript into GRangesList and make sure there's only one
-    assembled = GRangesList(assembled)
-    stopifnot(length(assembled) == 1)
+    annotEx = subset(annot, feature=="exon")
+    annotEx$transcript_id = getAttributeField(annotEx$attributes, "transcript_id")
+    annotEx$transcript_id = sapply(annotEx$transcript_id, function(x) substr(x, 2, nchar(x)-1))
+    annotEx$gene_id = getAttributeField(annotEx$attributes, "gene_id")
+    annotEx$gene_id = sapply(annotEx$gene_id, function(x) substr(x, 2, nchar(x)-1))
+    annotgr = split(GRanges(seqnames=Rle(annotEx$seqname),
+        ranges=IRanges(start=annotEx$start, end=annotEx$end),
+        strand=annotEx$strand, gene_id=annotEx$gene_id), annotEx$transcript_id)
+    message('done reading gtf file')
 
     # find overlapping annotated transcripts:
     ol = findOverlaps(assembled, annotgr)
 
     # return nothing if there isn't any overlap:
     if(length(ol) == 0){
-        message('Novel assembled transcript! (your assembled transcript does not overlap any annotated transcripts)')
+        message('All assembled transcripts are novel! That\'s fun.')
         return(NULL)
     }
 
     # return one hit if only overlaps one:
     if(length(ol) == 1){
+        ret = annotgr[subjectHits(ol)]
+        elementMetadata(ret[[1]])$asmbtx_id = rep(names(assembled)[queryHits(ol)], nrow(elementMetadata(ret[[1]])))
         return(annotgr[subjectHits(ol)])
     }
 
@@ -48,9 +51,18 @@ assmb2annot = function(gtf, chr, assembled){
         t2good = GRanges(seqnames=Rle(t2chr), ranges=ranges(t2), strand=strand(t2))
         return(pctOverlap(t1good, t2good))
     }) 
-    return(annotgr[subjectHits(ol)[which(pctol == max(pctol))]])
+    allInfo = data.frame(assembled=queryHits(ol), annotated=subjectHits(ol), overlap=pctol)
+    olList = split(allInfo[,c(2,3)], allInfo$assembled)
+    olTx = lapply(olList, function(x) x[which(x[,2] == max(x[,2])), 1])
+    ret = annotgr[as.numeric(olTx)]
+    ret = lapply(seq_along(ret), function(i){
+        ambInd = as.numeric(names(olTx)[i])
+        addedEMD = ret[[i]]
+        elementMetadata(addedEMD)$asmbtx_id = rep(names(assembled)[ambInd], nrow(elementMetadata(addedEMD)))
+        return(addedEMD)
+    })
+    return(GRangesList(ret))
 }
-
 
 
 
