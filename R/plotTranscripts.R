@@ -67,6 +67,9 @@ plotTranscripts = function(gene, gown, samples = NULL,
             smalldat = eexpr(gown, meas)[which(e_id_full %in% gtrans$id),]
             e_id = e_id_full[which(e_id_full %in% gtrans$id)]
         }
+        if(numtx == 1){
+            smalldat = matrix(smalldat, nrow=1)
+        }
         maxcol = quantile(as.matrix(smalldat), 0.99)
         colscale = seq(0, maxcol, length.out=200)
         introntypes = unique(as.character(sapply(names(data(gown)$intron)[-c(1:5)], gettype)))
