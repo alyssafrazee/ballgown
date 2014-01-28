@@ -105,6 +105,8 @@ for \code{mergedDate}: the date \code{x} was created
 
 for \code{*expr} methods: a feature-by-sample table with
 the specified expression measurement(s) in the cells.
+Return is a data frame if \code{meas} is \code{"all"} and a
+matrix otherwise.
 }
 \description{
 The following methods are available for the S4 class
