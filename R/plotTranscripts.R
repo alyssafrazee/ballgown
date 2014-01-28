@@ -48,7 +48,6 @@ plotTranscripts = function(gene, gown, samples = NULL,
     ma = IRanges::as.data.frame(structure(gown)$trans)
     thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
     gtrans = subset(ma, element %in% thetranscripts)
-    gtrans$tid = as.numeric(sapply(gtrans$element, function(x) as.numeric(substr(x,3,nchar(x)))))
     xax = seq(min(gtrans$start), max(gtrans$end), by=1)
     numtx = length(unique(thetranscripts))
     ymax = ifelse(legend, numtx+1.5, numtx+1)
@@ -88,14 +87,14 @@ plotTranscripts = function(gene, gown, samples = NULL,
         colName = paste(meas, samples[s], sep='.')
 
         # draw transcripts
-        for(tx in unique(gtrans$tid)){
+        for(tx in unique(gtrans$element)){
             if(colorby == "transcript"){
                 colIndex = which(names(smalldat) == colName)
                 mycolor = closestColor(smalldat[,colIndex][which(t_id==tx)], colscale)
             }
             if(colorby == "none") mycolor = "gray70"
-            txind = which(unique(gtrans$tid)==tx)
-            gtsub = gtrans[gtrans$tid==tx,]
+            txind = which(unique(gtrans$element)==tx)
+            gtsub = gtrans[gtrans$element==tx,]
             gtsub = gtsub[order(gtsub$start),]
             for(exind in 1:dim(gtsub)[1]){
                 if(colorby == "exon") mycolor = closestColor(smalldat[,colIndex][which(e_id==gtsub$id[exind])], colscale)
@@ -130,7 +129,7 @@ plotTranscripts = function(gene, gown, samples = NULL,
 
         # label the transcripts on the y-axis (if asked for)
         if(labelTranscripts){
-            axis(side=2, at=c(1:numtx), labels=unique(gtrans$tid), cex.axis=0.75, las=1)
+            axis(side=2, at=c(1:numtx), labels=unique(gtrans$element), cex.axis=0.75, las=1)
         }
 
     } #end loop over samples
