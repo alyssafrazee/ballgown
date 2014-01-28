@@ -44,8 +44,8 @@ stattest(gown, mod = NULL, mod0 = NULL, feature = c("gene", "exon",
   names of columns of \code{pData(gown)}.}
 
   \item{gexpr}{optional data frame that is the result of
-  calling \code{gexp(gown))}.  Used to speed this up by
-  pre-creating \code{gexp(gown)}.}
+  calling \code{gexpr(gown))}.  (You can speed this
+  function up by pre-creating \code{gexpr(gown)}.)}
 
   \item{df}{degrees of freedom used for modeling expression
   over time with natural cubic splines.  Default 4.  Only
@@ -62,7 +62,9 @@ representing feature id, \code{pval} representing the
 p-value for testing whether this feature was differentially
 expressed according to \code{covariate}, and \code{qval},
 the estimated false discovery rate using this feature's
-signal strength as a significance cutoff.
+signal strength as a significance cutoff. An additional
+column, \code{fc}, is included if \code{getFC} is
+\code{TRUE}.
 }
 \description{
 statistical tests for differential expression in ballgown
@@ -70,11 +72,16 @@ statistical tests for differential expression in ballgown
 \details{
 \code{mod} and \code{mod0} are optional arguments.  If
 \code{mod} is specified, you must also specify \code{mod0}.
-If neither are specified, \code{mod0} defaults to the
-design matrix for a model including only a library-size
+If neither is specified, \code{mod0} defaults to the design
+matrix for a model including only a library-size
 adjustment, and \code{mod} defaults to the design matrix
 for a model including a library-size adjustment and
-\code{covariate}.
+\code{covariate}. Note that if you supply \code{mod} and
+\code{mod0}, \code{covariate}, \code{timecourse},
+\code{adjustvars}, and \code{df} are ignored, so make sure
+your covariate of interest and all appropriate confounder
+adjustments, including library size, are specified in
+\code{mod} and \code{mod0}.
 }
 \author{
 Jeff Leek, Alyssa Frazee
