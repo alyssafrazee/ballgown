@@ -5,6 +5,8 @@ Version: 1.0
 License: GPL-3
 Title: 
 Description: 
+Depends:
+    GenomicRanges
 Imports:
     methods,
     GenomicRanges,
