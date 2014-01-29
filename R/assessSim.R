@@ -8,18 +8,22 @@
 #pData(simgown) = data.frame(id=sampleNames(simgown), 
 #    group=c(1,1,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1))
 
-assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, qcut=0.05){
+assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, qcut=0.05, UCSC=TRUE){
     require(ballgown)
     require(GenomicRanges)
 
     #trulyDEids should match transcript IDs in the "annotation" file.
+    # if qcut is a vector, this will return things that are useful for ROC plots
 
     assemblygr = structure(bg)$trans
     annot = gffRead(annotation)
     annotsub = subset(annot, feature=="exon" & seqname==chr)        
     annotsub$tx = getAttributeField(annotsub$attributes, "transcript_id")
-    # strip quotes:
-    #annotsub$tx = sapply(annotsub$tx, function(x) substr(x,2,nchar(x)-1))
+    if(UCSC){
+        # strip quotes and strip off any "_2" business
+        annotsub$tx = sapply(annotsub$tx, function(x) substr(x,2,nchar(x)-1))
+        annotsub$tx = sapply(annotsub$tx, function(x) paste(strsplit(x, split="_")[[1]][1:2],collapse="_"))
+    }
     
     degtf = subset(annotsub, tx %in% trulyDEids)
     stopifnot(length(unique(degtf$tx)) == length(unique(trulyDEids)))
@@ -79,34 +83,54 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
 
     bgtxids = texpr(bg,'all')$t_name[match(bgresults$id, texpr(bg,'all')$t_id)]
 
-    ### BALLGOWN IDS that should be DE:
+    ### BALLGOWN IDS that should and should not be DE:
     de_ids = unique(as.numeric(names(assemblygr)[as.numeric(truly_de)]))
+    non_de_ids = setdiff(unique(texpr(bg,'all')$t_id), as.numeric(de_ids))
+
 
     # load in cuffdiff results:
     cuff = read.table(cuffdiffFile, sep='\t', header=TRUE)
     cuffok = subset(cuff, status=='OK') 
-    cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut])
-    # translate cufflinks DE calls into ballgown transcript ids (numeric):
-    cuff_decalls = texpr(bg,'all')$t_id[match(cuff_decalls, texpr(bg,'all')$t_name)]
-    bg_decalls = bgresults$id[which(bgresults$qval < qcut)]
-    bg_decalls = as.numeric(as.character(bg_decalls))
 
-    ### sensitivity
-    bgsens = sum(de_ids %in% bg_decalls)/length(de_ids)
-    cuffsens = sum(de_ids %in% cuff_decalls)/length(de_ids)
+    if(length(qcut) == 1){
+        cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut])
+        # translate cufflinks DE calls into ballgown transcript ids (numeric):
+        cuff_decalls = texpr(bg,'all')$t_id[match(cuff_decalls, texpr(bg,'all')$t_name)]
+        bg_decalls = bgresults$id[which(bgresults$qval < qcut)]
+        bg_decalls = as.numeric(as.character(bg_decalls))
 
-    ### specificity
-    non_de_ids = setdiff(unique(texpr(bg,'all')$t_id), as.numeric(de_ids))
-    bgspec = sum(!(non_de_ids %in% bg_decalls))/length(non_de_ids)
-    cuffspec = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids) 
+        ### sensitivity
+        bgsens = sum(de_ids %in% bg_decalls)/length(de_ids)
+        cuffsens = sum(de_ids %in% cuff_decalls)/length(de_ids)
 
-    ### false discovery rates
-    bgfdr = sum(!(bg_decalls %in% de_ids))/length(bg_decalls)
-    cufffdr = sum(!(cuff_decalls %in% de_ids))/length(cuff_decalls) 
+        ### specificity
+        bgspec = sum(!(non_de_ids %in% bg_decalls))/length(non_de_ids)
+        cuffspec = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids) 
 
+        ### false discovery rates
+        bgfdr = sum(!(bg_decalls %in% de_ids))/length(bg_decalls)
+        cufffdr = sum(!(cuff_decalls %in% de_ids))/length(cuff_decalls) 
+
+        return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, 
+            ballgownspec=bgspec, cuffdiffspec=cuffspec,
+            ballgownfdr=bgfdr, cuffdifffdr=cufffdr))
+        }
+    ## else, make ROC plots:
+    bgsens = cuffsens = bgspec = cuffspec = NULL
+    for(i in 1:length(qcut)){
+        cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut[i]])
+        cuff_decalls = texpr(bg,'all')$t_id[match(cuff_decalls, texpr(bg,'all')$t_name)]
+        bg_decalls = bgresults$id[which(bgresults$qval < qcut[i])]
+        bgsens[i] = sum(de_ids %in% bg_decalls)/length(de_ids)
+        cuffsens[i] = sum(de_ids %in% cuff_decalls)/length(de_ids)
+        bgspec[i] = sum(!(non_de_ids %in% bg_decalls))/length(non_de_ids)
+        cuffspec[i] = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids) 
+    }
+    plot(1-bgspec, bgsens, col="dodgerblue", type="l", xlab="false positive rate", ylab="true positive rate", lwd=2, ylim=c(0,1))
+    lines(1-cuffspec, cuffsens, col="orange", lwd=2)
     return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, 
-        ballgownspec=bgspec, cuffdiffspec=cuffspec,
-        ballgownfdr=bgfdr, cuffdifffdr=cufffdr))
+        ballgownspec=bgspec, cuffdiffspec=cuffspec))
+
 }
 
 # cuffFile = "~/Desktop/simcuff.txt"
@@ -128,6 +152,10 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
 #     cuffdiffFile=cuffFile)
 
 
-
+#assessSim(bg=simgown, bgresults=bgresults, annotation=annFile, 
+ #    chr="22", trulyDEids=trulyDEids, cuffdiffFile=cuffFile,UCSC=TRUE)
+# assessSim(bg=simgown, bgresults=bgresults, annotation=annFile, 
+#      chr="22", trulyDEids=trulyDEids, cuffdiffFile=cuffFile, 
+#      qcut=seq(0,1,by=0.01),UCSC=FALSE)
 
 
