@@ -68,7 +68,9 @@ plotTranscripts = function(gene, gown, samples = NULL,
             e_id = e_id_full[which(e_id_full %in% gtrans$id)]
         }
         if(numtx == 1){
+            snames = names(smalldat)
             smalldat = matrix(smalldat, nrow=1)
+            names(smalldat) = snames
         }
         maxcol = quantile(as.matrix(smalldat), 0.99)
         colscale = seq(0, maxcol, length.out=200)
