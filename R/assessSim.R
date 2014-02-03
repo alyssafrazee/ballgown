@@ -1,12 +1,17 @@
-### function to check simulations
-### please dear god, let me never have to write this code again
-### considers "correctly called" DE transript as transcript w/ 
-### most overlap (by percent) with the annotated transcript set to be DE
-
-#simgown = ballgown(dataDir="~/Google Drive/hopkins/research/_ballgown/simgown",
-#    samplePattern="sample")
-#pData(simgown) = data.frame(id=sampleNames(simgown), 
-#    group=c(1,1,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1))
+#' analyze results of a two-group simulation experiment
+#'
+#' @param bg ballgown object from the simulated data
+#' @param bgresults data frame resulting from a call to \code{stattest(bg,...)}. Should be a transcript-level test (i.e., \code{feature="transcript"} in \code{stattest}).
+#' @param annotation
+#' @param chr 
+#' @param trulyDEids 
+#' @param cuffdiffFile 
+#' @param qcut either a number between 0 and 1 to be used as the q-value significance cutoff, or a vector like \code{seq(0,1,by=0.01)} (i.e., ranging from 0 to 1 in even increments). 
+#' @param UCSC 
+#' @details 
+#' @return 
+#' @author Alyssa Frazee
+#' @export
 
 assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, qcut=0.05, UCSC=TRUE){
     require(ballgown)
