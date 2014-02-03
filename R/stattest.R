@@ -11,6 +11,7 @@
 #' @param gexpr optional data frame that is the result of calling \code{gexpr(gown))}.  (You can speed this function up by pre-creating \code{gexpr(gown)}.)
 #' @param df degrees of freedom used for modeling expression over time with natural cubic splines.  Default 4.  Only used if \code{timecourse=TRUE}.
 #' @param getFC if \code{TRUE}, also return estimated fold changes (adjusted for library size and confounders) between populations. Only available for 2-group comparisons at the moment. Default \code{FALSE}.
+#' @param libadjust if \code{TRUE} (default), include a library-size adjustment as a confounder in the fitted models. The adjustment is currently defined as the sum of the sample's counts below that sample's 75th percentile.
 #' @details \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is specified, you must also specify \code{mod0}.  If neither is specified, \code{mod0} defaults to the design matrix for a model including only a library-size adjustment, and \code{mod} defaults to the design matrix for a model including a library-size adjustment and \code{covariate}. Note that if you supply \code{mod} and \code{mod0}, \code{covariate}, \code{timecourse}, \code{adjustvars}, and \code{df} are ignored, so make sure your covariate of interest and all appropriate confounder adjustments, including library size, are specified in \code{mod} and \code{mod0}.
 #' @return data frame containing the columns \code{feature}, \code{id} representing feature id, \code{pval} representing the p-value for testing whether this feature was differentially expressed according to \code{covariate}, and \code{qval}, the estimated false discovery rate using this feature's signal strength as a significance cutoff. An additional column, \code{fc}, is included if \code{getFC} is \code{TRUE}.
 #' @export
@@ -24,7 +25,8 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     adjustvars = NULL,
     gexpr = NULL,
     df = 4,
-    getFC = FALSE){
+    getFC = FALSE,
+    libadjust = TRUE){
 
     feature = match.arg(feature)
     meas = match.arg(meas)
@@ -76,11 +78,12 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     n = ncol(expr)
 
     ## library size adjustment
-    lib_adj = apply(expr, 2, function(x){
-        q3 = quantile(x, 0.75)
-        sum(x[x<q3])
-    })
-
+    if(libadjust){
+        lib_adj = apply(expr, 2, function(x){
+            q3 = quantile(x, 0.75)
+            sum(x[x<q3])
+        })
+    }
 
     if(is.null(mod) & is.null(mod0)){
         ## by default, just test whether the given covariate is important
@@ -98,18 +101,40 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
                 eval(parse(text=paste0(adjustvars[i], " <- pData(gown)[,",column_ind,"]")))
                 variable_list = paste(variable_list, adjustvars[i], sep="+")
             }
-            eval(parse(text=paste0("mod0 = model.matrix(~ lib_adj",variable_list,")")))
-            if(timecourse){
-                eval(parse(text=paste0("mod = model.matrix(~ ns(x, df = ",df,") + lib_adj",variable_list,")")))
+            if(libadjust){
+                eval(parse(text=paste0("mod0 = model.matrix(~ lib_adj",variable_list,")")))
+                if(timecourse){
+                    eval(parse(text=paste0("mod = model.matrix(~ ns(x, df = ",df,") + lib_adj",variable_list,")")))
+                } else {
+                    eval(parse(text=paste0("mod = model.matrix(~ as.factor(x) + lib_adj",variable_list,")")))
+                }
             } else {
-                eval(parse(text=paste0("mod = model.matrix(~ as.factor(x) + lib_adj",variable_list,")")))
+                variable_list = substr(variable_list, 2, nchar(variable_list)) #strip off "+" at beginning of variable_list
+                eval(parse(text=paste0("mod0 = model.matrix(~",variable_list,")")))
+                if(timecourse){
+                    eval(parse(text=paste0("mod = model.matrix(~ ns(x, df = ",df,") + ",variable_list,")")))
+                } else {
+                    eval(parse(text=paste0("mod = model.matrix(~ as.factor(x) + ",variable_list,")")))
+                }                
             }
         } else {
-            mod0 = model.matrix(~ lib_adj)
+            if(libadjust){
+                mod0 = model.matrix(~ lib_adj)
+            } else{
+                mod0 = rep(1, length(x))
+            }
             if(timecourse){
-                mod = model.matrix(~ ns(x, df = df) + lib_adj)
+                if(libadjust){
+                    mod = model.matrix(~ ns(x, df = df) + lib_adj)
+                } else {
+                    mod = model.matrix(~ ns(x, df = df))
+                }
             } else {
-                mod = model.matrix(~ as.factor(x) + lib_adj)
+                if(libadjust){
+                    mod = model.matrix(~ as.factor(x) + lib_adj)
+                } else {
+                    mod = model.matrix(~ as.factor(x))
+                }
             }
         }
     }
