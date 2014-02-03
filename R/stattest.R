@@ -119,7 +119,7 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
             if(libadjust){
                 mod0 = model.matrix(~ lib_adj)
             } else{
-                mod0 = rep(1, length(x))
+                mod0 = matrix(1, nrow=length(x), ncol=1)
             }
             if(timecourse){
                 if(libadjust){
