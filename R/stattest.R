@@ -20,13 +20,9 @@
 stattest = function(gown, mod = NULL, mod0 = NULL, 
     feature = c("gene", "exon", "intron", "transcript"),
     meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
-    timecourse = FALSE,
-    covariate = NULL,
-    adjustvars = NULL,
-    gexpr = NULL,
-    df = 4,
-    getFC = FALSE,
-    libadjust = TRUE){
+    timecourse = FALSE, covariate = NULL, adjustvars = NULL,
+    gexpr = NULL, df = 4, getFC = FALSE, libadjust = TRUE, 
+    log = TRUE){
 
     feature = match.arg(feature)
     meas = match.arg(meas)
@@ -136,20 +132,33 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
             }
         }
     }
+    if(log){
+        y = log2(expr+1)
+    }else{
+        y = expr
+    }
 
     if(getFC){
         if(length(table(x)) != 2){
             warning('fold changes only available for 2-group comparisons')
         }else{
             require(limma)
-            lmodels = lmFit(log2(expr+1), design=mod)
-            estFC = 2^(lmodels$coefficients[,2])
-            results = f.pvalue(log2(expr + 1), mod, mod0)
+            lmodels = lmFit(y, design=mod)
+            if(log){
+                estFC = 2^(lmodels$coefficients[,2])
+            }else{
+                warning('log is FALSE, so estimated fold change will be averaged over adjustment variables')
+                numx = as.numeric(as.factor(x))
+                predvals = lmodels$design %*% t(lmodels$coefficients)
+                estFC = colMeans(predvals[numx==1,])/colMeans(predvals[numx==2,])
+            }
+            results = f.pvalue(y, mod, mod0)
             return(data.frame(feature=rep(feature, nrow(expr)), id=rownames(expr), fc = estFC, pval = results, qval=p.adjust(results, "fdr")))             
         }
     }
 
-    results = f.pvalue(log2(expr + 1), mod, mod0)
+    results = f.pvalue(y, mod, mod0)
     return(data.frame(feature=rep(feature, nrow(expr)), id=rownames(expr), pval = results, qval=p.adjust(results, "fdr")))
 }
+
 
