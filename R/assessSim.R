@@ -54,20 +54,8 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
         return(pctOverlap(t1good, t2good))
     }
 
-    nondepercent = function(i){
-        t1 = nondegr[[subjectHits(nondeOverlaps)[i]]]
-        t2 = assemblygr[[queryHits(nondeOverlaps)[i]]]
-        t1chr = as.character(runValue(seqnames(t1)))
-        t2chr = as.character(runValue(seqnames(t2)))
-        t1good = GRanges(seqnames=Rle(t1chr), ranges=ranges(t1), strand=strand(t1))
-        t2good = GRanges(seqnames=Rle(t2chr), ranges=ranges(t2), strand=strand(t2))
-        return(pctOverlap(t1good, t2good))
-    }
-
     pctDE = sapply(1:length(deOverlaps), depercent)
-    #pctNonDE = sapply(1:length(nondeOverlaps), nondepercent)
-
-
+    
     corresponding_to_de = data.frame(
         assembled=queryHits(deOverlaps), 
         annotated=subjectHits(deOverlaps), 
@@ -91,7 +79,6 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
     ### BALLGOWN IDS that should and should not be DE:
     de_ids = unique(as.numeric(names(assemblygr)[as.numeric(truly_de)]))
     non_de_ids = setdiff(unique(texpr(bg,'all')$t_id), as.numeric(de_ids))
-
 
     # load in cuffdiff results:
     cuff = read.table(cuffdiffFile, sep='\t', header=TRUE)
