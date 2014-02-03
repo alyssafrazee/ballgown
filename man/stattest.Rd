@@ -5,7 +5,8 @@
 stattest(gown, mod = NULL, mod0 = NULL, feature = c("gene", "exon",
   "intron", "transcript"), meas = c("cov", "FPKM", "rcount", "ucount",
   "mrcount", "mcov"), timecourse = FALSE, covariate = NULL,
-  adjustvars = NULL, gexpr = NULL, df = 4, getFC = FALSE)
+  adjustvars = NULL, gexpr = NULL, df = 4, getFC = FALSE,
+  libadjust = TRUE, log = TRUE)
 }
 \arguments{
   \item{gown}{name of an object of class \code{ballgown}}
@@ -55,6 +56,11 @@ stattest(gown, mod = NULL, mod0 = NULL, feature = c("gene", "exon",
   changes (adjusted for library size and confounders)
   between populations. Only available for 2-group
   comparisons at the moment. Default \code{FALSE}.}
+
+  \item{libadjust}{if \code{TRUE} (default), include a
+  library-size adjustment as a confounder in the fitted
+  models. The adjustment is currently defined as the sum of
+  the sample's counts below that sample's 75th percentile.}
 }
 \value{
 data frame containing the columns \code{feature}, \code{id}
