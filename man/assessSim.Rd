@@ -34,12 +34,13 @@ used for said ROC curve, comparing cuffdiff to ballgown (as
 used to create \code{bg}).
 }
 \description{
-analyze results of a two-group simulation experiment
+[documentation in progress]
 }
 \details{
-\coode{trulyDEids} should be the transcripts that were set
+\code{trulyDEids} should be the transcripts that were set
 to be differentially expressed, identified the SAME WAY AS
 THEY ARE in \code{annotation}. This is super important!!!
+
 Also: if \code{qcut} is a vector, \code{assessSim} returns
 sensitivities/specificities and creates an ROC plot. If
 \code{qcut} is a single number, sensitivity and specificity
