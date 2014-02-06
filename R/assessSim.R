@@ -17,7 +17,7 @@
 #' @author Alyssa Frazee
 #' @export
 
-assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, qcut=0.05, UCSC=TRUE){
+assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, qcut=0.05, UCSC=TRUE, ret=FALSE){
     require(ballgown)
     require(GenomicRanges)
 
@@ -123,9 +123,10 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
     }
     plot(1-bgspec, bgsens, col="dodgerblue", type="l", xlab="false positive rate", ylab="true positive rate", lwd=2, ylim=c(0,1))
     lines(1-cuffspec, cuffsens, col="orange", lwd=2)
-    return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, 
-        ballgownspec=bgspec, cuffdiffspec=cuffspec))
-
+    if(ret){
+        return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, 
+            ballgownspec=bgspec, cuffdiffspec=cuffspec))
+    }
 }
 
 # cuffFile = "~/Desktop/simcuff.txt"
