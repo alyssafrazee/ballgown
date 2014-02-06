@@ -123,6 +123,7 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
     }
     plot(1-bgspec, bgsens, col="dodgerblue", type="l", xlab="false positive rate", ylab="true positive rate", lwd=2, ylim=c(0,1))
     lines(1-cuffspec, cuffsens, col="orange", lwd=2)
+    legend('bottomright', lty=c(1,1), lwd=c(2,2), col=c("dodgerblue", "orange"), c("ballgown", "cuffdiff"))
     if(ret){
         return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, 
             ballgownspec=bgspec, cuffdiffspec=cuffspec))
