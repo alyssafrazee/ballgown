@@ -29,7 +29,7 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
     annotsub$tx = getAttributeField(annotsub$attributes, "transcript_id")
     if(UCSC){
         # strip quotes and strip off any "_2" business
-        annotsub$tx = substr(annotsub$tx, 2, nchar(annotsub$tx)-1))
+        annotsub$tx = substr(annotsub$tx, 2, nchar(annotsub$tx)-1)
         annotsub$tx = sapply(annotsub$tx, function(x) paste(strsplit(x, split="_")[[1]][1:2],collapse="_"))
     }
     
