@@ -3,7 +3,7 @@
 \title{analyze results of a two-group simulation experiment}
 \usage{
 assessSim(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile,
-  qcut = 0.05, UCSC = TRUE)
+  qcut = 0.05, UCSC = TRUE, ret = FALSE)
 }
 \arguments{
   \item{bg}{ballgown object from the simulated data}
