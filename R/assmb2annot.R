@@ -16,9 +16,9 @@ assmb2annot = function(gtf, assembled){
     annot = gffRead(gtf)
     annotEx = subset(annot, feature=="exon")
     annotEx$transcript_id = getAttributeField(annotEx$attributes, "transcript_id")
-    annotEx$transcript_id = sapply(annotEx$transcript_id, function(x) substr(x, 2, nchar(x)-1))
+    annotEx$transcript_id = substr(annotEx$transcript_id, 2, nchar(annotEx$transcript_id)-1))
     annotEx$gene_id = getAttributeField(annotEx$attributes, "gene_id")
-    annotEx$gene_id = sapply(annotEx$gene_id, function(x) substr(x, 2, nchar(x)-1))
+    annotEx$gene_id = substr(annotEx$gene_id, 2, nchar(annotEx$gene_id)-1))
     annotgr = split(GRanges(seqnames=Rle(annotEx$seqname),
         ranges=IRanges(start=annotEx$start, end=annotEx$end),
         strand=annotEx$strand, gene_id=annotEx$gene_id), annotEx$transcript_id)
