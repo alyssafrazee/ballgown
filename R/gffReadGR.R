@@ -10,6 +10,7 @@
 gffReadGR = function(gtf){
     require(rtracklayer)
     con = file(gtf)
-    import(con, format='GFF')
+    ret = import(con, format='GFF')
     on.exit(close(con))
+    return(ret)
 }
