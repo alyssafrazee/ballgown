@@ -1,6 +1,7 @@
 export("data<-")
 export("indexes<-")
 export("pData<-")
+export(annotate_assembly)
 export(assessSim)
 export(assmb2annot)
 export(ballgown)
