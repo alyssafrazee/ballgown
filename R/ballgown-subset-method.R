@@ -21,7 +21,7 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
     
         introngr = structure(x)$intron[elementMetadata(structure(x)$intron)$id %in% theint]
         exongr = structure(x)$exon[elementMetadata(structure(x)$exon)$id %in% theex]
-        grltxids = sapply(names(structure(x)$trans), function(a) as.numeric(substr(a, 3, nchar(a))))
+        grltxids = as.numeric(names(structure(x)$trans))
         transgrl = structure(x)$trans[grltxids %in% thetx]
     
         return(new("ballgown", data=list(intron=intron, exon=exon, trans=trans), 
