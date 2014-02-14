@@ -87,6 +87,8 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
         cuffsens[i] = sum(de_ids %in% cuff_decalls)/length(de_ids)
         bgspec[i] = sum(!(non_de_ids %in% bg_decalls))/length(non_de_ids)
         cuffspec[i] = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids) 
+        bgfdr[i] = sum(!(bg_decalls %in% de_ids))/length(bg_decalls)
+        cufffdr[i] = sum(!(cuff_decalls %in% de_ids))/length(cuff_decalls)
     }
     plot(1-bgspec, bgsens, col="dodgerblue", type="l", xlab="false positive rate", ylab="true positive rate", lwd=2, ylim=c(0,1))
     lines(1-cuffspec, cuffsens, col="orange", lwd=2)
