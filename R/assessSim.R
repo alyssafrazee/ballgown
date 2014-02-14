@@ -4,7 +4,7 @@
 #' 
 #' @param bg ballgown object from the simulated data
 #' @param bgresults data frame resulting from a call to \code{stattest(bg,...)}. Should be a transcript-level test (i.e., \code{feature="transcript"} in \code{stattest}).
-#' @param annotation
+#' @param annotation either a path to an annotation gtf file, or a data.frame of an annotation file that was already read in and subset to exons on the right chromosome.
 #' @param chr 
 #' @param trulyDEids 
 #' @param cuffdiffFile 
@@ -24,13 +24,17 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
     stopifnot(all(qcut >= 0 & qcut <= 1))
 
     assemblygr = structure(bg)$trans
-    annot = gffRead(annotation)
-    annotsub = subset(annot, feature=="exon" & seqname==chr)        
-    annotsub$tx = getAttributeField(annotsub$attributes, "transcript_id")
-    if(UCSC){
-        # strip quotes and strip off any "_2" business
-        annotsub$tx = substr(annotsub$tx, 2, nchar(annotsub$tx)-1)
-        annotsub$tx = sapply(annotsub$tx, function(x) paste(strsplit(x, split="_")[[1]][1:2],collapse="_"))
+    if(class(annotation)!='data.frame'){
+        annot = gffRead(annotation)
+        annotsub = subset(annot, feature=="exon" & seqname==chr)        
+        annotsub$tx = getAttributeField(annotsub$attributes, "transcript_id")
+        if(UCSC){
+            # strip quotes and strip off any "_2" business
+            annotsub$tx = substr(annotsub$tx, 2, nchar(annotsub$tx)-1)
+            annotsub$tx = sapply(annotsub$tx, function(x) paste(strsplit(x, split="_")[[1]][1:2],collapse="_"))
+        }
+    }else{
+        annotsub = annotation
     }
     
     degtf = subset(annotsub, tx %in% trulyDEids)
