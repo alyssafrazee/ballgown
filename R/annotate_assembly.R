@@ -21,13 +21,13 @@ annotate_assembly = function(assembled, annotated){
     annotatedUL = unlist(annotated)
     mcols(annotatedUL) = NULL
     annotated = split(annotatedUL, names(annotatedUL))
-    annotated = annotated[match(names(annotated), names_annot)]
+    annotated = annotated[match(names_annot, names(annotated))]
 
     # for assembly: get rid of metadata
     assembledUL = unlist(assembled)
     mcols(assembledUL) = NULL
     assembled = split(assembledUL, names(assembledUL))
-    assembled = assembled[match(names(assembled), names_assmb)]
+    assembled = assembled[match(names_assmb, names(assembled))]
 
     # find the overlaps:
     ol = findOverlaps(assembled, annotated)
