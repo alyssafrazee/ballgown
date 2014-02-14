@@ -13,7 +13,10 @@ assessSim(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile,
   test (i.e., \code{feature="transcript"} in
   \code{stattest}).}
 
-  \item{annotation}{}
+  \item{annotation}{either a path to an annotation gtf
+  file, or a data.frame of an annotation file that was
+  already read in and subset to exons on the right
+  chromosome.}
 
   \item{chr}{}
 
