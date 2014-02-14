@@ -13,15 +13,21 @@ annotate_assembly = function(assembled, annotated){
     
     stopifnot(class(annotated) == 'GRangesList' & class(assembled) == 'GRangesList')
 
+    # things will get out of order: keep track
+    names_annot = names(annotated)
+    names_assmb = names(assembled)
+
     # get rid of metadata:
     annotatedUL = unlist(annotated)
     mcols(annotatedUL) = NULL
     annotated = split(annotatedUL, names(annotatedUL))
+    annotated = annotated[match(names(annotated), names_annot)]
 
     # for assembly: get rid of metadata
     assembledUL = unlist(assembled)
     mcols(assembledUL) = NULL
     assembled = split(assembledUL, names(assembledUL))
+    assembled = assembled[match(names(assembled), names_assmb)]
 
     # find the overlaps:
     ol = findOverlaps(assembled, annotated)
