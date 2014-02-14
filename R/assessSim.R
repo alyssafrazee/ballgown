@@ -95,6 +95,6 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
     legend('bottomright', lty=c(1,1), lwd=c(2,2), col=c("dodgerblue", "orange"), c("ballgown", "cuffdiff"))
     if(ret){
         return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, 
-            ballgownspec=bgspec, cuffdiffspec=cuffspec))
+            ballgownspec=bgspec, cuffdiffspec=cuffspec, bgfdr=bgfdr, cuffdifffdr=cuffdifffdr))
     }
 }
