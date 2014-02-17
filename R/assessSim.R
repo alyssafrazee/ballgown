@@ -78,7 +78,7 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
     }
 
     # else, make ROC plots
-    bgsens = cuffsens = bgspec = cuffspec = NULL
+    bgsens = cuffsens = bgspec = cuffspec = bgfdr = cufffdr = NULL
     for(i in 1:length(qcut)){
         cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut[i]])
         cuff_decalls = texpr(bg,'all')$t_id[match(cuff_decalls, texpr(bg,'all')$t_name)]
