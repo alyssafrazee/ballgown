@@ -53,7 +53,7 @@ contains = function(transcripts, cds){
 
     # return data in right order:
     ret = rep(FALSE, length(transcripts))
-    ret[queryHits(ol)] = containsCDs
+    ret[queryHits(ol)] = containsCDS
     return(ret)
 }
 
