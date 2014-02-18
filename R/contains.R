@@ -11,7 +11,7 @@
 
 contains = function(transcripts, cds){
     
-    stopifnot(class(transcripts) == 'GRangesList' & class(assembled) == 'cds')
+    stopifnot(class(transcripts) == 'GRangesList' & class(cds) == 'GRangesList')
 
     # things will get out of order: keep track
     names_transcripts = names(transcripts)
