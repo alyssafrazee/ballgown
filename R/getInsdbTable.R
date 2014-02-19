@@ -12,8 +12,8 @@ getInsdbTable = function(dbFile, feature="isoform", meas="fpkm"){
     require(cummeRbund)
     require(reshape)
 
-    feature = match.arg(c("isoform", "gene", "CDS", "TSS"))
-    meas = match.arg(c("fpkm", "raw_frags", "internal_scaled_frags", "external_scaled_frags"))
+    feature = match.arg(feature, c("isoform", "gene", "CDS", "TSS"))
+    meas = match.arg(meas, c("fpkm", "raw_frags", "internal_scaled_frags", "external_scaled_frags"))
 
     cuff = readCufflinks(dbFile=dbFile)
 
@@ -34,4 +34,6 @@ getInsdbTable = function(dbFile, feature="isoform", meas="fpkm"){
     return(final_data)
 
 }
+
+isoform_fpkm = getInsdbTable("GSE37764GPL10999_DGE_a9dc2c94672e4a51c036c76be9508164.db")
 
