@@ -35,5 +35,3 @@ getInsdbTable = function(dbFile, feature="isoform", meas="fpkm"){
 
 }
 
-isoform_fpkm = getInsdbTable("GSE37764GPL10999_DGE_a9dc2c94672e4a51c036c76be9508164.db")
-
