@@ -84,7 +84,13 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
         }, USE.NAMES=FALSE)
     }
 
+    ## check to see if you actually have ballgown data:
     n <- length(samples)
+    subfiles = list.files(samples)
+    ctabs = subfiles[subfiles %in% c('e_data.ctab', 'i_data.ctab', 't_data.ctab', 'e2t.ctab', 'i2t.ctab')]
+    if(length(ctabs) != 5*n){
+        stop("something is wrong: are you missing .ctab files? do extra files/folders (other than tablemaker output folders) match your samples/dataDir/samplePattern argument(s)?")
+    }
 
     ## Read tables linking exons/introns to transcripts
     if(verbose) message(paste0(date(), ": Reading linking tables"))
@@ -106,7 +112,9 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     if(verbose) message(paste0(date(), ": Merging intron data"))
     #[ensure ctab files all contain same introns]
     sumdiff <- sapply(intronAll, function(x) sum(x$i_id != intronAll[[1]]$i_id))
-    stopifnot(all(sumdiff==0))
+    if(not(all(sumdiff==0))){
+        stop('intron ids were either not the same or not in the same order across samples. double check i_data.ctab for each sample.')
+    }
     idataOnly <- lapply(intronAll[2:length(intronAll)], function(x) x[,6:ncol(x)]);
     intron <- data.frame(intronAll[[1]], as.data.frame(idataOnly))
     colnames(intron)  <- c("i_id", "chr", "strand", "start", "end", paste(c("rcount", "ucount", "mrcount"), rep(names(samples), each=3), sep="."))
@@ -130,7 +138,9 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     if(verbose) message(paste0(date(), ": Merging exon data"))
     #[ensure ctab files all contain same exons]
     sumdiffex <- sapply(exonAll, function(x) sum(x$e_id != exonAll[[1]]$e_id))
-    stopifnot(all(sumdiffex==0))
+    if(not(all(sumdiffex==0))){
+        stop('exon ids were either not the same or not in the same order across samples. double check e_data.ctab for each sample.')
+    }
     edataOnly <- lapply(exonAll[2:length(exonAll)], function(x) x[,6:ncol(x)])
     exon <- data.frame(exonAll[[1]], as.data.frame(edataOnly))
     colnames(exon) <- c("e_id", "chr", "strand", "start", "end", paste(c("rcount", "ucount", "mrcount", "cov", "cov_sd", "mcov", "mcov_sd"), rep(names(samples), each=7), sep="."))
@@ -154,7 +164,9 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     if(verbose) message(paste0(date(),": Merging transcript data"))
     #[ensure ctab files all contain same transcripts]
     sumdifft <- sapply(transAll, function(x) sum(x$t_id != transAll[[1]]$t_id))
-    stopifnot(all(sumdifft==0))
+    if(not(all(sumdifft==0))){
+        stop('transcript ids were either not the same or not in the same order across samples. double check t_data.ctab for each sample.')
+    }
     tdataOnly <- lapply(transAll[2:length(transAll)], function(x) x[,11:ncol(x)])
     trans <- data.frame(transAll[[1]], as.data.frame(tdataOnly))
     colnames(trans) <- c("t_id", "chr", "strand", "start", "end", "t_name", "num_exons", "length", "gene_id", "gene_name", paste(c("cov", "FPKM"), rep(names(samples), each=2), sep="."))
