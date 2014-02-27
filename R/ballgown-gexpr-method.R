@@ -7,10 +7,7 @@ setMethod("gexpr", "ballgown", function(x){
     glist = split(ulstruct, unlist(gid_by_exon))
     glengths = sapply(width(reduce(glist)), sum)
     tlengths = sapply(width(structure(x)$trans), sum)
-    tfrags = lapply(1:nrow(tmeas), function(i){
-        (tlengths[i]/1000) * tmeas[i,]
-    }) ## still a bit slow
-    tfrags = matrix(unlist(tfrags, use.names=FALSE), nrow=length(tfrags), byrow=TRUE)
+    tfrags = tlengths/1000 * tmeas
     expr = t(sapply(1:length(inds_by_gene), function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
     rownames(expr) = names(inds_by_gene)
     return(expr)
