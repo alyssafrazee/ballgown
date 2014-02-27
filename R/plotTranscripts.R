@@ -9,6 +9,8 @@
 #' @param labelTranscripts if \code{TRUE}, transcript ids are labeled on the left side of the plot. Default \code{FALSE}.
 #' @param main optional string giving the desired plot title.
 #' @param colorBorders if \code{TRUE}, exon borders are also drawn in color (instead of black, as they are by default). Useful for visualizing abundances for skinny exons and/or smaller plots, as often happens when \code{length(samples)} is large.
+#' @param log if \code{TRUE}, color transcripts on the log scale. Default \code{FALSE}. To account for expression values of 0, we add 1 to all expression values before taking the log.
+#' @param logbase log base to use if \code{log = TRUE}. default 2.
 #' @return produces a plot of the transcript structure for the specified gene in the current graphics device.
 #' @seealso \code{\link{plotMeans}} 
 #' @author Alyssa Frazee
@@ -16,7 +18,8 @@
 
 plotTranscripts = function(gene, gown, samples = NULL, 
     colorby = 'transcript', meas = 'FPKM', legend = TRUE, 
-    labelTranscripts = FALSE, main = NULL, colorBorders = FALSE){
+    labelTranscripts = FALSE, main = NULL, colorBorders = FALSE,
+    log = FALSE, logbase = 2){
 
 
     if(class(gown)!="ballgown") stop("gown must be a ballgown object")
@@ -71,6 +74,9 @@ plotTranscripts = function(gene, gown, samples = NULL,
             snames = names(smalldat)
             smalldat = matrix(smalldat, nrow=1)
             names(smalldat) = snames
+        }
+        if(log){
+            smalldat = log(smalldat+1, base=logbase)
         }
         maxcol = quantile(as.matrix(smalldat), 0.99)
         colscale = seq(0, maxcol, length.out=200)
@@ -128,8 +134,12 @@ plotTranscripts = function(gene, gown, samples = NULL,
             for(i in 1:length(colscale)){
                 polygon(x = c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]), y = c(ymax-0.3, ymax, ymax, ymax-0.3), border=NA, col = rev(heat.colors(length(colscale)))[i])
             }
-            text(x = seq(min(xax)+1, max(xax)-1, length = 20), y = rep(ymax+0.1, 20), labels = round(colscale,2)[seq(1,length(colscale), length=20)], cex=0.5 ) 
-            text(x = median(xax), y = ymax-0.5, labels=paste("expression, by",  colorby), cex=0.5)
+            text(x = seq(min(xax)+1, max(xax)-1, length = 10), y = rep(ymax+0.1, 10), labels = round(colscale,2)[seq(1,length(colscale), length=10)], cex=0.5 ) 
+            if(log){
+                text(x = median(xax), y = ymax-0.5, labels=paste("log expression, by",  colorby), cex=0.5)
+            }else{
+                text(x = median(xax), y = ymax-0.5, labels=paste("expression, by",  colorby), cex=0.5)                
+            }
         }
 
         # label the transcripts on the y-axis (if asked for)

@@ -4,7 +4,7 @@
 \usage{
 plotTranscripts(gene, gown, samples = NULL, colorby = "transcript",
   meas = "FPKM", legend = TRUE, labelTranscripts = FALSE, main = NULL,
-  colorBorders = FALSE)
+  colorBorders = FALSE, log = FALSE, logbase = 2)
 }
 \arguments{
   \item{gene}{name of gene whose transcripts will be
@@ -45,6 +45,14 @@ plotTranscripts(gene, gown, samples = NULL, colorby = "transcript",
   default). Useful for visualizing abundances for skinny
   exons and/or smaller plots, as often happens when
   \code{length(samples)} is large.}
+
+  \item{log}{if \code{TRUE}, color transcripts on the log
+  scale. Default \code{FALSE}. To account for expression
+  values of 0, we add 1 to all expression values before
+  taking the log.}
+
+  \item{logbase}{log base to use if \code{log = TRUE}.
+  default 2.}
 }
 \value{
 produces a plot of the transcript structure for the
