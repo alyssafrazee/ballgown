@@ -112,7 +112,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     if(verbose) message(paste0(date(), ": Merging intron data"))
     #[ensure ctab files all contain same introns]
     sumdiff <- sapply(intronAll, function(x) sum(x$i_id != intronAll[[1]]$i_id))
-    if(not(all(sumdiff==0))){
+    if(!(all(sumdiff==0))){
         stop('intron ids were either not the same or not in the same order across samples. double check i_data.ctab for each sample.')
     }
     idataOnly <- lapply(intronAll[2:length(intronAll)], function(x) x[,6:ncol(x)]);
@@ -138,7 +138,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     if(verbose) message(paste0(date(), ": Merging exon data"))
     #[ensure ctab files all contain same exons]
     sumdiffex <- sapply(exonAll, function(x) sum(x$e_id != exonAll[[1]]$e_id))
-    if(not(all(sumdiffex==0))){
+    if(!(all(sumdiffex==0))){
         stop('exon ids were either not the same or not in the same order across samples. double check e_data.ctab for each sample.')
     }
     edataOnly <- lapply(exonAll[2:length(exonAll)], function(x) x[,6:ncol(x)])
@@ -164,7 +164,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     if(verbose) message(paste0(date(),": Merging transcript data"))
     #[ensure ctab files all contain same transcripts]
     sumdifft <- sapply(transAll, function(x) sum(x$t_id != transAll[[1]]$t_id))
-    if(not(all(sumdifft==0))){
+    if(!(all(sumdifft==0))){
         stop('transcript ids were either not the same or not in the same order across samples. double check t_data.ctab for each sample.')
     }
     tdataOnly <- lapply(transAll[2:length(transAll)], function(x) x[,11:ncol(x)])
