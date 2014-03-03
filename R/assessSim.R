@@ -86,12 +86,19 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
         cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut[i]])
         cuff_decalls = texpr(bg,'all')$t_id[match(cuff_decalls, texpr(bg,'all')$t_name)]
         bg_decalls = bgresults$id[which(bgresults$qval < qcut[i])]
-        bgsens[i] = sum(de_ids %in% bg_decalls)/length(de_ids)
-        cuffsens[i] = sum(de_ids %in% cuff_decalls)/length(de_ids)
+        bg_decalls = as.numeric(as.character(bg_decalls))
+        found_by_bg = sapply(truly_de_ids, function(x){
+            any(x %in% bg_decalls)
+        })
+        found_by_cuffdiff = sapply(truly_de_ids, function(x){
+            any(x %in% cuff_decalls)
+        })
+        bgsens[i] = sum(found_by_bg) / length(found_by_bg)
+        cuffsens[i] = sum(found_by_cuffdiff) / length(found_by_cuffdiff)
         bgspec[i] = sum(!(non_de_ids %in% bg_decalls))/length(non_de_ids)
         cuffspec[i] = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids) 
-        bgfdr[i] = sum(!(bg_decalls %in% de_ids))/length(bg_decalls)
-        cufffdr[i] = sum(!(cuff_decalls %in% de_ids))/length(cuff_decalls)
+        bgfdr[i] = sum(!(bg_decalls %in% unlist(truly_de_ids)))/length(bg_decalls)
+        cufffdr[i] = sum(!(cuff_decalls %in% unlist(truly_de_ids)))/length(cuff_decalls)
     }
     plot(1-bgspec, bgsens, col="dodgerblue", type="l", xlab="false positive rate", ylab="true positive rate", lwd=2, ylim=c(0,1))
     lines(1-cuffspec, cuffsens, col="orange", lwd=2)
