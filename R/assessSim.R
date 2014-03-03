@@ -46,16 +46,13 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
         return(x[which(x[, 2] == max(x[, 2])), 1])
     }
     truly_de = lapply(ol_list, find_correct)
-    
-    # make sure there's no ties for "closest assembled transcript"
-    num_max = sapply(truly_de, length)
-    stopifnot(all(num_max == 1))
 
-    bgtxids = texpr(bg, "all")$t_name[match(bgresults$id, texpr(bg, "all")$t_id)]
-
-    ### BALLGOWN IDS that should and should not be DE:
-    de_ids = unique(as.numeric(names(assemblygr)[as.numeric(truly_de)]))
-    non_de_ids = setdiff(unique(texpr(bg, "all")$t_id), as.numeric(de_ids))
+    # if there are ties in "closest assembled transcript", count the transcript correctly called DE if at least 1 of the closest ones is found
+    inds_to_ids = function(x){
+        as.numeric(names(assemblygr)[x])
+    }##in case txid and indices do not match
+    truly_de_ids = lapply(truly_de, inds_to_ids)
+    non_de_ids = setdiff(unique(texpr(bg, "all")$t_id), as.numeric(unlist(truly_de_ids)))
 
     # load in cuffdiff results
     cuff = read.table(cuffdiffFile, sep = "\t", header = TRUE)
@@ -66,12 +63,18 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
         cuff_decalls = texpr(bg, "all")$t_id[match(cuff_decalls, texpr(bg, "all")$t_name)]
         bg_decalls = bgresults$id[which(bgresults$qval < qcut)]
         bg_decalls = as.numeric(as.character(bg_decalls))
-        bgsens = sum(de_ids %in% bg_decalls)/length(de_ids)
-        cuffsens = sum(de_ids %in% cuff_decalls)/length(de_ids)
+        found_by_bg = sapply(truly_de_ids, function(x){
+            any(x %in% bg_decalls)
+        })
+        found_by_cuffdiff = sapply(truly_de_ids, function(x){
+            any(x %in% cuff_decalls)
+        })
+        bgsens = sum(found_by_bg) / length(found_by_bg)
+        cuffsens = sum(found_by_cuffdiff) / length(found_by_cuffdiff)
         bgspec = sum(!(non_de_ids %in% bg_decalls))/length(non_de_ids)
         cuffspec = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids)
-        bgfdr = sum(!(bg_decalls %in% de_ids))/length(bg_decalls)
-        cufffdr = sum(!(cuff_decalls %in% de_ids))/length(cuff_decalls)
+        bgfdr = sum(!(bg_decalls %in% unlist(truly_de_ids)))/length(bg_decalls)
+        cufffdr = sum(!(cuff_decalls %in% unlist(truly_de_ids)))/length(cuff_decalls)
         return(list(ballgownsens = bgsens, cuffdiffsens = cuffsens, 
             ballgownspec = bgspec, cuffdiffspec = cuffspec, ballgownfdr = bgfdr, 
             cuffdifffdr = cufffdr))
