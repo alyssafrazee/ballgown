@@ -2,7 +2,7 @@
 \alias{getGenes}
 \title{label assembled transcripts with gene names}
 \usage{
-getGenes(gtf, assembled, UCSC = TRUE)
+getGenes(gtf, assembled, UCSC = TRUE, attribute = "gene_id")
 }
 \arguments{
   \item{gtf}{path to a GTF file containing locations of
@@ -13,6 +13,10 @@ getGenes(gtf, assembled, UCSC = TRUE)
 
   \item{UCSC}{set to \code{TRUE} if you're using a UCSC gtf
   file. (Requires some extra text-processing).}
+
+  \item{attribute}{set to \code{"gene_id"} (default) if you
+  want the gene ID or \code{"gene_name"} if you want the
+  gene symbol}
 }
 \value{
 a character vector of the same length as \code{assembled},
@@ -29,6 +33,6 @@ corrsponding to the same annotation you used when
 constructing \code{assembled})
 }
 \author{
-Alyssa Frazee
+Alyssa Frazee, Andrew Jaffe
 }
 
