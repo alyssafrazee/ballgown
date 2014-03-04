@@ -3,7 +3,7 @@
 #' @param gtf path to a GTF file containing locations of annotated transcripts
 #' @param assembled GRangesList object, with each set of ranges representing exons of an assembled transcript.
 #' @param UCSC set to \code{TRUE} if you're using a UCSC gtf file. (Requires some extra text-processing).
-#' @param attribute set to gene_id (default) if you want the gene ID or gene_name if you want the gene symbol 
+#' @param attribute set to \code{"gene_id"} (default) if you want the gene ID or \code{"gene_name"} if you want the gene symbol
 #' @return a character vector of the same length as \code{assembled}, providing the name(s) of the gene(s) that overlaps each transcript in \code{assembled}.
 #' @details chromosome labels in \code{gtf} and \code{assembled} should match. (i.e., you should provide the path to a gtf corrsponding to the same annotation you used when constructing \code{assembled})
 #' 
