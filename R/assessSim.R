@@ -10,7 +10,7 @@
 #' @param cuffdiffFile 
 #' @param qcut either a number between 0 and 1 to be used as the q-value significance cutoff, or a vector like \code{seq(0,1,by=0.01)} (i.e., ranging from 0 to 1 in even increments). 
 #' @param UCSC 
-#' @param strict only count "closest" transcript as correct? (default TRUE)
+#' @param nClosest for true positives, make a positive call if any of the \code{nClosest} closest (most overlapping) transcripts are called DE by a method. Default 1.
 #' @details \code{trulyDEids} should be the transcripts that were set to be differentially expressed, identified the SAME WAY AS THEY ARE in \code{annotation}. This is super important!!! 
 #' 
 #' Also: if \code{qcut} is a vector, \code{assessSim} returns sensitivities/specificities and creates an ROC plot. If \code{qcut} is a single number, sensitivity and specificity for both methods are returned, using \code{qcut} as a q-value significance cutoff.
@@ -18,7 +18,7 @@
 #' @author Alyssa Frazee
 #' @export
 
-assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, qcut=0.05, UCSC=TRUE, ret=FALSE, strict=TRUE){
+assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, qcut=0.05, UCSC=TRUE, ret=FALSE, nClosest=1){
     require(ballgown)
     require(GenomicRanges)
 
@@ -43,14 +43,10 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
 
     deoverlaps = annotate_assembly(assemblygr, degr)
     ol_list = split(deoverlaps[, c(1, 3)], deoverlaps[,2])
-    if(strict){
-        find_correct = function(x) {
-            return(x[which(x[, 2] == max(x[, 2])), 1])
-        }
-    }else{
-        find_correct = function(x) {
-            return(x[which(x[, 2] > 0.9), 1])
-        }
+    ## ties are handled according to "sort" -- i.e., if there's a max overlap tie, the transcript with the smaller start position will be chosen
+    find_correct = function(x){
+        maxInd = min(nrow(x), nClosest)
+        return(x[order(x[,2], decreasing=TRUE)[1:maxInd] ,1])
     }
     truly_de = lapply(ol_list, find_correct)
 
