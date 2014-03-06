@@ -3,7 +3,7 @@
 \title{analyze results of a two-group simulation experiment}
 \usage{
 assessSim(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile,
-  qcut = 0.05, UCSC = TRUE, ret = FALSE)
+  qcut = 0.05, UCSC = TRUE, ret = FALSE, nClosest = 1)
 }
 \arguments{
   \item{bg}{ballgown object from the simulated data}
@@ -30,6 +30,10 @@ assessSim(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile,
   even increments).}
 
   \item{UCSC}{}
+
+  \item{nClosest}{for true positives, make a positive call
+  if any of the \code{nClosest} closest (most overlapping)
+  transcripts are called DE by a method. Default 1.}
 }
 \value{
 creates ROC curve and returns sensitivities/specificities
