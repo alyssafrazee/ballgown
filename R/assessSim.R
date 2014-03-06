@@ -50,7 +50,6 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
     }
     truly_de = lapply(ol_list, find_correct)
 
-    # if there are ties in "closest assembled transcript", count the transcript correctly called DE if at least 1 of the closest ones is found
     inds_to_ids = function(x){
         as.numeric(names(assemblygr)[x])
     }##in case txid and indices do not match
@@ -107,7 +106,8 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile, q
     lines(1-cuffspec, cuffsens, col="orange", lwd=2)
     legend('bottomright', lty=c(1,1), lwd=c(2,2), col=c("dodgerblue", "orange"), c("ballgown", "cuffdiff"))
     if(ret){
+        isDE = bgresults$id %in% unlist(truly_de_ids)
         return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, 
-            ballgownspec=bgspec, cuffdiffspec=cuffspec, bgfdr=bgfdr, cufffdr=cufffdr))
+            ballgownspec=bgspec, cuffdiffspec=cuffspec, bgfdr=bgfdr, cufffdr=cufffdr, isDE=isDE))
     }
 }
