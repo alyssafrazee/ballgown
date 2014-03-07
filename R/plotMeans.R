@@ -85,7 +85,7 @@ plotMeans = function(gene, gown,
         # calculate means
         if(colorby == "transcript"){
             # mean transcript-level expression measurement for this group
-            smalldat = subset(texpr(gown), t_id %in% gtrans$tid)
+            smalldat = subset(texpr(gown, 'all'), t_id %in% gtrans$tid)
             coltype = as.character(sapply(names(data(gown)$trans), gettype))
             colsamp = as.character(sapply(names(data(gown)$trans), getsamp))
             datacols = which(coltype==dattype & colsamp %in% samples[[p]])
@@ -95,7 +95,7 @@ plotMeans = function(gene, gown,
 
         if(colorby == "exon"){
             # mean exon-level expression measurement for this group
-            smalldat = subset(eexpr(gown), e_id %in% gtrans$id)
+            smalldat = subset(eexpr(gown, 'all'), e_id %in% gtrans$id)
             coltype = as.character(sapply(names(data(gown)$exon), gettype))
             colsamp = as.character(sapply(names(data(gown)$exon), getsamp))
             datacols = which(coltype==dattype & colsamp %in% samples[[p]])
