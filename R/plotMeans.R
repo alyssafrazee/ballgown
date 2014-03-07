@@ -55,7 +55,7 @@ plotMeans = function(gene, gown,
     }
     if(groupname == "all"){
         numplots = length(unique(pData(gown)[,pdatacol]))
-        mf = c(ceiling(sqrt(numplots)), floor(sqrt(numplots)))
+        mf = c(floor(sqrt(numplots)), ceiling(sqrt(numplots)))
         plot_titles = unique(pData(gown)[,pdatacol])
     }else{
         numplots = 1
@@ -73,7 +73,7 @@ plotMeans = function(gene, gown,
     # plot base:
     westval = ifelse(labelTranscripts, 4, 2)
     par(mar=c(5, westval, 4, 2), mfrow = mf)
-    ymax = ifelse(legend, numtx+1.5, numtx+1)
+    ymax = ifelse(legend, numtx+2, numtx+1)
 
     # the for-loop only has >1 iteration if groupname == "all"
     for(p in 1:numplots){
