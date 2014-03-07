@@ -47,7 +47,7 @@ plotMeans = function(gene, gown,
     ma = as.data.frame(structure(gown)$trans)
     thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
     gtrans = subset(ma, element %in% thetranscripts)
-    gtrans$tid = as.numeric(sapply(gtrans$element, function(x) as.numeric(substr(x,3,nchar(x)))))
+    gtrans$tid = gtrans$element
     xax = seq(min(gtrans$start), max(gtrans$end), by=1)
     numtx = length(unique(thetranscripts))
     if(groupvar != "none"){
