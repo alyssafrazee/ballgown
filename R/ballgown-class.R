@@ -88,6 +88,8 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     n <- length(samples)
     subfiles = list.files(samples)
     ctabs = subfiles[subfiles %in% c('e_data.ctab', 'i_data.ctab', 't_data.ctab', 'e2t.ctab', 'i2t.ctab')]
+    print(ctabs)
+    print(length(ctabs))
     if(length(ctabs) != 5*n){
         stop("something is wrong: are you missing .ctab files? do extra files/folders (other than tablemaker output folders) match your samples/dataDir/samplePattern argument(s)?")
     }
