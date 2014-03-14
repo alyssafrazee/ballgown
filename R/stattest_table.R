@@ -18,7 +18,6 @@
 
 stattest_table = function(gowntable, pData, mod = NULL, mod0 = NULL,
     feature = c("gene", "exon", "intron", "transcript"),
-    meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
     timecourse = FALSE, covariate = NULL, adjustvars = NULL,
     df = 4, getFC = FALSE, libadjust = TRUE, log = TRUE){
 
