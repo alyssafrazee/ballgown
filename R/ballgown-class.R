@@ -188,8 +188,27 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
         phx = read.table(pData, stringsAsFactors=FALSE, ...)
         theorder = sapply(names(samples), function(x) which(phx[,1]==x))
         phx = phx[theorder,]
+        meastypes = ss(colnames(trans)[-1:10], pattern="\\.", slot=1)
+        column_order = ss(colnames(trans)[-1:10], pattern="\\.", slot=2)[meastypes=="FPKM"]
+        if(!all(phx[,1] == column_order)){
+            warning('the rows of pData did not seem to be in the same order as the columns of the expression data. attempting to rearrange pData.')
+            tmp = try(phx <- phx[,match(column_order, phx[,1])])
+            if(class(tmp) == "try-error"){
+                stop('first column of pData does not match the names of the folders containing the ballgown data.')
+            }
         }
-    if(is.data.frame(pData)) phx = pData
+    }else if(is.data.frame(pData)){
+        phx = pData
+        meastypes = ss(colnames(trans)[-1:10], pattern="\\.", slot=1)
+        column_order = ss(colnames(trans)[-1:10], pattern="\\.", slot=2)[meastypes=="FPKM"]
+        if(!all(phx[,1] == column_order)){
+            warning('the rows of pData did not seem to be in the same order as the columns of the expression data. attempting to rearrange pData.')
+            tmp = try(phx <- phx[,match(column_order, phx[,1])])
+            if(class(tmp) == "try-error"){
+                stop('first column of pData does not match the names of the folders containing the ballgown data.')
+            }
+        }
+    }
     if(is.null(pData)) phx = NULL
 
     if(verbose) message("Wrapping up the results")

@@ -5,4 +5,8 @@ setReplaceMethod("data", "ballgown", function(x, value) {x@data <- value; x})
 setMethod("pData", "ballgown", function(x){
   return(indexes(x)$pData)
 })
-setMethod("pData<-", "ballgown", function(x, value) {x@indexes$pData <- value; x})
+setMethod("pData<-", "ballgown", function(x, value) {
+    x@indexes$pData <- value
+    ### TODO: check validity of provided pData
+    x}
+)
