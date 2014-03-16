@@ -1,5 +1,6 @@
 # the show method:
 setMethod("show", "ballgown", 
     function(object)
-        cat(class(object), "instance with", length(structure(object)$trans), "assembled transcripts and", ncol(data(object)$trans), "samples\n")
+        cat(class(object), "instance with", length(structure(object)$trans), 
+            "assembled transcripts and", nrow(indexes(object)$pData), "samples\n")
 )
