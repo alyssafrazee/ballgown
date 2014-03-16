@@ -3,8 +3,7 @@
 \title{statistical tests for differential expression, without a ballgown object}
 \usage{
 stattest_table(gowntable, pData, mod = NULL, mod0 = NULL,
-  feature = c("gene", "exon", "intron", "transcript"), meas = c("cov",
-  "FPKM", "rcount", "ucount", "mrcount", "mcov"), timecourse = FALSE,
+  feature = c("gene", "exon", "intron", "transcript"), timecourse = FALSE,
   covariate = NULL, adjustvars = NULL, df = 4, getFC = FALSE,
   libadjust = TRUE, log = TRUE)
 }
