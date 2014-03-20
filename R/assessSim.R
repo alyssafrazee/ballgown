@@ -139,7 +139,7 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
     legend('bottomright', lty=c(1,1), lwd=c(2,2), col=c("dodgerblue", "orange"), c("ballgown", "cuffdiff"))
     if(ret){
         isDE = bgresults$id %in% unlist(truly_de_ids)
-        return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, limmasens=limmasens
+        return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, limmasens=limmasens,
             ballgownspec=bgspec, cuffdiffspec=cuffspec, limmaspec=limmaspec,
             bgfdr=bgfdr, cufffdr=cufffdr, limmafdr=limmafdr, isDE=isDE))
     }
