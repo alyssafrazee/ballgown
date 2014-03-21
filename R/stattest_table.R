@@ -22,7 +22,6 @@ stattest_table = function(gowntable, pData, mod = NULL, mod0 = NULL,
     df = 4, getFC = FALSE, libadjust = TRUE, log = TRUE){
 
     feature = match.arg(feature)
-    meas = match.arg(meas)
 
     if(xor(is.null(mod), is.null(mod0))){
         stop("please provide both null and full models, or use the defaults")
