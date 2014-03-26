@@ -1,0 +1,24 @@
+Package: polyester
+Maintainer: Alyssa Frazee <acfrazee@gmail.com>
+Author: Andrew Jaffe, Alyssa Frazee, Jeff Leek
+Version: 1.0
+License: GPL-3
+Title: polyester
+Description: an awesome RNA-seq differential expression simulator
+Imports:
+    Biostrings,
+    IRanges,
+    GenomicRanges,
+    ballgown
+Collage:
+    'polyester-package.R'
+    'NB.R'
+    'add_error.R'
+    'generate_fragments.R'
+    'get_reads.R'
+    'reverse_complement.R'
+    'simulate_experiment.R'
+    'simulate_experiment_countmat.R'
+    'write_reads.R
+    'get_params.R'
+    'get_read_numbers.R'
