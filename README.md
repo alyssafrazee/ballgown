@@ -12,7 +12,7 @@ install_github('ballgown', 'alyssafrazee')
 ## (1) preprocessing: preparing transcript assemblies for analysis
 This package was created as a statistical backend for existing transcript assembly software.  In its current state, `ballgown` only provides support for assemblies created with [Cufflinks](http://cufflinks.cbcb.umd.edu/index.html), though we hope to be able to process output from other assemblers in the near future.  
 
-Users need to run the `tablemaker` binary<sup>1</sup> to get their assembly output organized into a format that `ballgown` can load.  This program needs to be run on each RNA-seq sample in your experiment.  It requires your merged assembly, in `gtf` format, and the read alignments for each sample, in `bam` format.  You use `tablemaker` as follows:
+Users need to run the `tablemaker` binary to get their assembly output organized into a format that `ballgown` can load.  `tablemaker` is available in the `tablemaker` subfolder of this repo; download/untar/unzip to get READMEs and binaries. (Source code coming soon). This program needs to be run on each RNA-seq sample in your experiment.  It requires your merged assembly, in `gtf` format, and the read alignments for each sample, in `bam` format.  You use `tablemaker` as follows:
 
 `tablemaker -p 4 -q -W -G merged.gtf -o sample01_output read_alignments.bam`
 
@@ -173,6 +173,3 @@ Our statistical methods for differential expression testing are straightforward 
 
 ## that's it!
 Functions are completely documented, so help is available with `help(function)` or `?function`.  And if you find a bug or other problem, we definitely want to know about it!
-
-## footnotes
-1.  email me (acfrazee@gmail.com) for a copy of the `tablemaker` binary.  It should be public shortly, but for now, it's an "upon request" situation.
