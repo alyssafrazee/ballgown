@@ -50,6 +50,10 @@ plotTranscripts = function(gene, gown, samples = NULL,
 
     ma = IRanges::as.data.frame(structure(gown)$trans)
     thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
+    if(substr(ma$element[1] == "tx"){
+        warning('your ballgown object was built with a deprecated version of ballgown - would probably be good to re-build!')
+        thetranscripts = paste0('tx',thetranscripts)
+    }
     gtrans = subset(ma, element %in% thetranscripts)
     xax = seq(min(gtrans$start), max(gtrans$end), by=1)
     numtx = length(unique(thetranscripts))
