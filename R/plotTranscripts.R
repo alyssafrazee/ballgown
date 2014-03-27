@@ -119,8 +119,9 @@ plotTranscripts = function(gene, gown, samples = NULL,
                 mycolor = closestColor(smalldat[,colIndex][which(t_id==tx)], colscale)
             }
             if(colorby == "none") mycolor = "gray70"
+            
             if(!is.null(customCol)){
-              mycolor=customCol[tx]
+              mycolor=customCol[which(unique(gtrans$element)==tx)]
             }
             txind = which(unique(gtrans$element)==tx)
             gtsub = gtrans[gtrans$element==tx,]
