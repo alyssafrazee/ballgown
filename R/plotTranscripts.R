@@ -11,6 +11,7 @@
 #' @param colorBorders if \code{TRUE}, exon borders are also drawn in color (instead of black, as they are by default). Useful for visualizing abundances for skinny exons and/or smaller plots, as often happens when \code{length(samples)} is large.
 #' @param log if \code{TRUE}, color transcripts on the log scale. Default \code{FALSE}. To account for expression values of 0, we add 1 to all expression values before taking the log.
 #' @param logbase log base to use if \code{log = TRUE}. default 2.
+#' @param customCol an optional vector of custom colors to color transcripts by. there must be the same number of colors as transcripts in the gene being plotted.
 #' @return produces a plot of the transcript structure for the specified gene in the current graphics device.
 #' @seealso \code{\link{plotMeans}} 
 #' @author Alyssa Frazee
@@ -19,7 +20,7 @@
 plotTranscripts = function(gene, gown, samples = NULL, 
     colorby = 'transcript', meas = 'FPKM', legend = TRUE, 
     labelTranscripts = FALSE, main = NULL, colorBorders = FALSE,
-    log = FALSE, logbase = 2){
+    log = FALSE, logbase = 2, customCol=NULL){
 
 
     if(class(gown)!="ballgown") stop("gown must be a ballgown object")
@@ -37,6 +38,10 @@ plotTranscripts = function(gene, gown, samples = NULL,
     }
 
     if(colorby=="none") legend = FALSE
+    
+    if(!is.null(customCol) & (colorby!="transcript")){
+      stop("Custom coloring is only available at transcript level currently")
+    }
 
     n = length(samples)
     westval = ifelse(labelTranscripts, 4, 2)
@@ -50,10 +55,16 @@ plotTranscripts = function(gene, gown, samples = NULL,
 
     ma = IRanges::as.data.frame(structure(gown)$trans)
     thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
+    
     if(substr(ma$element[1],1,2) == "tx"){
-        warning('your ballgown object was built with a deprecated version of ballgown - would probably be good to re-build!')
-        thetranscripts = paste0('tx',thetranscripts)
+      warning('your ballgown object was built with a deprecated version of ballgown - would probably be good to re-build!')
+      thetranscripts = paste0('tx',thetranscripts)
     }
+    
+    if(!is.null(customCol) & (length(customCol)!=length(thetranscripts))){
+      stop("You must have the same number of custom colors as transcripts")
+    }
+    
     gtrans = subset(ma, element %in% thetranscripts)
     xax = seq(min(gtrans$start), max(gtrans$end), by=1)
     numtx = length(unique(thetranscripts))
@@ -108,6 +119,10 @@ plotTranscripts = function(gene, gown, samples = NULL,
                 mycolor = closestColor(smalldat[,colIndex][which(t_id==tx)], colscale)
             }
             if(colorby == "none") mycolor = "gray70"
+            
+            if(!is.null(customCol)){
+              mycolor=customCol[which(unique(gtrans$element)==tx)]
+            }
             txind = which(unique(gtrans$element)==tx)
             gtsub = gtrans[gtrans$element==tx,]
             gtsub = gtsub[order(gtsub$start),]
