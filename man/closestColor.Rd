@@ -23,6 +23,6 @@ internal function for \code{plotTranscripts} - not intended for direct use
 Alyssa Frazee
 }
 \seealso{
-\link{\code{plotTranscripts}}
+\code{\link{plotTranscripts}}
 }
 

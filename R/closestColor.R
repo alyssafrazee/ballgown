@@ -5,7 +5,7 @@
 #' @return color (from \code{heat.colors}) that most closely matches \code{x} in the given scale
 #' @details internal function for \code{plotTranscripts} - not intended for direct use
 #' @author Alyssa Frazee
-#' @seealso \link{\code{plotTranscripts}}
+#' @seealso \code{\link{plotTranscripts}}
 
 closestColor = function(x, colscale){
 	choices = rev(heat.colors(length(colscale)))
