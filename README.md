@@ -173,3 +173,10 @@ Our statistical methods for differential expression testing are straightforward 
 
 ## that's it!
 Functions are completely documented, so help is available with `help(function)` or `?function`.  And if you find a bug or other problem, we definitely want to know about it!
+
+## code contributors
+* [Alyssa Frazee](https://github.com/alyssafrazee)
+* [Jeff Leek](https://github.com/jtleek)
+* [Andrew Jaffe](https://github.com/andrewejaffe)
+* [Leonardo Collado Torres](https://github.com/lcolladotor)
+* Geo Pertea
