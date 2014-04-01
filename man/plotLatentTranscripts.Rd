@@ -15,7 +15,7 @@ plotLatentTranscripts(gene, gown, method = c("hclust", "kmeans"), k = NULL,
 
 \item{k}{number of transcripts clusters to use.  By default, \code{k} is \code{NULL} and thus is chosen using a rule of thumb, but providing \code{k} overrides those rules of thumb.}
 
-\item{choosek}{if \code{k} is not provided, how should the number of clusters be chosen?  Must be one of "var90" (choose a \code{k} that explains 90% of the observed variation) or "thumb" (\code{k} is set to be approximately \code{sqrt(n)}, where n is the total number of transcripts for \code{gene})}
+\item{choosek}{if \code{k} is not provided, how should the number of clusters be chosen?  Must be one of "var90" (choose a \code{k} that explains 90 percent of the observed variation) or "thumb" (\code{k} is set to be approximately \code{sqrt(n)}, where n is the total number of transcripts for \code{gene})}
 
 \item{returncluster}{if TRUE (as it is by default), return the results of the call to \code{clusterTrancsripts} so the data is available for later use.  Nothing is returned if FALSE.}
 }

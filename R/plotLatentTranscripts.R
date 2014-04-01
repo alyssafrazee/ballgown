@@ -4,7 +4,7 @@
 #' @param gown object of class \code{ballgown} being used for analysis
 #' @param method clustering method to use.  Currently can choose from hierarchical clustering (\code{hclust}) or K-means (\code{kmeans}).  More methods are in development.
 #' @param k number of transcripts clusters to use.  By default, \code{k} is \code{NULL} and thus is chosen using a rule of thumb, but providing \code{k} overrides those rules of thumb.
-#' @param choosek if \code{k} is not provided, how should the number of clusters be chosen?  Must be one of "var90" (choose a \code{k} that explains 90% of the observed variation) or "thumb" (\code{k} is set to be approximately \code{sqrt(n)}, where n is the total number of transcripts for \code{gene})
+#' @param choosek if \code{k} is not provided, how should the number of clusters be chosen?  Must be one of "var90" (choose a \code{k} that explains 90 percent of the observed variation) or "thumb" (\code{k} is set to be approximately \code{sqrt(n)}, where n is the total number of transcripts for \code{gene})
 #' @param returncluster if TRUE (as it is by default), return the results of the call to \code{clusterTrancsripts} so the data is available for later use.  Nothing is returned if FALSE.
 #' @return if \code{returncluster} is TRUE, the transcript clusters are returned as described in \link{\code{clusterTranscripts}}. A plot of the transcript clusters is also produced, in the style of \link{\code{plotTranscripts}}.
 #' @seealso \code{\link{clusterTranscripts}}
