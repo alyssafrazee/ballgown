@@ -20,7 +20,7 @@ plotLatentTranscripts(gene, gown, method = c("hclust", "kmeans"), k = NULL,
 \item{returncluster}{if TRUE (as it is by default), return the results of the call to \code{clusterTrancsripts} so the data is available for later use.  Nothing is returned if FALSE.}
 }
 \value{
-if \code{returncluster} is TRUE, the transcript clusters are returned as described in \link{\code{clusterTranscripts}}. A plot of the transcript clusters is also produced, in the style of \link{\code{plotTranscripts}}.
+if \code{returncluster} is TRUE, the transcript clusters are returned as described in \code{\link{clusterTranscripts}}. A plot of the transcript clusters is also produced, in the style of \code{\link{plotTranscripts}}.
 }
 \description{
 cluster assembled transcripts and plot the results
