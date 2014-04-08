@@ -179,4 +179,4 @@ Functions are completely documented, so help is available with `help(function)` 
 * [Jeff Leek](https://github.com/jtleek)
 * [Andrew Jaffe](https://github.com/andrewejaffe)
 * [Leonardo Collado Torres](https://github.com/lcolladotor)
-* Geo Pertea
+* [Geo Pertea](https://github.com/gpertea)
