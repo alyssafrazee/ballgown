@@ -51,7 +51,7 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
             gnames = indexes(gown)$t2g$g_id
             inds_by_gene = split(seq(along=gnames), gnames)
             tmeas = texpr(gown, "FPKM")
-            gid_by_exon = lapply(1:nrow(texpr(gown)), function(i){rep(texpr(gown)$gene_id[i], texpr(gown)$num_exons[i])})
+            gid_by_exon = lapply(1:nrow(texpr(gown)), function(i){rep(texpr(gown, 'all')$gene_id[i], texpr(gown, 'all')$num_exons[i])})
             ulstruct = unlist(structure(gown)$trans)
             glist = split(ulstruct, unlist(gid_by_exon))
             glengths = sapply(width(reduce(glist)), sum)
