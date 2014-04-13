@@ -56,9 +56,9 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
             glist = split(ulstruct, unlist(gid_by_exon))
             glengths = sapply(width(reduce(glist)), sum)
             tlengths = sapply(width(structure(gown)$trans), sum)
-            tfrags = tlengths*as.matrix(tmeas)/1000
-            tfrags = matrix(unlist(tfrags, use.names=FALSE), nrow=length(tfrags), byrow=TRUE)
-            expr = t(sapply(1:length(inds_by_gene), function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
+            tfrags = tlengths * tmeas
+            expr = t(sapply(1:length(inds_by_gene), 
+                function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
             rownames(expr) = names(inds_by_gene)
         }else{
             expr = gexpr
