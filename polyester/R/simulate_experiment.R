@@ -68,22 +68,30 @@ simulate_experiment = function(fasta, num_reps=10, fraglen=250, fragsd=25,
     basemeans2 = round(basemeans2)
 
     if(is.null(dispersion_param)){
-        dispersion_param = round(reads_per_transcript/3)
+        dispersion_param = reads_per_transcript/3
+    }
+
+    if(length(dispersion_param) == 1){
+        nbdp1 = nbdp2 = dispersion_param
+    }else{
+        nbdp1 = dispersion_param[1:n1]
+        nbdp2 = dispersion_param[(1:n2)+n1] 
     }
 
     numreadsList = vector("list", n1+n2)
     for(i in 1:n1){
-        numreadsList[[i]] = NB(1:length(transcripts), basemeans1, dispersion_param)
+        numreadsList[[i]] = NB(basemeans1, nbdp1)
     }
     for(i in (1:n2)+n1){
-        numreadsList[[i]] = NB(1:length(transcripts), basemeans2, dispersion_param)
+        numreadsList[[i]] = NB(basemeans2, nbdp2)
     }
+
 
     ## simulate reads for each sample:
     #######################################
     for(i in 1:(n1+n2)){
         
-        tObj = rep(transcripts,times=numreadsList[[i]])
+        tObj = rep(transcripts, times=numreadsList[[i]])
         
         #get fragments
         tFrags = generate_fragments(tObj, fraglen=fraglen)
