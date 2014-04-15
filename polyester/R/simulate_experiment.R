@@ -1,4 +1,4 @@
-#' simulate RNA-seq experiment 
+#' simulate RNA-seq experiment using negative binomial model
 #'
 #' create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional differential expression between two groups
 #' @param fasta path to FASTA file containing transcripts from which to simulate reads 
