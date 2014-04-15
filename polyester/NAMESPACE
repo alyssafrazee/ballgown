@@ -2,6 +2,7 @@
 
 export(add_error)
 export(count_transcripts)
+export(generate_fragments)
 export(get_params)
 export(get_read_numbers)
 export(simulate_experiment)

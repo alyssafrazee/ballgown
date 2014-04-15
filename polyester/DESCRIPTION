@@ -6,19 +6,5 @@ License: GPL-3
 Title: polyester
 Description: RNA-seq read simulator, including differential transcript
     expression options
-Imports:
-    Biostrings,
-    IRanges,
-    GenomicRanges,
-    ballgown
-Collage: 'polyester-package.R'
-    'NB.R'
-    'add_error.R'
-    'generate_fragments.R'
-    'get_reads.R'
-    'reverse_complement.R'
-    'simulate_experiment.R'
-    'simulate_experiment_countmat.R'
-    'write_reads.R
-    'get_params.R'
-    'get_read_numbers.R'
+Depends:
+    Biostrings

@@ -54,9 +54,9 @@ create FASTA files containing RNA-seq reads simulated from provided transcripts,
 fastapath = system.file("data", "chr22.fa", package="polyester")
 numtx = count_transcripts(fastapath)
 set.seed(4)
-fold_changes = sample(c(0.5, 1, 2), size=numtx, probs=c(0.05, 0.9, 0.05), replace=TRUE)
+fold_changes = sample(c(0.5, 1, 2), size=numtx, prob=c(0.05, 0.9, 0.05), replace=TRUE)
 
-simulate_experiment(fastapath, reads_per_transcript = 10, fold_changes=fold_changes, outdir="./simdata/")
+simulate_experiment(fastapath, reads_per_transcript=10, fold_changes=fold_changes, outdir="./simdata/")
 
 }
 }
