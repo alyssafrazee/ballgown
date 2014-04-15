@@ -2,16 +2,18 @@
 #'
 #'<full description>
 #' @param fasta <what param does>
+#' @param  readmat <what param does>
+#' @param  outdir <what param does>
+#' @param  fraglen=250 <what param does>
+#' @param  fragsd=25 <what param does>
+#' @param  readlen=100 <what param does>
+#' @param  error_rate=0.005 <what param does>
+#' @param  paired=TRUE <what param does>
 #' @export
-#' @keywords
-#' @seealso
-#' @return
-#' @alias
 #' @examples \dontrun{
 #'
 #'}
-simulate_experiment_countmat = function(fasta, readmat, outdir, 
-    fraglen=250, fragsd=25, readlen=100, error_rate=0.005, paired=TRUE){
+simulate_experiment_countmat = function(fasta, readmat, outdir, fraglen=250, fragsd=25, readlen=100, error_rate=0.005, paired=TRUE){
 
     transcripts = readDNAStringSet(fasta)
 

@@ -4,14 +4,14 @@ Author: Andrew Jaffe, Alyssa Frazee, Jeff Leek
 Version: 1.0.0
 License: GPL-3
 Title: polyester
-Description: RNA-seq read simulator, including differential transcript expression options
+Description: RNA-seq read simulator, including differential transcript
+    expression options
 Imports:
     Biostrings,
     IRanges,
     GenomicRanges,
     ballgown
-Collage:
-    'polyester-package.R'
+Collage: 'polyester-package.R'
     'NB.R'
     'add_error.R'
     'generate_fragments.R'

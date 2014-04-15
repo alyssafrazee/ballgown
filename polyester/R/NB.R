@@ -5,10 +5,6 @@
 #' @param  dispersion_param <what param does>
 #' @param  seed=NULL <what param does>
 #' @export
-#' @keywords
-#' @seealso
-#' @return
-#' @alias
 #' @examples \dontrun{
 #'
 #'}

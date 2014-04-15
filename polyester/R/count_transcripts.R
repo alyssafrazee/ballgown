@@ -3,10 +3,7 @@
 #'<full description>
 #' @param fasta <what param does>
 #' @export
-#' @keywords
-#' @seealso
-#' @return
-#' @alias
+#' @return Number of transcripts annotated in \code{fasta}
 #' @examples \dontrun{
 #'
 #'}
