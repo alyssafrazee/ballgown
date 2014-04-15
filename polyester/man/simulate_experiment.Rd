@@ -16,15 +16,18 @@ is an integer, \code{num_reps} replicates will be simulated in each group.
 Otherwise, \code{num_reps} can be a length-2 vector, where \code{num_reps[1]}
 and \code{num_reps[2]} replicates will be simulated in each of the two groups.}
 
-\item{fraglen}{Mean RNA fragment length. Sequences will be read off the end(s) of these fragments.}
+\item{fraglen}{Mean RNA fragment length. Sequences will be read off the end(s) of these
+fragments.}
 
 \item{fragsd}{Standard deviation of fragment lengths.}
 
 \item{readlen}{Read length.}
 
-\item{error_rate}{Sequencing error rate. Must be between 0 and 1. A uniform error model is assumed.}
+\item{error_rate}{Sequencing error rate. Must be between 0 and 1. A uniform error model is
+assumed.}
 
-\item{paired}{If \code{TRUE}, paired-end reads are simulated; else single-end reads are simulated.}
+\item{paired}{If \code{TRUE}, paired-end reads are simulated; else single-end reads are
+simulated.}
 
 \item{reads_per_transcript}{baseline mean number of reads to simulate
 from each transcript. Can be an integer, in which case this many reads
@@ -38,17 +41,19 @@ samples. Fold change < 1 means transcript is overexpressed in the last
 \code{num_reps} (or \code{num_reps[2]}) samples. The change is in the mean
 number of reads generated from the transcript, between groups.}
 
-\item{dispersion_param}{the negative binomial \code{size} distribution (see \code{\link{NegBinomial}})
+\item{dispersion_param}{the negative binomial \code{size} distribution
+(see \code{\link{NegBinomial}})
 of the number of reads drawn per transcript. If left blank, defaults to
 \code{reads_per_transcript / 3}. Negative binomial variance is mean + mean^2 / size.}
 
-\item{outdir}{character, path to folder where simulated reads should be written. Should end with "/" if specified. If unspecified, reads are written to current working directory.}
+\item{outdir}{character, path to folder where simulated reads should be written. Should end
+with "/" if specified. If unspecified, reads are written to current working directory.}
 }
 \description{
-create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional differential expression between two groups
+create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional
+differential expression between two groups
 }
 \examples{
-\dontrun{
 ## simulate a few reads from chromosome 22
 
 fastapath = system.file("data", "chr22.fa", package="polyester")
@@ -56,8 +61,7 @@ numtx = count_transcripts(fastapath)
 set.seed(4)
 fold_changes = sample(c(0.5, 1, 2), size=numtx, prob=c(0.05, 0.9, 0.05), replace=TRUE)
 
-simulate_experiment(fastapath, reads_per_transcript=10, fold_changes=fold_changes, outdir="./simdata/")
-
-}
+simulate_experiment(fastapath, reads_per_transcript=10, fold_changes=fold_changes,
+    outdir="./simdata/")
 }
 
