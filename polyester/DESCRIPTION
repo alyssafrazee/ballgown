@@ -1,10 +1,10 @@
 Package: polyester
 Maintainer: Alyssa Frazee <acfrazee@gmail.com>
 Author: Andrew Jaffe, Alyssa Frazee, Jeff Leek
-Version: 1.0
+Version: 1.0.0
 License: GPL-3
 Title: polyester
-Description: an awesome RNA-seq differential expression simulator
+Description: RNA-seq read simulator, including differential transcript expression options
 Imports:
     Biostrings,
     IRanges,
