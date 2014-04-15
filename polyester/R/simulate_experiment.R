@@ -24,7 +24,7 @@
 #' @param  dispersion_param the negative binomial \code{size} distribution (see \code{\link{NegBinomial}})
 #' of the number of reads drawn per transcript. If left blank, defaults to 
 #' \code{reads_per_transcript / 3}. Negative binomial variance is mean + mean^2 / size.
-#' @param  outdir character, path to folder where simulated reads should be written.
+#' @param  outdir character, path to folder where simulated reads should be written. Should end with "/" if specified. If unspecified, reads are written to current working directory.
 #' @export
 #' @examples \dontrun{
 #' ## simulate a few reads from chromosome 22
@@ -34,7 +34,7 @@
 #' set.seed(4)
 #' fold_changes = sample(c(0.5, 1, 2), size=numtx, probs=c(0.05, 0.9, 0.05), replace=TRUE)
 #' 
-#' simulate_experiment(fastapath, reads_per_transcript = 10, fold_changes=fold_changes, outdir="./simdata")
+#' simulate_experiment(fastapath, reads_per_transcript = 10, fold_changes=fold_changes, outdir="./simdata/")
 #'
 #'}
 simulate_experiment = function(fasta, num_reps=10, fraglen=250, fragsd=25, 

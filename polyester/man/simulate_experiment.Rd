@@ -42,7 +42,7 @@ number of reads generated from the transcript, between groups.}
 of the number of reads drawn per transcript. If left blank, defaults to
 \code{reads_per_transcript / 3}. Negative binomial variance is mean + mean^2 / size.}
 
-\item{outdir}{character, path to folder where simulated reads should be written.}
+\item{outdir}{character, path to folder where simulated reads should be written. Should end with "/" if specified. If unspecified, reads are written to current working directory.}
 }
 \description{
 create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional differential expression between two groups
@@ -56,7 +56,7 @@ numtx = count_transcripts(fastapath)
 set.seed(4)
 fold_changes = sample(c(0.5, 1, 2), size=numtx, probs=c(0.05, 0.9, 0.05), replace=TRUE)
 
-simulate_experiment(fastapath, reads_per_transcript = 10, fold_changes=fold_changes, outdir="./simdata")
+simulate_experiment(fastapath, reads_per_transcript = 10, fold_changes=fold_changes, outdir="./simdata/")
 
 }
 }
