@@ -1,6 +1,19 @@
 ### function to add error to reads/fragments
 
 # Q: should this go after we actually select reads? will that matter? (for speed and/or sensibleness?)
+#'<brief desc>
+#'
+#'<full description>
+#' @param tFrags <what param does>
+#' @param  error_rate = 0.005 <what param does>
+#' @export
+#' @keywords
+#' @seealso
+#' @return
+#' @alias
+#' @examples \dontrun{
+#'
+#'}
 add_error = function(tFrags, error_rate = 0.005){
     adj_error = error_rate*4/3 # based on random read selection
     

@@ -1,3 +1,15 @@
+#'<brief desc>
+#'
+#'<full description>
+#' @param fasta <what param does>
+#' @export
+#' @keywords
+#' @seealso
+#' @return
+#' @alias
+#' @examples \dontrun{
+#'
+#'}
 simulate_experiment_countmat = function(fasta, readmat, outdir, 
     fraglen=250, fragsd=25, readlen=100, error_rate=0.005, paired=TRUE){
 
