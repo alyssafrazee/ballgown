@@ -12,17 +12,21 @@ simulate_experiment_countmat(fasta, readmat, outdir = "", fraglen = 250,
 \item{readmat}{matrix with rows representing transcripts and columns representing samples.
 Entry i,j specifies how many reads to simulate from transcript i for sample j.}
 
-\item{outdir}{character, path to folder where simulated reads should be written. Should end with "/" if specified. If unspecified, reads are written to the working directory.}
+\item{outdir}{character, path to folder where simulated reads should be written. Should end with
+"/" if specified. If unspecified, reads are written to the working directory.}
 
-\item{fraglen}{Mean RNA fragment length. Sequences will be read off the end(s) of these fragments.}
+\item{fraglen}{Mean RNA fragment length. Sequences will be read off the end(s) of these
+fragments.}
 
 \item{fragsd}{Standard deviation of fragment lengths.}
 
 \item{readlen}{Read length}
 
-\item{error_rate=0.005}{Sequencing error rate. Must be between 0 and 1. A uniform error model is assumed.}
+\item{error_rate=0.005}{Sequencing error rate. Must be between 0 and 1. A uniform error model is
+assumed.}
 
-\item{paired}{If \code{TRUE}, paired-end reads are simulated; else single-end reads are simulated.}
+\item{paired}{If \code{TRUE}, paired-end reads are simulated; else single-end reads are
+simulated.}
 }
 \description{
 <full description>
