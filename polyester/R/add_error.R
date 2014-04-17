@@ -15,7 +15,7 @@ add_error = function(tFrags, error_rate = 0.005){
 
     print(search())
 
-    allSeq = unlist(tFrags)
+    allSeq = base::unlist(tFrags)
     print('allSeq:')
     print(allSeq)
     insertLocs = Rle(sample(c(TRUE,FALSE), size = length(allSeq), 
