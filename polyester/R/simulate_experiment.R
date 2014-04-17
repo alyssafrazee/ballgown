@@ -14,9 +14,7 @@ simulate_experiment = function(fasta, num_reps=10,
     require(Biostrings)
     transcripts = readDNAStringSet(fasta)
     L = width(transcripts)
-    
-    fold_changes=rep(1,length(transcripts)); # for testing
-    
+        
     ## get number of reps per group
     stopifnot(length(num_reps)==1 | length(num_reps)==2)
     if(length(num_reps)==2){
