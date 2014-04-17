@@ -13,6 +13,8 @@ add_error = function(tFrags, error_rate = 0.005){
     print('explicit Biostrings call:')
     print(Biostrings::unlist(tFrags))
 
+    print(search())
+
     allSeq = unlist(tFrags)
     print('allSeq:')
     print(allSeq)
