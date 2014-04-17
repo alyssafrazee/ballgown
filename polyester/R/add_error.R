@@ -11,7 +11,7 @@ add_error = function(tFrags, error_rate = 0.005){
     newletters = DNAString(paste(sample(c("A", "C", "G", "T"), sum(insertLocs), replace=TRUE), collapse="") )
     allSeq = replaceLetterAt(allSeq, insertLocs, newletters)
     
-    eFrags = DNAStringSet(allSeq, start=c(1, cumsum(width(tFrags))[-length(tFrags)]), width=width(tFrags))
+    eFrags = DNAStringSet(allSeq, start=c(1, (cumsum(width(tFrags))+1)[-length(tFrags)]), width=width(tFrags))
     names(eFrags) = names(tFrags)
     return(eFrags)
 }
