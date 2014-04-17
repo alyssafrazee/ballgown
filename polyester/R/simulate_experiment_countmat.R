@@ -34,7 +34,7 @@ simulate_experiment_countmat = function(fasta, readmat, outdir="",
         tObj = rep(transcripts,times=readmat[,i])
   
         #get fragments
-        tFrags = generate_fragments(tObj, fraglen=fraglen)
+        tFrags = generate_fragments(tObj, fraglen=fraglen, fragsd=fragsd)
 
         #reverse_complement some of those fragments
         rctFrags = reverse_complement(tFrags)

@@ -106,7 +106,7 @@ simulate_experiment = function(fasta, num_reps=10, fraglen=250, fragsd=25,
         tObj = rep(transcripts, times=numreadsList[[i]])
         
         #get fragments
-        tFrags = generate_fragments(tObj, fraglen=fraglen)
+        tFrags = generate_fragments(tObj, fraglen=fraglen, fragsd=fragsd)
 
         #reverse_complement some of those fragments
         rctFrags = reverse_complement(tFrags)
