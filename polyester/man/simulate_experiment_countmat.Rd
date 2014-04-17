@@ -29,7 +29,8 @@ assumed.}
 simulated.}
 }
 \description{
-<full description>
+create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional
+differential expression between two groups (designated via read count matrix)
 }
 \examples{
 \dontrun{

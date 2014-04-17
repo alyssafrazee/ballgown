@@ -1,6 +1,7 @@
 #' Simulate RNA-seq experiment 
 #'
-#'<full description>
+#' create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional 
+#' differential expression between two groups (designated via read count matrix)
 #' @param fasta path to FASTA file containing transcripts from which to simulate reads 
 #' @param readmat matrix with rows representing transcripts and columns representing samples. 
 #' Entry i,j specifies how many reads to simulate from transcript i for sample j.
