@@ -9,24 +9,12 @@ add_error = function(tFrags, error_rate = 0.005){
     adj_error = error_rate*4/3 
     #^so you don't have to choose *another* nucleotide for an error: just choose *a* nucleotide.
     
-    print(class(tFrags))
-    print('explicit Biostrings call:')
-    print(Biostrings::unlist(tFrags))
-
-    print(search())
-
-    allSeq = base::unlist(tFrags)
-    print('allSeq:')
-    print(allSeq)
+    allSeq = Biostrings::unlist(tFrags)
     insertLocs = Rle(sample(c(TRUE,FALSE), size = length(allSeq), 
            replace=TRUE, prob = c(adj_error, 1-adj_error)))
   
-    print('sum(insertLocs):')
-    print(sum(insertLocs))
     newletters = DNAString(
         paste(sample(c("A", "C", "G", "T"), sum(insertLocs), replace=TRUE), collapse="") )
-    print('newletters:')
-    print(newletters)
     allSeq = replaceLetterAt(allSeq, insertLocs, newletters)
     
     eFrags = DNAStringSet(allSeq, 
