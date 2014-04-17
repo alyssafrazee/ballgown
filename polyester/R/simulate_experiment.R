@@ -25,12 +25,17 @@
 #' samples. Fold change < 1 means transcript is overexpressed in the last
 #' \code{num_reps} (or \code{num_reps[2]}) samples. The change is in the mean
 #' number of reads generated from the transcript, between groups.
-#' @param  dispersion_param the negative binomial \code{size} distribution 
+#' @param dispersion_param the negative binomial \code{size} distribution 
 #' (see \code{\link{NegBinomial}})
 #' of the number of reads drawn per transcript. If left blank, defaults to 
 #' \code{reads_per_transcript / 3}. Negative binomial variance is mean + mean^2 / size.
-#' @param  outdir character, path to folder where simulated reads should be written. Should end 
+#' @param outdir character, path to folder where simulated reads should be written. Should end 
 #' with "/" if specified. If unspecified, reads are written to current working directory.
+#' @param write_info If \code{TRUE}, write a file matching transcript IDs to differential expression
+#' status into the file \code{outdir/sim_info.txt}.
+#' @param transcriptid optional vector of transcript IDs to be written into \code{sim_info.txt}. 
+#' Defaults to \code{names(readDNAStringSet(fasta))}. This option is useful if default names are 
+#' very long or contain special characters.
 #' @export
 #' @examples
 #' ## simulate a few reads from chromosome 22
@@ -45,7 +50,7 @@
 #'
 simulate_experiment = function(fasta, num_reps=10, fraglen=250, fragsd=25, 
     readlen=100, error_rate=0.005, paired=TRUE, reads_per_transcript=300, 
-    fold_changes, dispersion_param=NULL, outdir=""){
+    fold_changes, dispersion_param=NULL, outdir="", write_info=TRUE, transcriptid=NULL){
 
     transcripts = readDNAStringSet(fasta)
     L = width(transcripts)
@@ -113,5 +118,16 @@ simulate_experiment = function(fasta, num_reps=10, fraglen=250, fragsd=25,
         #write read pairs
         write_reads(reads, readlen=readlen, 
             fname=paste0(outdir, 'sample_', sprintf('%02d', i)), paired=paired)
+    }
+
+    ## write out simulation information, if asked for:
+    if(write_info){
+        if(is.null(transcriptid)){
+            transcriptid = names(transcripts)
+        }
+        sim_info = data.frame(transcriptid=transcriptid, foldchange=fold_changes, 
+            DEstatus=fold_changes!=1)
+        write.table(sim_info, row.names=FALSE, quote=FALSE, sep="\t", 
+            file=paste0(outdir, 'sim_info.txt'))
     }
 }

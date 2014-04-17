@@ -6,7 +6,7 @@
 simulate_experiment(fasta, num_reps = 10, fraglen = 250, fragsd = 25,
   readlen = 100, error_rate = 0.005, paired = TRUE,
   reads_per_transcript = 300, fold_changes, dispersion_param = NULL,
-  outdir = "")
+  outdir = "", write_info = TRUE, transcriptid = NULL)
 }
 \arguments{
 \item{fasta}{path to FASTA file containing transcripts from which to simulate reads}
@@ -48,6 +48,13 @@ of the number of reads drawn per transcript. If left blank, defaults to
 
 \item{outdir}{character, path to folder where simulated reads should be written. Should end
 with "/" if specified. If unspecified, reads are written to current working directory.}
+
+\item{write_info}{If \code{TRUE}, write a file matching transcript IDs to differential expression
+status into the file \code{outdir/sim_info.txt}.}
+
+\item{transcriptid}{optional vector of transcript IDs to be written into \code{sim_info.txt}.
+Defaults to \code{names(readDNAStringSet(fasta))}. This option is useful if default names are
+very long or contain special characters.}
 }
 \description{
 create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional
