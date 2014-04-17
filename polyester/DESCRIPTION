@@ -3,8 +3,8 @@ Maintainer: Alyssa Frazee <acfrazee@gmail.com>
 Author: Andrew Jaffe, Alyssa Frazee, Jeff Leek
 Version: 1.0.0
 License: GPL-3
-Title: polyester
-Description: RNA-seq read simulator, including differential transcript
-    expression options
-Depends:
-    Biostrings
+Title: Simulate RNA-seq reads
+Description: RNA-seq read simulator, including differential transcript expression options
+VignetteBuilder: knitr
+Depends: Biostrings
+Suggests: knitr

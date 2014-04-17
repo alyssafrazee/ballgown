@@ -1,0 +1,78 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Simulating RNA-seq reads with Polyester}
+-->
+
+# The Polyester package for simulating RNA-seq reads
+
+## Why use Polyester?
+
+Polyester is an R package designed to simulate an RNA sequencing experiment. Given a set of annotated transcripts, polyester will simulate the steps of an RNA-seq experiment (fragmentation, reverse-complementing, and sequencing) and produce files containing simulated RNA-seq reads. Simulated reads can be analyzed using any of several downstream analysis tools. 
+
+In particular, Polyester was designed to simulate a case/control experiment with biological replicates. Users are able to set differential transcript expression between cases and controls. This allows users to create datasets with known differential expression, which means they can the accuracy of statistical methods for differential expression detection.
+
+Polyester was developed with several specific features in mind:  
+* Simulation of differential expression at the transcript level
+* Ability to set differential expression signal strength
+* Simulation of small datasets, since large RNA-seq datasets can require lots of time and computing resources to analyze
+* Generation of raw RNA-seq reads (as opposed to read alignments or transcript-level abundance estimates)
+* Transparency: open-source code, 
+
+## Prerequisites
+
+Polyester depends on the `Biostrings` library from Bioconductor. You can install Biostrings by opening R and running:
+```S
+source("http://bioconductor.org/biocLite.R")
+biocLite("Biostrings")
+```
+
+We also recommend using R >= 3.0.0: because this vignette was written with [knitr](http://yihui.name/knitr/), it won't be compiled upon package installation with R versions < 3.0.0. (Support for non-Sweave vignettes was introduced in R 3.0.0). A vignette-less Polyester will likely work with older versions of R, but will not be officially supported.
+
+## Simulating reads
+
+
+## Future features
+The following features will be implemented in a future release: 
+* ability to set a seed, so running the simulation function twice will produce the same set of simulated reads (**near future**)
+* option to simulate from GTF file + DNA sequence, instead of FASTA file of transcripts
+
+
+
+
+
+We can use the JavaScript library [`DataTables`](http://www.datatables.net) to generate enhanced tables in HTML. In the example below, we create a table for the `mtcars` data:
+
+```{r cool, results='asis'}
+library(knitr)
+kable(mtcars, 'html', table.attr='id="mtcars_table"')
+```
+
+Note we assigned an `id` to the table, and next we use the `DataTables` library to tweak the table.
+
+```js
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#mtcars_table').dataTable();
+    } );
+</script>
+```
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+        $('#mtcars_table').dataTable();
+    } );
+</script>
+
+Since this is a Markdown vignette, we need to add the JavaScript libraries as well as some additional CSS files to the HTML header, and this can be done via:
+
+```{r}
+options(markdown.HTML.header = system.file('misc', 'datatables.html', package = 'knitr'))
+```
+
+Two files `vignette.css` and `datatables.html` under the `misc` directory of **knitr** were added to the HTML output.
+
+By comparison, below is an ordinary table:
+
+```{r boring, results='asis'}
+kable(head(mtcars), 'html')
+```
