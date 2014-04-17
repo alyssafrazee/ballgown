@@ -7,7 +7,7 @@ Title: Simulate RNA-seq reads
 Description: RNA-seq read simulator, including differential transcript
     expression options
 VignetteBuilder: knitr
-Depends:
+Imports:
     Biostrings
 Suggests:
     knitr
