@@ -9,6 +9,10 @@ add_error = function(tFrags, error_rate = 0.005){
     adj_error = error_rate*4/3 
     #^so you don't have to choose *another* nucleotide for an error: just choose *a* nucleotide.
     
+    print(class(tFrags))
+    print('explicit Biostrings call:')
+    print(Biostrings::unlist(tFrags))
+
     allSeq = unlist(tFrags)
     print('allSeq:')
     print(allSeq)
