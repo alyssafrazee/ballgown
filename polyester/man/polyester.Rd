@@ -20,6 +20,9 @@ data. See detailed documentation for \code{\link{simulate_experiment}} and
 
 A vignette is available by typing \code{browseVignettes("polyester")} in the R prompt.
 }
+\author{
+Andrew Jaffe, Alyssa Frazee, Jeff Leek
+}
 \references{
 Alyssa C Frazee, Geo Pertea, Andrew E Jaffe, Ben Langmead, Steven L Salzberg,
 Jeffrey T Leek (2014). Flexible isoform-level differential expression analysis with Ballgown.

@@ -19,6 +19,7 @@
 #' BioRxiv preprint: \url{http://biorxiv.org/content/early/2014/03/30/003665}. 
 #' @import Biostrings
 #' @docType package
+#' @author Andrew Jaffe, Alyssa Frazee, Jeff Leek
 #' @name polyester
 NULL
 
