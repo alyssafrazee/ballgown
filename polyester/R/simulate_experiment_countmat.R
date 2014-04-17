@@ -27,6 +27,7 @@ simulate_experiment_countmat = function(fasta, readmat, outdir="",
     fraglen=250, fragsd=25, readlen=100, error_rate=0.005, paired=TRUE){
 
     transcripts = readDNAStringSet(fasta)
+    system(paste("mkdir -p", outdir))
 
     for(i in 1:ncol(readmat)){
         tObj = rep(transcripts,times=readmat[,i])

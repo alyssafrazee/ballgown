@@ -99,6 +99,7 @@ simulate_experiment = function(fasta, num_reps=10, fraglen=250, fragsd=25,
 
     ## simulate reads for each sample:
     #######################################
+    system(paste("mkdir -p", outdir))
     for(i in 1:(n1+n2)){
         
         tObj = rep(transcripts, times=numreadsList[[i]])
