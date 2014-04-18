@@ -15,10 +15,11 @@ Polyester was developed with several specific features in mind:
 
 ## Prerequisites
 
-Polyester depends on the `Biostrings` library from Bioconductor. You can install Biostrings by opening R and running:
+Polyester depends on the `Biostrings` and `IRanges` libraries from Bioconductor. You can install these packagess by opening R and running:
 ```S
 source("http://bioconductor.org/biocLite.R")
 biocLite("Biostrings")
+biocLite("IRanges")
 ```
 
 We also recommend using R >= 3.0.0: because this vignette was written with [knitr](http://yihui.name/knitr/), it won't be compiled upon package installation with R versions < 3.0.0. (Support for non-Sweave vignettes was introduced in R 3.0.0). A vignette-less Polyester will likely work with older versions of R, but will not be officially supported.
