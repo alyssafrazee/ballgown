@@ -23,7 +23,7 @@
 #' readmat = matrix(20, ncol=10, nrow=numtx)
 #' readmat[1:30, 1:5] = 40
 #' 
-#' simulate_experiment_countmat(fastapath, readmat, outdir="./data/")
+#' simulate_experiment_countmat(fastapath, readmat, outdir="./data/", seed=5)
 #'}
 simulate_experiment_countmat = function(fasta, readmat, outdir="", 
     fraglen=250, fragsd=25, readlen=100, error_rate=0.005, paired=TRUE, seed=NULL){

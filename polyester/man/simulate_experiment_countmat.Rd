@@ -4,7 +4,8 @@
 \title{Simulate RNA-seq experiment}
 \usage{
 simulate_experiment_countmat(fasta, readmat, outdir = "", fraglen = 250,
-  fragsd = 25, readlen = 100, error_rate = 0.005, paired = TRUE)
+  fragsd = 25, readlen = 100, error_rate = 0.005, paired = TRUE,
+  seed = NULL)
 }
 \arguments{
 \item{fasta}{path to FASTA file containing transcripts from which to simulate reads}
@@ -27,6 +28,8 @@ assumed.}
 
 \item{paired}{If \code{TRUE}, paired-end reads are simulated; else single-end reads are
 simulated.}
+
+\item{seed}{Optional seed to set before simulating reads, for reproducibility.}
 }
 \description{
 create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional
@@ -39,7 +42,7 @@ numtx = count_transcripts(fastapath)
 readmat = matrix(20, ncol=10, nrow=numtx)
 readmat[1:30, 1:5] = 40
 
-simulate_experiment_countmat(fastapath, readmat, outdir="./data/")
+simulate_experiment_countmat(fastapath, readmat, outdir="./data/", seed=5)
 }
 }
 
