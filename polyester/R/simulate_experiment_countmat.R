@@ -15,6 +15,7 @@
 #' assumed. 
 #' @param paired If \code{TRUE}, paired-end reads are simulated; else single-end reads are 
 #' simulated.
+#' @param seed Optional seed to set before simulating reads, for reproducibility.
 #' @export
 #' @examples \dontrun{
 #' fastapath = system.file("data", "chr22.fa", package="polyester")
@@ -25,7 +26,9 @@
 #' simulate_experiment_countmat(fastapath, readmat, outdir="./data/")
 #'}
 simulate_experiment_countmat = function(fasta, readmat, outdir="", 
-    fraglen=250, fragsd=25, readlen=100, error_rate=0.005, paired=TRUE){
+    fraglen=250, fragsd=25, readlen=100, error_rate=0.005, paired=TRUE, seed=NULL){
+
+    if(!is.null(seed)) set.seed(seed)
 
     transcripts = readDNAStringSet(fasta)
     system(paste("mkdir -p", outdir))
