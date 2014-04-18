@@ -6,7 +6,7 @@
 simulate_experiment(fasta, num_reps = 10, fraglen = 250, fragsd = 25,
   readlen = 100, error_rate = 0.005, paired = TRUE,
   reads_per_transcript = 300, fold_changes, dispersion_param = NULL,
-  outdir = "", write_info = TRUE, transcriptid = NULL)
+  outdir = "", write_info = TRUE, transcriptid = NULL, seed = NULL)
 }
 \arguments{
 \item{fasta}{path to FASTA file containing transcripts from which to simulate reads}
@@ -55,6 +55,8 @@ status into the file \code{outdir/sim_info.txt}.}
 \item{transcriptid}{optional vector of transcript IDs to be written into \code{sim_info.txt}.
 Defaults to \code{names(readDNAStringSet(fasta))}. This option is useful if default names are
 very long or contain special characters.}
+
+\item{seed}{Optional seed to set before simulating reads, for reproducibility.}
 }
 \description{
 create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional
@@ -70,6 +72,7 @@ fold_changes = sample(c(0.5, 1, 2), size=numtx, prob=c(0.05, 0.9, 0.05), replace
 require(Biostrings)
 tNames = gsub("'", "", names(readDNAStringSet(fastapath))) #remove quotes in transcript IDs
 
-simulate_experiment(fastapath, reads_per_transcript=10, fold_changes=fold_changes, outdir="./simdata/", transcriptid=tNames)
+simulate_experiment(fastapath, reads_per_transcript=10, fold_changes=fold_changes,
+    outdir="./simdata/", transcriptid=tNames, seed=12)
 }
 

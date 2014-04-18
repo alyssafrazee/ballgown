@@ -36,6 +36,7 @@
 #' @param transcriptid optional vector of transcript IDs to be written into \code{sim_info.txt}. 
 #' Defaults to \code{names(readDNAStringSet(fasta))}. This option is useful if default names are 
 #' very long or contain special characters.
+#' @param seed Optional seed to set before simulating reads, for reproducibility.
 #' @export
 #' @examples
 #' ## simulate a few reads from chromosome 22
@@ -47,15 +48,18 @@
 #' require(Biostrings)
 #' tNames = gsub("'", "", names(readDNAStringSet(fastapath))) #remove quotes in transcript IDs
 #' 
-#' simulate_experiment(fastapath, reads_per_transcript=10, fold_changes=fold_changes, outdir="./simdata/", transcriptid=tNames)
+#' simulate_experiment(fastapath, reads_per_transcript=10, fold_changes=fold_changes, 
+#'     outdir="./simdata/", transcriptid=tNames, seed=12)
 #'
 simulate_experiment = function(fasta, num_reps=10, fraglen=250, fragsd=25, 
     readlen=100, error_rate=0.005, paired=TRUE, reads_per_transcript=300, 
-    fold_changes, dispersion_param=NULL, outdir="", write_info=TRUE, transcriptid=NULL){
+    fold_changes, dispersion_param=NULL, outdir="", write_info=TRUE, transcriptid=NULL, seed=NULL){
 
     transcripts = readDNAStringSet(fasta)
     L = width(transcripts)
         
+    if(!is.null(seed)) set.seed(seed)
+
     ## get number of reps per group
     stopifnot(length(num_reps)==1 | length(num_reps)==2)
     if(length(num_reps)==2){
