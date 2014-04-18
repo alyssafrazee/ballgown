@@ -8,6 +8,7 @@ Description: RNA-seq read simulator, including differential transcript
     expression options
 VignetteBuilder: knitr
 Imports:
-    Biostrings
+    Biostrings,
+    IRanges
 Suggests:
     knitr
