@@ -31,6 +31,14 @@ We also recommend using R >= 3.0.0: because this vignette was written with [knit
 
 Finally, you will need a reference FASTA file containing names and sequences of transcripts from which reads should be simulated. Known transcripts from human chromosome 22 (hg19 build) are available in the `data` subdirectory of this package. 
 
+## Installation
+To install Polyester, start R and run:
+```S
+install.packages("devtools") #if devtools is not already installed
+library(devtools)
+install_github("ballgown", "alyssafrazee", subdir="polyester")
+```
+
 ## Simulating reads
 
 Simulating an RNA-seq experiment with Polyester requires just one function call. You can choose either `simulate_experiment()` or `simulate_experiment_countmat()`. See the function-specific documentation for examples on using each one. The ideas behind the two approaches are:
