@@ -3,13 +3,20 @@
 \alias{simulate_experiment}
 \title{simulate RNA-seq experiment using negative binomial model}
 \usage{
-simulate_experiment(fasta, num_reps = 10, fraglen = 250, fragsd = 25,
-  readlen = 100, error_rate = 0.005, paired = TRUE,
-  reads_per_transcript = 300, fold_changes, dispersion_param = NULL,
-  outdir = "", write_info = TRUE, transcriptid = NULL, seed = NULL)
+simulate_experiment(fasta = NULL, gtf = NULL, seqpath = NULL,
+  num_reps = 10, fraglen = 250, fragsd = 25, readlen = 100,
+  error_rate = 0.005, paired = TRUE, reads_per_transcript = 300,
+  fold_changes, dispersion_param = NULL, outdir = "", write_info = TRUE,
+  transcriptid = NULL, seed = NULL, ...)
 }
 \arguments{
-\item{fasta}{path to FASTA file containing transcripts from which to simulate reads}
+\item{fasta}{path to FASTA file containing transcripts from which to simulate reads. See details.}
+
+\item{gtf}{path to GTF file containing transcript structures from which reads should be
+simulated. See details.}
+
+\item{seqpath}{path to folder containing one FASTA file (\code{.fa} extension) for each
+chromosome in \code{gtf}. See details.}
 
 \item{num_reps}{How many biological replicates should be in each group? If \code{num_reps}
 is an integer, \code{num_reps} replicates will be simulated in each group.
@@ -57,10 +64,18 @@ Defaults to \code{names(readDNAStringSet(fasta))}. This option is useful if defa
 very long or contain special characters.}
 
 \item{seed}{Optional seed to set before simulating reads, for reproducibility.}
+
+\item{...}{additional arguments to pass to \code{seq_gtf} if using \code{gtf} and \code{seqpath}}
 }
 \description{
 create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional
 differential expression between two groups
+}
+\details{
+Reads can either be simulated from a FASTA file of transcripts (provided with the
+\code{fasta} argument) or from a GTF file plus DNA sequences (provided with the \code{gtf} and
+\code{seqpath} arguments). Simulating from a GTF file and DNA sequences may be a bit slower:
+it took about 6 minutes to parse the GTF/sequence files for chromosomes 1-22, X, and Y in hg19.
 }
 \examples{
 ## simulate a few reads from chromosome 22

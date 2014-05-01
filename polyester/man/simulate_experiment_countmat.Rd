@@ -3,12 +3,18 @@
 \alias{simulate_experiment_countmat}
 \title{Simulate RNA-seq experiment}
 \usage{
-simulate_experiment_countmat(fasta, readmat, outdir = "", fraglen = 250,
-  fragsd = 25, readlen = 100, error_rate = 0.005, paired = TRUE,
-  seed = NULL)
+simulate_experiment_countmat(fasta = NULL, gtf = NULL, seqpath = NULL,
+  readmat, outdir = "", fraglen = 250, fragsd = 25, readlen = 100,
+  error_rate = 0.005, paired = TRUE, seed = NULL)
 }
 \arguments{
-\item{fasta}{path to FASTA file containing transcripts from which to simulate reads}
+\item{fasta}{path to FASTA file containing transcripts from which to simulate reads. See details.}
+
+\item{gtf}{path to GTF file containing transcript structures from which reads should be
+simulated. See details.}
+
+\item{seqpath}{path to folder containing one FASTA file (\code{.fa} extension) for each
+chromosome in \code{gtf}. See details.}
 
 \item{readmat}{matrix with rows representing transcripts and columns representing samples.
 Entry i,j specifies how many reads to simulate from transcript i for sample j.}
@@ -34,6 +40,12 @@ simulated.}
 \description{
 create FASTA files containing RNA-seq reads simulated from provided transcripts, with optional
 differential expression between two groups (designated via read count matrix)
+}
+\details{
+Reads can either be simulated from a FASTA file of transcripts (provided with the
+\code{fasta} argument) or from a GTF file plus DNA sequences (provided with the \code{gtf} and
+\code{seqpath} arguments). Simulating from a GTF file and DNA sequences may be a bit slower:
+it took about 6 minutes to parse the GTF/sequence files for chromosomes 1-22, X, and Y in hg19.
 }
 \examples{
 \dontrun{
