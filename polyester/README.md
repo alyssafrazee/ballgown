@@ -26,7 +26,7 @@ We also recommend using R >= 3.0.0: because this vignette was written with [knit
 
 Finally, you will need either:
 * a reference FASTA file containing names and sequences of transcripts from which reads should be simulated. Known transcripts from human chromosome 22 (hg19 build) are available in the `data` subdirectory of this package. 
-* or a file in [GTF format](http://www.ensembl.org/info/website/upload/gff.html) denoting transcript structures, along with one FASTA file of the DNA sequence for each chromosome in the GTF file. All the FASTA files should be in the same directory. DNA sequences for some organisms can be downloaded [here](http://tophat.cbcb.umd.edu/igenomes.shtml) (sequences are in the `<organism>/<source>/<build>/Sequence/Chromosomes` subdirectoyr, e.g., `Homo_sapiens/UCSC/hg19/Sequence/Chromosomes`).
+* or a file in [GTF format](http://www.ensembl.org/info/website/upload/gff.html) denoting transcript structures, along with one FASTA file of the DNA sequence for each chromosome in the GTF file. All the FASTA files should be in the same directory. DNA sequences for some organisms can be downloaded [here](http://tophat.cbcb.umd.edu/igenomes.shtml) (sequences are in the `<organism>/<source>/<build>/Sequence/Chromosomes` subdirectory, e.g., `Homo_sapiens/UCSC/hg19/Sequence/Chromosomes`).
 
 ## Installation
 To install Polyester, start R and run:
