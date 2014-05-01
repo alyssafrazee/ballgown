@@ -24,7 +24,9 @@ biocLite("IRanges")
 
 We also recommend using R >= 3.0.0: because this vignette was written with [knitr](http://yihui.name/knitr/), it won't be compiled upon package installation with R versions < 3.0.0. (Support for non-Sweave vignettes was introduced in R 3.0.0). A vignette-less Polyester will likely work with older versions of R, but will not be officially supported.
 
-Finally, you will need a reference FASTA file containing names and sequences of transcripts from which reads should be simulated. Known transcripts from human chromosome 22 (hg19 build) are available in the `data` subdirectory of this package. 
+Finally, you will need either:
+* a reference FASTA file containing names and sequences of transcripts from which reads should be simulated. Known transcripts from human chromosome 22 (hg19 build) are available in the `data` subdirectory of this package. 
+* or a file in [GTF format](http://www.ensembl.org/info/website/upload/gff.html) denoting transcript structures, along with one FASTA file of the DNA sequence for each chromosome in the GTF file. All the FASTA files should be in the same directory. DNA sequences for some organisms can be downloaded [here](http://tophat.cbcb.umd.edu/igenomes.shtml) (sequences are in the `<organism>/<source>/<build>/Sequence/Chromosomes` subdirectoyr, e.g., `Homo_sapiens/UCSC/hg19/Sequence/Chromosomes`).
 
 ## Installation
 To install Polyester, start R and run:
@@ -71,9 +73,6 @@ If `paired` is true, you'll get two FASTA files per biological replicate (left m
 Files will be named `sample_01` through `sample_N` where `N` is the total number of replicates. The first `num_reps` (or `num_reps[1]`) samples belong to the same group in the two-group experiment scenario. 
 
 In `simulate_experiment`, by default, a table called `sim_info.txt` is written to `outdir`, which will contain transcript IDs, fold changes, and whether or not that transcript was set to be differentially expressed. This file could be useful for downstream analysis. If the transcript names in the FASTA file cause problems down the line (e.g., a dangling single quote from a `5'-end` label), you can specify your own transcript names with the `transcriptid` argument. You will need to keep track of this information separately if you use `simulate_experiment_countmat.`
-
-## Future features
-In the future, we will implement an option to simulate from a GTF file + DNA sequence, instead of FASTA file of transcripts.
 
 ## Bug reports
 Report bugs as issues on our [GitHub repository](https://github.com/alyssafrazee/ballgown/tree/master/polyester). 
