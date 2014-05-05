@@ -14,7 +14,8 @@ S4 class for storing and manipulating expression data from assembled transcripto
 
 \item{\code{structure}}{genomic locations of features and their relationships to one another}
 
-\item{\code{indexes}}{tables connecting components of the assembly and providing other experimental information (e.g., phenotype data and locations of read alignment files)}
+\item{\code{indexes}}{tables connecting components of the assembly and providing other experimental
+information (e.g., phenotype data and locations of read alignment files)}
 
 \item{\code{dirs}}{directories holding data created by \code{tablemaker}}
 
