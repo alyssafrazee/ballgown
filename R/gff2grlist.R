@@ -15,7 +15,6 @@
 #'@author Alyssa Frazee
 #'@export
 gff2grlist = function(gtf, txidentifier = "transcript_id", exonsonly = TRUE){
-  require(GenomicRanges)
   gtf.dataframe = gffRead(gtf)
   gtf.dataframe$txid = getAttributeField(gtf.dataframe$attributes, txidentifier, attrsep = "; ")
   gtf.dataframe = gtf.dataframe[,-9]
