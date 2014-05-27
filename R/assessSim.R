@@ -20,7 +20,7 @@
 #' @export
 
 assessSim = function(bg, bgresults, annotation, chr, trulyDEids, 
-    cuffdiffFile, qcut=0.05, UCSC=TRUE, ret=FALSE, nClosest=1, 
+    cuffdiffFile=NULL, qcut=0.05, UCSC=TRUE, ret=FALSE, nClosest=1, 
     limmaresults=NULL){
     
     require(ballgown)
@@ -62,42 +62,54 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
     non_de_ids = setdiff(unique(texpr(bg, "all")$t_id), as.numeric(unlist(truly_de_ids)))
 
     # load in cuffdiff results
-    cuff = read.table(cuffdiffFile, sep = "\t", header = TRUE)
-    cuffok = subset(cuff, status == "OK")
+    if(!is.null(cuffdiffFile)){
+        cuff = read.table(cuffdiffFile, sep = "\t", header = TRUE)
+        cuffok = subset(cuff, status == "OK")
+    }
 
     # run limma (FPKM ONLY)
     y = log2(texpr(bg)+1)
 
-    
     if(length(qcut) == 1){
-        cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut])
-        cuff_decalls = texpr(bg, "all")$t_id[match(cuff_decalls, texpr(bg, "all")$t_name)]
-        if(!is.null(limmaresults)) limma_decalls = limmaresults$id[limmaresults$qval < qcut]
+        if(!is.null(cuffdiffFile)){
+            cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut])
+            cuff_decalls = texpr(bg, "all")$t_id[match(cuff_decalls, texpr(bg, "all")$t_name)]
+            found_by_cuffdiff = sapply(truly_de_ids, function(x){
+                any(x %in% cuff_decalls)
+            })
+        }
         bg_decalls = bgresults$id[which(bgresults$qval < qcut)]
         bg_decalls = as.numeric(as.character(bg_decalls))
         found_by_bg = sapply(truly_de_ids, function(x){
             any(x %in% bg_decalls)
         })
-        found_by_cuffdiff = sapply(truly_de_ids, function(x){
-            any(x %in% cuff_decalls)
-        })
         if(!is.null(limmaresults)) { 
+            limma_decalls = limmaresults$id[limmaresults$qval < qcut]
             found_by_limma = sapply(truly_de_ids, function(x){
                 any(x %in% limma_decalls)
             })
         }
+
         bgsens = sum(found_by_bg) / length(found_by_bg)
-        cuffsens = sum(found_by_cuffdiff) / length(found_by_cuffdiff)
-        if(!is.null(limmaresults)) limmasens = sum(found_by_limma) / length(found_by_limma)
         bgspec = sum(!(non_de_ids %in% bg_decalls))/length(non_de_ids)
-        cuffspec = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids)
-        if(!is.null(limmaresults)) limmaspec = sum(!(non_de_ids %in% limma_decalls)) / length(non_de_ids)
         bgfdr = sum(!(bg_decalls %in% unlist(truly_de_ids)))/length(bg_decalls)
-        cufffdr = sum(!(cuff_decalls %in% unlist(truly_de_ids)))/length(cuff_decalls)
-        if(!is.null(limmaresults)) limmafdr = sum(!(limma_decalls %in% unlist(truly_de_ids)))/length(limma_decalls)
-        if(is.null(limmaresults)){
+
+        if(!is.null(cuffdiffFile)){
+            cuffsens = sum(found_by_cuffdiff) / length(found_by_cuffdiff)    
+            cuffspec = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids)
+            cufffdr = sum(!(cuff_decalls %in% unlist(truly_de_ids)))/length(cuff_decalls)
+        } else {
+            cuffsense = cuffspec = cufffdr = NULL
+        }
+        
+        if(!is.null(limmaresults)){ 
+            limmasens = sum(found_by_limma) / length(found_by_limma)
+            limmaspec = sum(!(non_de_ids %in% limma_decalls)) / length(non_de_ids)
+            limmafdr = sum(!(limma_decalls %in% unlist(truly_de_ids)))/length(limma_decalls)
+        } else {
             limmasens = limmaspec = limmafdr = NULL
         }
+        
         return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, 
             limmasens=limmasens, ballgownspec=bgspec, 
             cuffdiffspec=cuffspec, limmapsec=limmaspec, 
@@ -108,35 +120,51 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
     bgsens = cuffsens = bgspec = cuffspec = bgfdr = cufffdr = NULL
     limmasens = limmaspec = limmafdr = NULL
     for(i in 1:length(qcut)){
-        cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut[i]])
-        cuff_decalls = texpr(bg,'all')$t_id[match(cuff_decalls, texpr(bg,'all')$t_name)]
+
+        if(!is.null(cuffdiffFile)){
+            cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut[i]])
+            cuff_decalls = texpr(bg,'all')$t_id[match(cuff_decalls, texpr(bg,'all')$t_name)]
+            found_by_cuffdiff = sapply(truly_de_ids, function(x){
+                any(x %in% cuff_decalls)
+            })
+        }
+
         bg_decalls = bgresults$id[which(bgresults$qval < qcut[i])]
         bg_decalls = as.numeric(as.character(bg_decalls))
-        if(!is.null(limmaresults)) limma_decalls = limmaresults$id[limmaresults$qval < qcut[i]]
         found_by_bg = sapply(truly_de_ids, function(x){
             any(x %in% bg_decalls)
         })
-        found_by_cuffdiff = sapply(truly_de_ids, function(x){
-            any(x %in% cuff_decalls)
-        })
+
         if(!is.null(limmaresults)) { 
+            limma_decalls = limmaresults$id[limmaresults$qval < qcut[i]]
             found_by_limma = sapply(truly_de_ids, function(x){
                 any(x %in% limma_decalls)
             })
         }
+
         bgsens[i] = sum(found_by_bg) / length(found_by_bg)
-        cuffsens[i] = sum(found_by_cuffdiff) / length(found_by_cuffdiff)
-        if(!is.null(limmaresults)) limmasens[i] = sum(found_by_limma) / length(found_by_limma)
         bgspec[i] = sum(!(non_de_ids %in% bg_decalls))/length(non_de_ids)
-        cuffspec[i] = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids) 
-        if(!is.null(limmaresults)) limmaspec[i] = sum(!(non_de_ids %in% limma_decalls)) / length(non_de_ids)
         bgfdr[i] = sum(!(bg_decalls %in% unlist(truly_de_ids)))/length(bg_decalls)
-        cufffdr[i] = sum(!(cuff_decalls %in% unlist(truly_de_ids)))/length(cuff_decalls)
-        if(!is.null(limmaresults)) limmafdr[i] = sum(!(limma_decalls %in% unlist(truly_de_ids)))/length(limma_decalls)
+
+        if(!is.null(cuffdiffFile)){
+            cuffsens[i] = sum(found_by_cuffdiff) / length(found_by_cuffdiff)    
+            cuffspec[i] = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids) 
+            cufffdr[i] = sum(!(cuff_decalls %in% unlist(truly_de_ids)))/length(cuff_decalls)
+        }
+        
+        if(!is.null(limmaresults)){
+            limmasens[i] = sum(found_by_limma) / length(found_by_limma)
+            limmaspec[i] = sum(!(non_de_ids %in% limma_decalls)) / length(non_de_ids)
+            limmafdr[i] = sum(!(limma_decalls %in% unlist(truly_de_ids)))/length(limma_decalls)
+        }
+        
     }
+
     plot(1-bgspec, bgsens, col="dodgerblue", type="l", xlab="false positive rate", ylab="true positive rate", lwd=2, ylim=c(0,1))
-    lines(1-cuffspec, cuffsens, col="orange", lwd=2)
-    legend('bottomright', lty=c(1,1), lwd=c(2,2), col=c("dodgerblue", "orange"), c("ballgown", "cuffdiff"))
+    if(!is.null(cuffdiffFile)){
+        lines(1-cuffspec, cuffsens, col="orange", lwd=2)
+        legend('bottomright', lty=c(1,1), lwd=c(2,2), col=c("dodgerblue", "orange"), c("ballgown", "cuffdiff"))
+    }
     if(ret){
         isDE = bgresults$id %in% unlist(truly_de_ids)
         return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, limmasens=limmasens,
