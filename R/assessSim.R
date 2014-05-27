@@ -99,7 +99,7 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
             cuffspec = sum(!(non_de_ids %in% cuff_decalls))/length(non_de_ids)
             cufffdr = sum(!(cuff_decalls %in% unlist(truly_de_ids)))/length(cuff_decalls)
         } else {
-            cuffsense = cuffspec = cufffdr = NULL
+            cuffsens = cuffspec = cufffdr = NULL
         }
         
         if(!is.null(limmaresults)){ 
