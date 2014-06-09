@@ -1,12 +1,10 @@
 Package: ballgown
-Maintainer: Alyssa Frazee <acfrazee@gmail.com>
-Author: Alyssa Frazee, Jeff Leek, Leonardo Collado Torres, et al.
-Version: 1.0
+Maintainer: Alyssa Frazee <alyssa.frazee@gmail.com>
+Author: Alyssa Frazee, Andrew Jaffe, Leonardo Collado Torres, Jeff Leek
+Version: 0.99.0
 License: GPL-3
-Title: 
-Description: 
-Depends:
-    GenomicRanges
+Title: Flexible, isoform-level differential expression analysis
+Description: Tools for statistical analysis of assembled transcriptomes, including flexible differential expression analysis, visualization of transcript structures, and matching of assembled transcripts to annotation.
 Imports:
     methods,
     GenomicRanges,
