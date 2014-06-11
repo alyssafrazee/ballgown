@@ -1,17 +1,21 @@
 #' get feature-by-sample expression table from cuffdiff2/cummeRbund output
 #' 
 #' @param dbFile path to the database file from cummeRbund (available as an insilicodb download)
-#' @param feature one of \code{"isoform"}, \code{"gene"}, \code{"CDS"}, or \code{"TSS"} -- what genomic feature do you want expression measurements for? Default \code{"isoform"}
-#' @param meas one of \code{"fpkm"}, \code{"raw_frags"}, \code{"internal_scaled_frags"}, \code{"external_scaled_frags"} -- which measurement from the Cuffdiff output table do you want? Default \code{"fpkm"}.
-#' @return matrix with \code{feature}s in rows, samples (replicates) in columns, and \code{meas}urements in cells
+#' @param feature one of \code{"isoform"}, \code{"gene"}, \code{"CDS"}, or \code{"TSS"} -- what 
+#' genomic feature do you want expression measurements for? Default \code{"isoform"}
+#' @param meas one of \code{"fpkm"}, \code{"raw_frags"}, \code{"internal_scaled_frags"}, 
+#' \code{"external_scaled_frags"} -- which measurement from the Cuffdiff output table do you want? 
+#' Default \code{"fpkm"}.
+#' 
+#' @return matrix with \code{feature}s in rows, samples (replicates) in columns, and 
+#' \code{meas}urements in cells
+#' 
 #' @details on a test dataset with 37K transcripts and 24 reps, this took about 30 seconds
+#' 
 #' @author Alyssa Frazee
 #' @export
 
 getInsdbTable = function(dbFile, feature="isoform", meas="fpkm"){
-    require(cummeRbund)
-    require(reshape)
-
     feature = match.arg(feature, c("isoform", "gene", "CDS", "TSS"))
     meas = match.arg(meas, c("fpkm", "raw_frags", "internal_scaled_frags", "external_scaled_frags"))
 

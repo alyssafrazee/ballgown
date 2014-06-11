@@ -2,16 +2,24 @@
 #'
 #' @param x vector representing the "attributes" column of GTF/GFF file
 #' @param field name of the field you want to extract from the "attributes" column
-#' @param attrsep separator for the fields in the attributes column.  Defaults to '; ', the separator for GTF files outputted by Cufflinks.
+#' @param attrsep separator for the fields in the attributes column.  Defaults to '; ', the 
+#' separator for GTF files outputted by Cufflinks.
+#' 
 #' @return vector of nucleotide positions included in the transcript
-#' @seealso \code{\link{gffRead}} for creating a data frame from a GTF/GFF file, and \link{http://useast.ensembl.org/info/website/upload/gff.html} for specifics of the GFF/GTF file format.
+#' 
+#' @seealso \code{\link{gffRead}} for creating a data frame from a GTF/GFF file, and 
+#' \link{http://useast.ensembl.org/info/website/upload/gff.html} for specifics of the GFF/GTF file 
+#' format.
+#' 
 #' @author Wolfgang Huber, in \code{davidTiling}
+#' 
 #' @export
-#' @examples
+#' @examples \dontrun{
 #' ## not run:
 #' gffdata = gffRead('transcripts.gtf')
 #' transcriptID = getAttributeField(gffdata$V9, field = "transcript_id")
 #' gffdata$transcriptID = transcriptID
+#' }
 getAttributeField <- function (x, field, attrsep = "; ") 
 {
     s = strsplit(x, split = attrsep, fixed = TRUE)

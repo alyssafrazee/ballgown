@@ -2,12 +2,17 @@
 #' 
 #' @param transcripts \code{GRangesList} object (assume for now that it represents transcripts)
 #' @param cds \code{GRangesList} object (assume for now that it represents sets of coding sequences)
-#' @details If \code{gown} is a \code{ballgown} object, \code{transcripts} can be \code{structure(gown)$trans} (or any subset). 
-#' @return vector with length equal to \code{length(transcripts)}, where each entry is \code{TRUE} if the corresponding transcript contains a coding sequence (i.e., is a superset of at least one entry of \code{cds}). 
+#' 
+#' @details If \code{gown} is a \code{ballgown} object, \code{transcripts} can be 
+#' \code{structure(gown)$trans} (or any subset). 
+#' 
+#' @return vector with length equal to \code{length(transcripts)}, where each entry is \code{TRUE} 
+#' if the corresponding transcript contains a coding sequence (i.e., is a superset of at least one 
+#' entry of \code{cds}). 
 #' 
 #' @author Alyssa Frazee
+#' 
 #' @export
-
 
 contains = function(transcripts, cds){
     

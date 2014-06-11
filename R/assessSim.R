@@ -1,32 +1,47 @@
 #' analyze results of a two-group simulation experiment
 #'
-#' [documentation in progress]
+#' This function calculates sensitivity, specificity, and false discovery rates for a simulation 
+#' experiment. Currently it compares ballgown, cuffdiff, and limma. Assembled transcripts in the 
+#' ballgown objects are matched to annotated transcripts using percent overlap as distance. Analysis
+#' is done one chromosome at a time.
 #' 
 #' @param bg ballgown object from the simulated data
-#' @param bgresults data frame resulting from a call to \code{stattest(bg,...)}. Should be a transcript-level test (i.e., \code{feature="transcript"} in \code{stattest}).
-#' @param annotation either a path to an annotation gtf file, or a data.frame of an annotation file that was already read in and subset to exons on the right chromosome.
-#' @param chr 
-#' @param trulyDEids 
-#' @param cuffdiffFile 
-#' @param qcut either a number between 0 and 1 to be used as the q-value significance cutoff, or a vector like \code{seq(0,1,by=0.01)} (i.e., ranging from 0 to 1 in even increments). 
-#' @param UCSC 
-#' @param nClosest for true positives, make a positive call if any of the \code{nClosest} closest (most overlapping) transcripts are called DE by a method. Default 1.
-#' @param limmaresults data frame or list with transcript q-values in one column ("qval") and transcript ids (matching those in \code{bg}) in another column ("id").
-#' @details \code{trulyDEids} should be the transcripts that were set to be differentially expressed, identified the SAME WAY AS THEY ARE in \code{annotation}. This is super important!!! 
+#' @param bgresults data frame resulting from a call to \code{stattest(bg,...)}. Should be a 
+#' transcript-level test (i.e., \code{feature="transcript"} in \code{stattest}).
+#' @param annotation either a path to an annotation gtf file, or a data.frame of an annotation file 
+#' that was already read in and subset to exons on the right chromosome.
+#' @param chr Chromosome to analyze. Currently you can only do one at a time. 
+#' @param trulyDEids character vector of transcript IDs (matching the IDs in \code{annotation}) that
+#' were set to be truly differentially expressed in the simulation
+#' @param cuffdiffFile path to the Cuffdiff output file \code{isoform_exp.diff}.
+#' @param qcut either a number between 0 and 1 to be used as the q-value significance cutoff, or a 
+#' vector like \code{seq(0,1,by=0.01)} (i.e., ranging from 0 to 1 in even increments). 
+#' @param UCSC set to \code{TRUE} if \code{annotation} is UCSC annotation (UCSC annotations require)
+#' extra text processing
+#' @param ret set to TRUE to return simulation information in addition to plotting ROC curve. (FALSE
+#' by default).
+#' @param nClosest for true positives, make a positive call if any of the \code{nClosest} closest 
+#' (most overlapping) transcripts are called DE by a method. Default 1.
+#' @param limmaresults data frame or list with transcript q-values in one column ("qval") and 
+#' transcript ids (matching those in \code{bg}) in another column ("id").
+#' @param plot set to FALSE to disable the plotting of the ROC curve when \code{qcut} is a vector. 
+#' (TRUE by default).
 #' 
-#' Also: if \code{qcut} is a vector, \code{assessSim} returns sensitivities/specificities and creates an ROC plot. If \code{qcut} is a single number, sensitivity and specificity for both methods are returned, using \code{qcut} as a q-value significance cutoff.
-#' @return creates ROC curve and returns sensitivities/specificities used for said ROC curve, comparing cuffdiff to ballgown (as used to create \code{bg}). 
+#' @details If \code{qcut} is a vector, \code{assessSim} returns sensitivities/specificities and 
+#' creates an ROC plot, if \code{plot} is TRUE. If \code{qcut} is a single number, sensitivity and 
+#' specificity for both methods are returned, using \code{qcut} as a q-value significance cutoff.
+#' 
+#' @return creates ROC curve and returns sensitivities/specificities used for said ROC curve, 
+#' comparing ballgown (as used to create \code{bg}) to cuffdiff and limma.
+#' 
 #' @author Alyssa Frazee
+#' 
 #' @export
 
 assessSim = function(bg, bgresults, annotation, chr, trulyDEids, 
     cuffdiffFile=NULL, qcut=0.05, UCSC=TRUE, ret=FALSE, nClosest=1, 
-    limmaresults=NULL){
+    limmaresults=NULL, plot=TRUE){
     
-    require(ballgown)
-    require(GenomicRanges)
-    if(!is.null(limmaresults)) require(limma)
-
     stopifnot(all(qcut >= 0 & qcut <= 1))
 
     assemblygr = structure(bg)$trans
@@ -37,18 +52,21 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
         if(UCSC){
             # strip quotes and strip off any "_2" business
             annotsub$tx = substr(annotsub$tx, 2, nchar(annotsub$tx)-1)
-            annotsub$tx = sapply(annotsub$tx, function(x) paste(strsplit(x, split="_")[[1]][1:2],collapse="_"))
+            annotsub$tx = sapply(annotsub$tx, 
+                function(x) paste(strsplit(x, split="_")[[1]][1:2],collapse="_"))
         }
     }else{
         annotsub = annotation
     }
     
     degtf = subset(annotsub, tx %in% trulyDEids)
-    degr = split(GRanges(seqnames = Rle(chr), ranges = IRanges(start = degtf$start, end = degtf$end), strand = degtf$strand), degtf$tx)
+    degr = split(GRanges(seqnames=Rle(chr), 
+        ranges=IRanges(start=degtf$start, end=degtf$end), strand=degtf$strand), degtf$tx)
 
     deoverlaps = annotate_assembly(assemblygr, degr)
     ol_list = split(deoverlaps[, c(1, 3)], deoverlaps[,2])
-    ## ties are handled according to "sort" -- i.e., if there's a max overlap tie, the transcript with the smaller start position will be chosen
+    ## ties are handled according to "sort" -- i.e., if there's a max overlap tie, the transcript 
+    ## with the smaller start position will be chosen
     find_correct = function(x){
         maxInd = min(nrow(x), nClosest)
         return(x[order(x[,2], decreasing=TRUE)[1:maxInd] ,1])
@@ -160,11 +178,16 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
         
     }
 
-    plot(1-bgspec, bgsens, col="dodgerblue", type="l", xlab="false positive rate", ylab="true positive rate", lwd=2, ylim=c(0,1))
-    if(!is.null(cuffdiffFile)){
-        lines(1-cuffspec, cuffsens, col="orange", lwd=2)
-        legend('bottomright', lty=c(1,1), lwd=c(2,2), col=c("dodgerblue", "orange"), c("ballgown", "cuffdiff"))
+    if(plot){
+        plot(1-bgspec, bgsens, col="dodgerblue", type="l", xlab="false positive rate", 
+            ylab="true positive rate", lwd=2, ylim=c(0,1))
+        if(!is.null(cuffdiffFile)){
+            lines(1-cuffspec, cuffsens, col="orange", lwd=2)
+            legend('bottomright', lty=c(1,1), lwd=c(2,2), col=c("dodgerblue", "orange"), 
+                c("ballgown", "cuffdiff"))
+        }
     }
+
     if(ret){
         isDE = bgresults$id %in% unlist(truly_de_ids)
         return(list(ballgownsens=bgsens, cuffdiffsens=cuffsens, limmasens=limmasens,

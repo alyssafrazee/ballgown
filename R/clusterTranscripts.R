@@ -1,21 +1,34 @@
 #' group a gene's assembled transcripts into clusters
 #'
-#' @param gene name of gene whose transcripts will be clustered.  When using Cufflinks output, usually of the form \code{"XLOC_######"}
+#' @param gene name of gene whose transcripts will be clustered.  When using Cufflinks output, 
+#' usually of the form \code{"XLOC_######"}
 #' @param gown ballgown object containing experimental data
 #' @param k number of clusters to use
-#' @param method clustering method to use.  Must be one of \code{"hclust"}, for hierarchical clustering, or \code{"kmeans"}, for k-means clustering. 
-#' @return list with elements \code{clusters} and \code{pctvar}.  \code{clusters} contains columns "cluster", "tname", and "tid", and denotes which transcripts belong to which clusters.  \code{pctvar} is only non-NULL when using k-means clustering and is the percentage of variation explained by these clusters, defined as the ratio of the between-cluster sum of squares to the total sum of squares.
-#' @seealso \code{\link{hclust}}, \code{\link{kmeans}}, \code{\link{plotLatentTranscripts}} for visualizing the transcript clusters
+#' @param method clustering method to use.  Must be one of \code{"hclust"}, for hierarchical 
+#' clustering, or \code{"kmeans"}, for k-means clustering. 
+#' 
+#' @return list with elements \code{clusters} and \code{pctvar}.  \code{clusters} contains columns 
+#' "cluster", "tname", and "tid", and denotes which transcripts belong to which clusters.  
+#' \code{pctvar} is only non-NULL when using k-means clustering and is the percentage of variation 
+#' explained by these clusters, defined as the ratio of the between-cluster sum of squares to the 
+#' total sum of squares.
+#' 
+#' @seealso \code{\link{hclust}}, \code{\link{kmeans}}, \code{\link{plotLatentTranscripts}} for 
+#' visualizing the transcript clusters
+#' 
 #' @author Alyssa Frazee
+#' 
 #' @export
 clusterTranscripts = function(gene, gown, k=NULL, method=c("hclust", "kmeans")){
     method = match.arg(method)
 
     txnames = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id == gene]
-    strucnames = as.numeric(substr(names(structure(gown)$trans),3,nchar(names(structure(gown)$trans))))
+    strucnames = as.numeric(substr(names(structure(gown)$trans), 3, 
+        nchar(names(structure(gown)$trans))))
     inds = which(strucnames %in% txnames)
     tx = structure(gown)$trans[inds]
-    chr = data(gown)$trans$chr[inds[1]] #add error check later, in case the tx's are on different chromosomes.  ugh.
+    chr = data(gown)$trans$chr[inds[1]] 
+    #TODO: add error check later, in case the tx's are on different chromosomes.
 
     covind = unique(as.numeric(lapply(tx, function(x) runValue(seqnames(x)))))
     covs = lapply(tx, function(x) coverage(x)[[covind]])
@@ -25,7 +38,9 @@ clusterTranscripts = function(gene, gown, k=NULL, method=c("hclust", "kmeans")){
     minbp = min(startpos)
     maxbp = max(endpos)
 
-    compactrles = lapply(covs, function(x) Rle(values = runValue(x)[-1], lengths = runLength(x)[-1]))
+    compactrles = lapply(covs, function(x){
+        Rle(values=runValue(x)[-1], lengths=runLength(x)[-1])
+    })
     expanded = lapply(compactrles, IRanges::as.vector)
     tnames = names(expanded)
     expanded = lapply(1:length(expanded), function(i){
@@ -54,5 +69,5 @@ clusterTranscripts = function(gene, gown, k=NULL, method=c("hclust", "kmeans")){
         pctvar = km$betweenss/km$totss
     }
 
-    return(list(clusters = data.frame(cluster=groups, tname=tnames, tid=txnames), pctvar = pctvar))
+    return(list(clusters=data.frame(cluster=groups, tname=tnames, tid=txnames), pctvar=pctvar))
 }

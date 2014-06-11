@@ -1,16 +1,30 @@
 #' visualize transcript abundance by group
 #'
-#' @param gene name of gene whose transcripts will be plotted.  When using Cufflinks output, usually of the form \code{"XLOC_######"}
+#' @param gene name of gene whose transcripts will be plotted.  When using Cufflinks output, usually
+#' of the form \code{"XLOC_######"}
 #' @param gown ballgown object containing experimental and phenotype data
-#' @param overall if \code{TRUE}, color features by the overall (experiment-wide) mean rather than a group-specific mean
-#' @param groupvar string representing the name of the variable denoting which sample belongs to which group.  Can be \code{"none"} (if you want the study-wide mean), or must correspond to the name of a column of \code{pData(gown)}.  Usually a categorical variable.
-#' @param groupname string representing which group's expression means you want to plot.  Can be \code{"none"} (if you want the study-wide mean), \code{"all"} (if you want a multipanel plot of each group's mean expression), or any of the levels of \code{groupvar}.
-#' @param colorby one of \code{"transcript"} or \code{"exon"}, indicating which feature's abundances should dictate plot coloring. 
-#' @param legend if \code{TRUE} (as it is by default), a color legend is drawn on top of the plot indicating the scale for feature abundances.
-#' @param labelTranscripts if \code{TRUE}, transcript ids are labeled on the left side of the plot. Default \code{FALSE}.
-#' @return produces a plot of the transcript structure for the specified gene in the current graphics device, colored by study-wide or group-specific mean expression level.
+#' @param overall if \code{TRUE}, color features by the overall (experiment-wide) mean rather than a
+#' group-specific mean
+#' @param groupvar string representing the name of the variable denoting which sample belongs to
+#' which group.  Can be \code{"none"} (if you want the study-wide mean), or must correspond to the 
+#' name of a column of \code{pData(gown)}.  Usually a categorical variable.
+#' @param groupname string representing which group's expression means you want to plot.  Can be 
+#' \code{"none"} (if you want the study-wide mean), \code{"all"} (if you want a multipanel plot of 
+#' each group's mean expression), or any of the levels of \code{groupvar}.
+#' @param colorby one of \code{"transcript"} or \code{"exon"}, indicating which feature's abundances
+#' should dictate plot coloring. 
+#' @param legend if \code{TRUE} (as it is by default), a color legend is drawn on top of the plot 
+#' indicating the scale for feature abundances.
+#' @param labelTranscripts if \code{TRUE}, transcript ids are labeled on the left side of the plot. 
+#' Default \code{FALSE}.
+#' 
+#' @return produces a plot of the transcript structure for the specified gene in the current 
+#' graphics device, colored by study-wide or group-specific mean expression level.
+#' 
 #' @seealso \code{\link{plotTranscripts}} 
+#' 
 #' @author Alyssa Frazee
+#' 
 #' @export
 
 plotMeans = function(gene, gown, 
@@ -34,13 +48,16 @@ plotMeans = function(gene, gown,
     if(class(gown)!="ballgown") stop("gown must be a ballgown object")
 
     if(!overall & (groupvar=="none"|groupname=="none")){
-        stop("to plot means for a specific group, please provide both the grouping variable name and which group you're plotting for")
+        stop("to plot means for a specific group, please provide both the grouping variable name 
+            and which group you're plotting for")
     }
     if(groupname == "all" & overall){
-        warning("Plotting the study-wide mean for each feature. To plot each group's mean separately, set overall=FALSE.")
+        warning("Plotting the study-wide mean for each feature. To plot each group's mean 
+            separately, set overall=FALSE.")
     }
     if(groupname == "all" & groupvar == "none"){
-        stop("to plot means for all groups, please provide groupvar (the name of the group variable)")
+        stop("to plot means for all groups, please provide groupvar (the name of the group 
+            variable)")
     }
     
     # some setup:
@@ -109,14 +126,21 @@ plotMeans = function(gene, gown,
 
         # draw the transcripts
         for(tx in unique(gtrans$tid)){
-            if(colorby == "transcript") mycolor = closestColor(tmeans[which(smalldat$t_id==tx)], colscale)
+            if(colorby == "transcript") {
+                mycolor = closestColor(tmeans[which(smalldat$t_id==tx)], colscale)
+            }
             txind = which(unique(gtrans$tid)==tx)
             gtsub = gtrans[gtrans$tid==tx,]
             gtsub = gtsub[order(gtsub$start),]
             for(exind in 1:dim(gtsub)[1]){
-                if(colorby == "exon") mycolor = closestColor(emeans[which(smalldat$e_id==gtsub$id[exind])], colscale)
-                polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), col=mycolor)
-                if(exind!=dim(gtsub)[1]) lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind, txind), lty=2, col="gray60")
+                if(colorby == "exon"){ 
+                    mycolor = closestColor(emeans[which(smalldat$e_id==gtsub$id[exind])], colscale)
+                }
+                polygon(
+                    x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]),
+                    y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), col=mycolor)
+                if(exind!=dim(gtsub)[1]) lines(c(gtsub$end[exind],gtsub$start[exind+1]), 
+                    c(txind, txind), lty=2, col="gray60")
             }
         }
 
@@ -124,13 +148,18 @@ plotMeans = function(gene, gown,
         if(legend){
             leglocs = seq(min(xax)+1, max(xax)-1, length=length(colscale)+1)
             for(i in 1:length(colscale)){
-                polygon(x = c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]), y = c(ymax-0.3, ymax, ymax, ymax-0.3), border=NA, col = rev(heat.colors(length(colscale)))[i])
+                polygon(x=c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]), 
+                    y=c(ymax-0.3, ymax, ymax, ymax-0.3), border=NA, 
+                    col=rev(heat.colors(length(colscale)))[i])
             }
-            text(x = seq(min(xax)+1, max(xax)-1, length = 20), y = rep(ymax+0.1, 20), labels = round(colscale,2)[seq(1,length(colscale), length=20)], cex=0.5 )	
-            text(x = median(xax), y = ymax-0.5, labels=paste("mean expression, by",  colorby), cex=0.5)
+            text(x=seq(min(xax)+1, max(xax)-1, length=20), y=rep(ymax+0.1, 20), 
+                labels=round(colscale,2)[seq(1,length(colscale), length=20)], cex=0.5)	
+            text(x=median(xax), y=ymax-0.5, labels=paste("mean expression, by",  colorby), cex=0.5)
         }
 
-        if(labelTranscripts) axis(side=2, at=c(1:numtx), labels=unique(gtrans$tid), cex.axis=0.75, las=1)
+        if(labelTranscripts){
+            axis(side=2, at=c(1:numtx), labels=unique(gtrans$tid), cex.axis=0.75, las=1)
+        }
     }
 }
 
