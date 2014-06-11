@@ -11,10 +11,12 @@ gff2grlist(gtf, txidentifier = "transcript_id", exonsonly = TRUE)
 \item{txidentifier}{string specifying the identifier in the of the "attributes" column
 of the the gtf file that gives the transcript id for each exon.}
 
-\item{exonsonly}{if TRUE, return transcripts only as a set of exons - do not include CDS, start/stop codons, etc.}
+\item{exonsonly}{if TRUE, return transcripts only as a set of exons - do not include CDS,
+start/stop codons, etc.}
 }
 \value{
-A \code{GRangesList} object with each GRangesElement denoting a transcript in the gtf file.
+A \code{GRangesList} object with each GRangesElement denoting a transcript in the gtf
+file.
 }
 \description{
 Read a gtf file into memory, return a GRangesList of transcripts in that

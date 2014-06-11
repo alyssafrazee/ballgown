@@ -15,7 +15,8 @@ the last element of \code{x}
 get the last element
 }
 \details{
-this function is made of several thousand lines of complex code, so be sure to read it carefully.
+this function is made of several thousand lines of complex code, so be sure to read it
+carefully.
 }
 \author{
 Alyssa Frazee

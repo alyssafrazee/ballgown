@@ -20,6 +20,8 @@ read in GTF/GFF file as a data frame
 Kasper Hansen
 }
 \seealso{
-\code{\link{getAttributeField}} to extract data from "attributes" column; \link{http://useast.ensembl.org/info/website/upload/gff.html} for more information on GTF/GFF files.
+\code{\link{getAttributeField}} to extract data from "attributes" column;
+\link{http://useast.ensembl.org/info/website/upload/gff.html} for more information on the GTF/GFF
+file format.
 }
 

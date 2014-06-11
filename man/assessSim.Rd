@@ -5,39 +5,56 @@
 \usage{
 assessSim(bg, bgresults, annotation, chr, trulyDEids, cuffdiffFile = NULL,
   qcut = 0.05, UCSC = TRUE, ret = FALSE, nClosest = 1,
-  limmaresults = NULL)
+  limmaresults = NULL, plot = TRUE)
 }
 \arguments{
 \item{bg}{ballgown object from the simulated data}
 
-\item{bgresults}{data frame resulting from a call to \code{stattest(bg,...)}. Should be a transcript-level test (i.e., \code{feature="transcript"} in \code{stattest}).}
+\item{bgresults}{data frame resulting from a call to \code{stattest(bg,...)}. Should be a
+transcript-level test (i.e., \code{feature="transcript"} in \code{stattest}).}
 
-\item{annotation}{either a path to an annotation gtf file, or a data.frame of an annotation file that was already read in and subset to exons on the right chromosome.}
+\item{annotation}{either a path to an annotation gtf file, or a data.frame of an annotation file
+that was already read in and subset to exons on the right chromosome.}
 
-\item{chr}{}
+\item{chr}{Chromosome to analyze. Currently you can only do one at a time.}
 
-\item{trulyDEids}{}
+\item{trulyDEids}{character vector of transcript IDs (matching the IDs in \code{annotation}) that
+were set to be truly differentially expressed in the simulation}
 
-\item{cuffdiffFile}{}
+\item{cuffdiffFile}{path to the Cuffdiff output file \code{isoform_exp.diff}.}
 
-\item{qcut}{either a number between 0 and 1 to be used as the q-value significance cutoff, or a vector like \code{seq(0,1,by=0.01)} (i.e., ranging from 0 to 1 in even increments).}
+\item{qcut}{either a number between 0 and 1 to be used as the q-value significance cutoff, or a
+vector like \code{seq(0,1,by=0.01)} (i.e., ranging from 0 to 1 in even increments).}
 
-\item{UCSC}{}
+\item{UCSC}{set to \code{TRUE} if \code{annotation} is UCSC annotation (UCSC annotations require)
+extra text processing}
 
-\item{nClosest}{for true positives, make a positive call if any of the \code{nClosest} closest (most overlapping) transcripts are called DE by a method. Default 1.}
+\item{ret}{set to TRUE to return simulation information in addition to plotting ROC curve. (FALSE
+by default).}
 
-\item{limmaresults}{data frame or list with transcript q-values in one column ("qval") and transcript ids (matching those in \code{bg}) in another column ("id").}
+\item{nClosest}{for true positives, make a positive call if any of the \code{nClosest} closest
+(most overlapping) transcripts are called DE by a method. Default 1.}
+
+\item{limmaresults}{data frame or list with transcript q-values in one column ("qval") and
+transcript ids (matching those in \code{bg}) in another column ("id").}
+
+\item{plot}{set to FALSE to disable the plotting of the ROC curve when \code{qcut} is a vector.
+(TRUE by default).}
 }
 \value{
-creates ROC curve and returns sensitivities/specificities used for said ROC curve, comparing cuffdiff to ballgown (as used to create \code{bg}).
+creates ROC curve and returns sensitivities/specificities used for said ROC curve,
+comparing ballgown (as used to create \code{bg}) to cuffdiff and limma.
 }
 \description{
-[documentation in progress]
+This function calculates sensitivity, specificity, and false discovery rates for a simulation
+experiment. Currently it compares ballgown, cuffdiff, and limma. Assembled transcripts in the
+ballgown objects are matched to annotated transcripts using percent overlap as distance. Analysis
+is done one chromosome at a time.
 }
 \details{
-\code{trulyDEids} should be the transcripts that were set to be differentially expressed, identified the SAME WAY AS THEY ARE in \code{annotation}. This is super important!!!
-
-Also: if \code{qcut} is a vector, \code{assessSim} returns sensitivities/specificities and creates an ROC plot. If \code{qcut} is a single number, sensitivity and specificity for both methods are returned, using \code{qcut} as a q-value significance cutoff.
+If \code{qcut} is a vector, \code{assessSim} returns sensitivities/specificities and
+creates an ROC plot, if \code{plot} is TRUE. If \code{qcut} is a single number, sensitivity and
+specificity for both methods are returned, using \code{qcut} as a q-value significance cutoff.
 }
 \author{
 Alyssa Frazee
