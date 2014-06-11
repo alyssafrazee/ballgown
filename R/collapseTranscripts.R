@@ -74,7 +74,7 @@ collapseTranscripts = function(gown, dattype=c('cov','FPKM'), method=c('hclust',
     }
   
     tab = as.data.frame(tab)
-    names(tab) = as.character(sapply(names(data(simgown)$trans)[coltypes==dattype], getsamp))
+    names(tab) = as.character(sapply(names(data(gown)$trans)[coltypes==dattype], getsamp))
     rownames(tab) = tclustnames
     return(tab)
 }  
