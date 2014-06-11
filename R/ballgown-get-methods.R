@@ -59,3 +59,17 @@ setMethod("dirs", "ballgown", function(x) x@dirs)
 #' @aliases mergedDate,ballgown-method
 #' @param x a ballgown object
 setMethod("mergedDate", "ballgown", function(x) x@mergedDate)
+
+#' extract phenotype data from a ballgown object
+#' 
+#' @name pData
+#' @exportMethod pData
+#' @docType methods
+#' @rdname pData
+#' @aliases pData,ballgown-method
+#' @param x a ballgown object
+#' @return sample-by-phenotype data frame
+setMethod("pData", "ballgown", function(x){
+    return(indexes(x)$pData)
+})
+

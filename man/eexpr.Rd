@@ -15,6 +15,9 @@ eexpr(x, ...)
 \item{meas}{type of measurement to extract. Can be "rcount", "ucount", "mrcount", "cov", "mcov",
 or "all". Default "rcount".}
 }
+\value{
+exon-by-sample matrix containing exon-level expression values (measured by \code{meas})
+}
 \description{
 extract exon-level expression measurements from ballgown objects
 }

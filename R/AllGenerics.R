@@ -24,36 +24,32 @@ setGeneric("indexes", function(x) standardGeneric("indexes"))
 #' @rdname dirs
 setGeneric("dirs", function(x) standardGeneric("dirs"))
 
-#' PLACEHOLDER TITLE
-#' 
 #' @name sampleNames
-#' @exportMethod sampleNames
+#' @export
 #' @docType methods
-#' @rdname ballgown-methods
-#' @return for \code{sampleNames}: names of samples included in the dataset.  Matches folder names 
-#' of \code{dirs(x)}.
+#' @rdname sampleNames
 setGeneric("sampleNames", function(x) standardGeneric("sampleNames"))
 
 #' @name mergedDate
-#' @exportMethod mergedDate
+#' @export
 #' @docType methods
-#' @rdname ballgown-methods
-#' @return for \code{mergedDate}: the date \code{x} was created
+#' @rdname mergedDate
 setGeneric("mergedDate", function(x) standardGeneric("mergedDate"))
 
 #' @name indexes<-
-#' @exportMethod indexes<-
+#' @export
 #' @docType methods
-#' @rdname ballgown-methods
-#' @param value the updated value for a ballgown object component
+#' @rdname ballgown-replace-methods
 setGeneric("indexes<-", function(x, value) standardGeneric("indexes<-"))
 
 #' @name data<-
-#' @exportMethod data<-
+#' @export
 #' @docType methods
-#' @rdname ballgown-methods
+#' @rdname ballgown-replace-methods
 setGeneric("data<-", function(x, value) standardGeneric("data<-"))
 
+#' [PLACEHOLDER TITLE]
+#' 
 #' @name subset
 #' @exportMethod subset
 #' @docType methods
@@ -68,15 +64,15 @@ setGeneric("data<-", function(x, value) standardGeneric("data<-"))
 setGeneric("subset", function(x, ...) standardGeneric("subset"))
 
 #' @name pData
-#' @exportMethod pData
+#' @export
 #' @docType methods
-#' @rdname ballgown-methods
+#' @rdname pData
 setGeneric("pData", function(x) standardGeneric("pData"))
 
 #' @name pData<-
 #' @exportMethod pData<-
 #' @docType methods
-#' @rdname ballgown-methods
+#' @rdname ballgown-replace-methods
 setGeneric("pData<-", function(x, value) standardGeneric("pData<-"))
 
 #' @name texpr

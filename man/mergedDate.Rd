@@ -5,6 +5,8 @@
 \alias{mergedDate,ballgown-method}
 \title{extract package version & creation date from ballgown object}
 \usage{
+mergedDate(x)
+
 \S4method{mergedDate}{ballgown}(x)
 }
 \arguments{
