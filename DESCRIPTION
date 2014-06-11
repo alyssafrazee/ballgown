@@ -2,7 +2,7 @@ Package: ballgown
 Maintainer: Alyssa Frazee <alyssa.frazee@gmail.com>
 Author: Alyssa Frazee, Andrew Jaffe, Leonardo Collado Torres, Jeff Leek
 Version: 0.99.0
-License: MIT
+License: MIT + file LICENSE
 Title: Flexible, isoform-level differential expression analysis
 Description: Tools for statistical analysis of assembled transcriptomes,
     including flexible differential expression analysis, visualization of
