@@ -5,6 +5,8 @@
 \alias{data,ballgown-method}
 \title{extract data components from ballgown objects}
 \usage{
+data(x)
+
 \S4method{data}{ballgown}(x)
 }
 \arguments{

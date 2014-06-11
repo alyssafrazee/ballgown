@@ -7,8 +7,6 @@
 \usage{
 structure(x)
 
-data(x)
-
 \S4method{structure}{ballgown}(x)
 }
 \arguments{

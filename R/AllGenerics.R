@@ -6,10 +6,10 @@
 #' @rdname structure
 setGeneric("structure", function(x) standardGeneric("structure"))
 
-#' @name structure
+#' @name data
 #' @export
 #' @docType methods
-#' @rdname structure
+#' @rdname data
 setGeneric("data", function(x) standardGeneric("data"))
 
 #' @name indexes
