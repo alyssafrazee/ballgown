@@ -1,25 +1,15 @@
 ### define generics for ballgown class 
 
-#' methods for objects of class \code{ballgown}
-#'
-#' The following methods are available for the S4 class \code{ballgown}.
-#' @name ballgown-methods
-#' @aliases structure
-#' @exportMethod structure
+#' @name structure
+#' @export
 #' @docType methods
-#' @rdname ballgown-methods
-#' @param x ballgown object
-#' @return for \code{structure}: list containing elements \code{intron} (GRanges), \code{exon} 
-#' (GRanges), and \code{trans} (GRangesList), denoting genomic positions of exons, introns, and 
-#' transcripts (represented as sets of exons).
+#' @rdname structure
 setGeneric("structure", function(x) standardGeneric("structure"))
 
-#' @name data
-#' @exportMethod data
+#' @name structure
+#' @export
 #' @docType methods
-#' @rdname ballgown-methods
-#' @return for \code{data}: list containing elements \code{intron}, \code{exon}, and \code{trans} 
-#' (all data frames) -- feature-by-sample expression tables.
+#' @rdname structure
 setGeneric("data", function(x) standardGeneric("data"))
 
 #' @name indexes

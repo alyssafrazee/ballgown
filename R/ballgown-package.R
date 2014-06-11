@@ -1,6 +1,7 @@
-#' ballgown
+#' The ballgown package for analysis of transcript assemblies
 #'
-#' @name ballgown
+#' @name ballgown-package
+#' @aliases ballgownp
 #' @docType package
 #' @import GenomicRanges
 #' @import IRanges
