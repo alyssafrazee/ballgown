@@ -80,7 +80,7 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
 
     # load in cuffdiff results
     if(!is.null(cuffdiffFile)){
-        cuff = read.table(cuffdiffFile, se p = "\t", header = TRUE)
+        cuff = read.table(cuffdiffFile, sep = "\t", header = TRUE)
         cuffok = cuff[cuff$status == 'OK',]
     }
 

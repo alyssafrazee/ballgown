@@ -63,7 +63,7 @@ plotMeans = function(gene, gown,
     # some setup:
     ma = as.data.frame(structure(gown)$trans)
     thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
-    gtrans = ma[ma$element %in% thetranscript,]
+    gtrans = ma[ma$element %in% thetranscripts,]
     gtrans$tid = gtrans$element
     xax = seq(min(gtrans$start), max(gtrans$end), by=1)
     numtx = length(unique(thetranscripts))
