@@ -4,7 +4,7 @@
 \alias{data<-}
 \alias{indexes<-}
 \alias{pData<-}
-\alias{pData<-,ballgown-method}
+\title{Replace methods for ballgown objects}
 \usage{
 indexes(x) <- value
 
@@ -26,5 +26,8 @@ pData(x) <- value
 \item{x}{a ballgown object}
 
 \item{value}{the updated value for \code{pData(x)}.}
+}
+\description{
+Replace methods for ballgown objects
 }
 

@@ -1,3 +1,5 @@
+#' Replace methods for ballgown objects
+#' 
 #' @name indexes<-
 #' @exportMethod indexes<-
 #' @docType methods
@@ -18,7 +20,6 @@ setReplaceMethod("data", "ballgown", function(x, value) {x@data <- value; x})
 #' @name pData<-
 #' @exportMethod pData<-
 #' @docType methods
-#' @aliases pData<-,ballgown-method
 #' @rdname ballgown-replace-methods
 #' @param x a ballgown object
 #' @param value the updated value for \code{pData(x)}.
