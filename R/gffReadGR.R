@@ -26,7 +26,7 @@ gffReadGR = function(gtf, splitByTranscript=FALSE, identifier='transcript_id', s
     con = file(gtf)
     ret = import(con, format='GFF')
     if(splitByTranscript){
-        ret = subset(ret, type == 'exon')
+        ret = ret[ret$type == 'exon', ]
         transcript = getAttributeField(as.character(ret$group), identifier, sep)
         ret = split(ret, transcript)
     }
