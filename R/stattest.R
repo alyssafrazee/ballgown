@@ -179,7 +179,6 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
         if(length(table(x)) != 2){
             warning('fold changes only available for 2-group comparisons')
         }else{
-            require(limma)
             lmodels = lmFit(y, design=mod)
             if(log){
                 estFC = 2^(lmodels$coefficients[,2])
