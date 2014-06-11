@@ -23,7 +23,7 @@ gff2grlist = function(gtf, txidentifier = "transcript_id", exonsonly = TRUE){
     gtf.dataframe = gffRead(gtf)
     gtf.dataframe$txid = getAttributeField(gtf.dataframe$attributes, txidentifier, attrsep = "; ")
     gtf.dataframe = gtf.dataframe[,-9]
-    if(exonsonly) gtf.dataframe = subset(gtf.dataframe, feature=="exon")
+    if(exonsonly) gtf.dataframe = gtf.dataframe[gtf.dataframe$feature=="exon",]
     gtf.list = split(gtf.dataframe, gtf.dataframe$txid)
     gtf.grl = lapply(gtf.list, function(x){
         x$strand[x$strand=="."] = "*"
