@@ -78,8 +78,8 @@ plotTranscripts = function(gene, gown, samples = NULL,
     if(!is.null(customCol) & (length(customCol)!=length(thetranscripts))){
         stop("You must have the same number of custom colors as transcripts")
     }
-    
-    gtrans = subset(ma, element %in% thetranscripts)
+
+    gtrans = ma[ma$element %in% transcripts,]
     xax = seq(min(gtrans$start), max(gtrans$end), by=1)
     numtx = length(unique(thetranscripts))
     ymax = ifelse(legend, numtx+1.5, numtx+1)
