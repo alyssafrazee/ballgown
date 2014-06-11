@@ -14,4 +14,7 @@ Imports:
     RColorBrewer,
     splines,
     sva,
-    limma
+    limma,
+    cummeRbund,
+    reshape,
+    rtracklayer
