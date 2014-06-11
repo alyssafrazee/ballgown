@@ -19,7 +19,6 @@
 getGenes = function(gtf, assembled, UCSC=TRUE, attribute = "gene_id"){
     # read in annotation and split by gene:
     if(!attribute %in%  c("gene_id", "gene_name")) stop("attribute must be gene_id or gene_name\n")
-    require(GenomicRanges)
     annot = gffReadGR(gtf)
     annotEx = annot[mcols(annot)$type=="exon"]
     annotEx$gene_id = getAttributeField(as.character(mcols(annotEx)$group), attribute)

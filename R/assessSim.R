@@ -85,9 +85,6 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
         cuffok = subset(cuff, status == "OK")
     }
 
-    # run limma (FPKM ONLY)
-    y = log2(texpr(bg)+1)
-
     if(length(qcut) == 1){
         if(!is.null(cuffdiffFile)){
             cuff_decalls = as.character(cuffok$test_id[cuffok$q_value < qcut])
