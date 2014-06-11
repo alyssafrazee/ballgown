@@ -5,7 +5,6 @@
 \alias{data}
 \alias{data<-}
 \alias{dirs}
-\alias{eexpr}
 \alias{gexpr}
 \alias{iexpr}
 \alias{indexes}
@@ -42,8 +41,6 @@ pData(x)
 pData(x) <- value
 
 texpr(x, ...)
-
-eexpr(x, ...)
 
 iexpr(x, ...)
 
