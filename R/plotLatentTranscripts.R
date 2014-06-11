@@ -75,7 +75,7 @@ plotLatentTranscripts = function(gene, gown, method=c("hclust", "kmeans"), k=NUL
         }
         if(i==length(thetranscripts)-1){
             # nothing explained 90% of variation:
-            plotTranscripts(gene=gene, gown=gown, samp=NULL, colorby="none")
+            plotTranscripts(gene=gene, gown=gown, colorby="none")
             warning("k = n-1 did not explain 90% of variation. we recommend not clustering this gene
                 or pre-specifying a reasonable k for this gene.")
             return(NULL) #this function is now done.
