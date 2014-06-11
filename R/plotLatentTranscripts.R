@@ -49,7 +49,7 @@ plotLatentTranscripts = function(gene, gown, method=c("hclust", "kmeans"), k=NUL
 	ma = IRanges::as.data.frame(structure(gown)$trans)
 	thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
 	thetranscripts = paste0("tx", thetranscripts)
-	gtrans = subset(ma, element %in% thetranscripts)
+    gtrans = ma[ma$element %in% thetranscripts,]
 	xax = seq(min(gtrans$start), max(gtrans$end), by=1)
 	
     ## check validity again:
