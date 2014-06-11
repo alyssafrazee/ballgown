@@ -11,6 +11,9 @@
 #' @param groupname string representing which group's expression means you want to plot.  Can be 
 #' \code{"none"} (if you want the study-wide mean), \code{"all"} (if you want a multipanel plot of 
 #' each group's mean expression), or any of the levels of \code{groupvar}.
+#' @param dattype type of expression measurement to plot. One of "cov", "FPKM", "rcount", "ucount", 
+#' "mrcount", or "mcov". Not all types are valid for all features. (See description of tablemaker 
+#' output for more information).
 #' @param colorby one of \code{"transcript"} or \code{"exon"}, indicating which feature's abundances
 #' should dictate plot coloring. 
 #' @param legend if \code{TRUE} (as it is by default), a color legend is drawn on top of the plot 
@@ -27,14 +30,9 @@
 #' 
 #' @export
 
-plotMeans = function(gene, gown, 
-    overall = TRUE,
-    groupvar = "none", 
-    groupname = "none", 
-	dattype = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
-	colorby = c("transcript", "exon"),
-    legend = TRUE,
-    labelTranscripts = FALSE){
+plotMeans = function(gene, gown, overall=TRUE, groupvar="none", 
+    groupname="none", dattype=c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
+	colorby=c("transcript", "exon"), legend=TRUE, labelTranscripts=FALSE){
     
     dattype = match.arg(dattype)
     colorby = match.arg(colorby)

@@ -25,6 +25,10 @@ name of a column of \code{pData(gown)}.  Usually a categorical variable.}
 \code{"none"} (if you want the study-wide mean), \code{"all"} (if you want a multipanel plot of
 each group's mean expression), or any of the levels of \code{groupvar}.}
 
+\item{dattype}{type of expression measurement to plot. One of "cov", "FPKM", "rcount", "ucount",
+"mrcount", or "mcov". Not all types are valid for all features. (See description of tablemaker
+output for more information).}
+
 \item{colorby}{one of \code{"transcript"} or \code{"exon"}, indicating which feature's abundances
 should dictate plot coloring.}
 

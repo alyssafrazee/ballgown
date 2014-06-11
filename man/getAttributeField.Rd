@@ -32,7 +32,7 @@ Wolfgang Huber, in \code{davidTiling}
 }
 \seealso{
 \code{\link{gffRead}} for creating a data frame from a GTF/GFF file, and
-\link{http://useast.ensembl.org/info/website/upload/gff.html} for specifics of the GFF/GTF file
+\url{http://useast.ensembl.org/info/website/upload/gff.html} for specifics of the GFF/GTF file
 format.
 }
 

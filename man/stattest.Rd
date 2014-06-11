@@ -48,6 +48,9 @@ confounders) between populations. Only available for 2-group comparisons at the 
 \item{libadjust}{if \code{TRUE} (default), include a library-size adjustment as a confounder in
 the fitted models. The adjustment is currently defined as the sum of the sample's counts below
 that sample's 75th percentile.}
+
+\item{log}{if \code{TRUE}, outcome variable in linear models is log(expression), otherwise it's
+expression. Default TRUE.}
 }
 \value{
 data frame containing the columns \code{feature}, \code{id} representing feature id,

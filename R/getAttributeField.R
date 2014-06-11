@@ -8,7 +8,7 @@
 #' @return vector of nucleotide positions included in the transcript
 #' 
 #' @seealso \code{\link{gffRead}} for creating a data frame from a GTF/GFF file, and 
-#' \link{http://useast.ensembl.org/info/website/upload/gff.html} for specifics of the GFF/GTF file 
+#' \url{http://useast.ensembl.org/info/website/upload/gff.html} for specifics of the GFF/GTF file 
 #' format.
 #' 
 #' @author Wolfgang Huber, in \code{davidTiling}
