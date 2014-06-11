@@ -47,7 +47,7 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
     assemblygr = structure(bg)$trans
     if(class(annotation)!='data.frame'){
         annot = gffRead(annotation)
-        annotsub = subset(annot, feature=="exon" & seqname==chr)        
+        annotsub = annot[annot[,3]=='exon' & annot[,1]==chr,] #col3=feature, col1=seqname
         annotsub$tx = getAttributeField(annotsub$attributes, "transcript_id")
         if(UCSC){
             # strip quotes and strip off any "_2" business
@@ -58,8 +58,7 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
     }else{
         annotsub = annotation
     }
-    
-    degtf = subset(annotsub, tx %in% trulyDEids)
+    degtf = annotsub[annotsub$tx %in% trulyDEids,]
     degr = split(GRanges(seqnames=Rle(chr), 
         ranges=IRanges(start=degtf$start, end=degtf$end), strand=degtf$strand), degtf$tx)
 
@@ -81,8 +80,8 @@ assessSim = function(bg, bgresults, annotation, chr, trulyDEids,
 
     # load in cuffdiff results
     if(!is.null(cuffdiffFile)){
-        cuff = read.table(cuffdiffFile, sep = "\t", header = TRUE)
-        cuffok = subset(cuff, status == "OK")
+        cuff = read.table(cuffdiffFile, se p = "\t", header = TRUE)
+        cuffok = cuff[cuff$status == 'OK',]
     }
 
     if(length(qcut) == 1){
