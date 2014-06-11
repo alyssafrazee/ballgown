@@ -5,6 +5,8 @@
 \alias{indexes,ballgown-method}
 \title{extract the indexes from ballgown objects}
 \usage{
+indexes(x)
+
 \S4method{indexes}{ballgown}(x)
 }
 \arguments{

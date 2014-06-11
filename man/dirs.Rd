@@ -5,6 +5,8 @@
 \alias{dirs,ballgown-method}
 \title{extract paths to tablemaker output}
 \usage{
+dirs(x)
+
 \S4method{dirs}{ballgown}(x)
 }
 \arguments{

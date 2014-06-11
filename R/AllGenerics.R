@@ -13,22 +13,15 @@ setGeneric("structure", function(x) standardGeneric("structure"))
 setGeneric("data", function(x) standardGeneric("data"))
 
 #' @name indexes
-#' @exportMethod indexes
+#' @export
 #' @docType methods
-#' @rdname ballgown-methods
-#' @return for \code{indexes}: list containing elements \code{e2t}, \code{i2t}, \code{t2g}, 
-#' \code{bamfiles}, and \code{pData}, where \code{e2t} and \code{i2t} are data frames linking exons 
-#' and introns (respectively) to transcripts, \code{t2g} is a data frame linking transcripts to 
-#' genes, and \code{bamfiles} and \code{pData} are described at the \code{link{ballgown}} 
-#' constructor help page.
+#' @rdname indexes
 setGeneric("indexes", function(x) standardGeneric("indexes"))
 
 #' @name dirs
-#' @exportMethod dirs
+#' @export
 #' @docType methods
-#' @rdname ballgown-methods
-#' @return for \code{dirs}: paths to the on-disk directories holding the data (created with 
-#' \code{tablemaker}) used to create \code{x}
+#' @rdname dirs
 setGeneric("dirs", function(x) standardGeneric("dirs"))
 
 #' @name sampleNames
