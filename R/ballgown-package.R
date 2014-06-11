@@ -8,7 +8,7 @@
 #' @import splines
 #' @importFrom sva f.pvalue
 #' @importFrom rtracklayer import 
-#' @import cummeRbund
+#' @importFrom cummeRbund readCufflinks repFpkm isoforms genes CDS TSS
 #' @importFrom reshape cast
 #' @import limma
 NULL

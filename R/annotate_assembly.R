@@ -1,5 +1,5 @@
 #' match assembled transcripts to annotated transcripts
-#' 
+#'
 #' @param assembled \code{GRangesList} object representing assembled transcripts
 #' @param annotated \code{GRangesList} object representing annotated transcripts
 #' 
