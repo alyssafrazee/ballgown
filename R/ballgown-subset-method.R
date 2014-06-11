@@ -1,4 +1,25 @@
-# subset method for ballgown
+#' subset ballgown objects to specific samples or genomic locations
+#' 
+#' @name subset
+#' @exportMethod subset
+#' @docType methods
+#' @rdname subset
+#' @aliases subset,ballgown-method
+#' @param x a ballgown object
+#' @param cond Condition on which to subset. See details.
+#' @param genomesubset if TRUE, subset \code{x} to a specific part of the genome. Otherwise, subset
+#'   x to only include specific samples. TRUE by default.
+#' @return a subsetted ballgown object, containing only the regions or samples satisfying 
+#'   \code{cond}.
+#' 
+#' @details To use \code{subset}, you must provide the \code{cond} argument as a string representing
+#' a logical expression specifying your desired subset. The subset expression can either involve 
+#' column names of \code{texpr(x, "all")} (if \code{genomesubset} is \code{TRUE}) or of 
+#' \code{pData(x)} (if \code{genomesubset} is \code{FALSE}). For example, if you wanted a ballgown 
+#' object for only chromosome 22, you might call \code{subset(x, "chr == 'chr22'")}. 
+#' (Be sure to handle quotes within character strings appropriately). 
+#' 
+#' @author Alyssa Frazee
 setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
     stopifnot(class(cond) == 'character')
 

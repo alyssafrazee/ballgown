@@ -5,6 +5,8 @@
 \alias{iexpr,ballgown-method}
 \title{extract transcript-level expression measurements from ballgown objects}
 \usage{
+iexpr(x, ...)
+
 \S4method{iexpr}{ballgown}(x, meas = "rcount")
 }
 \arguments{
