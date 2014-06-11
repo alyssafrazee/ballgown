@@ -24,6 +24,8 @@ setGeneric("indexes", function(x) standardGeneric("indexes"))
 #' @rdname dirs
 setGeneric("dirs", function(x) standardGeneric("dirs"))
 
+#' PLACEHOLDER TITLE
+#' 
 #' @name sampleNames
 #' @exportMethod sampleNames
 #' @docType methods

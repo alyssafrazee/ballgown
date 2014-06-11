@@ -11,6 +11,7 @@
 \alias{sampleNames}
 \alias{subset}
 \alias{texpr}
+\title{PLACEHOLDER TITLE}
 \usage{
 sampleNames(x)
 
@@ -57,6 +58,9 @@ for \code{mergedDate}: the date \code{x} was created
 for \code{*expr} methods: a feature-by-sample table with the specified expression
 measurement(s) in the cells. Return is a data frame if \code{meas} is \code{"all"} and a matrix
 otherwise.
+}
+\description{
+PLACEHOLDER TITLE
 }
 \details{
 To use \code{subset}, you must provide the \code{cond} argument as a string representing
