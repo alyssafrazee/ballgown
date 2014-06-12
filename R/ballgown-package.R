@@ -12,4 +12,5 @@
 #' @importFrom cummeRbund readCufflinks repFpkm isoforms genes CDS TSS
 #' @importFrom reshape cast
 #' @import limma
+#' @import methods
 NULL

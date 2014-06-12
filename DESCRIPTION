@@ -7,8 +7,9 @@ Title: Flexible, isoform-level differential expression analysis
 Description: Tools for statistical analysis of assembled transcriptomes,
     including flexible differential expression analysis, visualization of
     transcript structures, and matching of assembled transcripts to annotation.
+Depends:
+    methods
 Imports:
-    methods,
     GenomicRanges,
     IRanges,
     RColorBrewer,
