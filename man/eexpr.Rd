@@ -5,7 +5,7 @@
 \alias{eexpr,ballgown-method}
 \title{extract exon-level expression measurements from ballgown objects}
 \usage{
-eexpr(x, ...)
+eexpr(x, meas)
 
 \S4method{eexpr}{ballgown}(x, meas = "rcount")
 }
