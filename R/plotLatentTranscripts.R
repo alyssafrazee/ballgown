@@ -43,7 +43,7 @@ plotLatentTranscripts = function(gene, gown, method=c("hclust", "kmeans"), k=NUL
   
 	## work with reasonably small gown object
 	cond = paste0("gene_id == \"", gene, "\"")
-	gown = subset(gown, cond, global=FALSE)
+	gown = subset(gown, cond)
 	
 	## plot setup:
 	ma = IRanges::as.data.frame(structure(gown)$trans)
