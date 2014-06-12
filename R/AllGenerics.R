@@ -39,13 +39,13 @@ setGeneric("mergedDate", function(x) standardGeneric("mergedDate"))
 #' @name indexes<-
 #' @export
 #' @docType methods
-#' @rdname ballgown-replace-methods
+#' @rdname indexes-replace
 setGeneric("indexes<-", function(x, value) standardGeneric("indexes<-"))
 
 #' @name data<-
 #' @export
 #' @docType methods
-#' @rdname ballgown-replace-methods
+#' @rdname data-replace
 setGeneric("data<-", function(x, value) standardGeneric("data<-"))
 
 #' @name subset
@@ -61,9 +61,9 @@ setGeneric("subset", function(x, ...) standardGeneric("subset"))
 setGeneric("pData", function(x) standardGeneric("pData"))
 
 #' @name pData<-
-#' @exportMethod pData<-
+#' @export
 #' @docType methods
-#' @rdname ballgown-replace-methods
+#' @rdname pData-replace
 setGeneric("pData<-", function(x, value) standardGeneric("pData<-"))
 
 #' @name texpr
@@ -79,7 +79,7 @@ setGeneric("texpr", function(x, meas) standardGeneric("texpr"))
 setGeneric("eexpr", function(x, meas) standardGeneric("eexpr"))
 
 #' @name iexpr
-#' @exportMethod iexpr
+#' @export
 #' @docType methods
 #' @rdname iexpr
 setGeneric("iexpr", function(x, meas) standardGeneric("iexpr"))
