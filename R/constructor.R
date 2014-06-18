@@ -198,7 +198,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         exonAll = NULL
         for(f in exonFiles){
             ind = which(exonFiles == f)
-            intronAll[[ind]] = .readExon(f, meas)
+            exonAll[[ind]] = .readExon(f, meas)
         }
 
         ## Merge the exon results
