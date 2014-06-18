@@ -1,5 +1,13 @@
 # Ballgown
-R package for downstream analysis of transcript assemblies. This is the bleeding-edge, development version.  Please do submit issues, pull requests, bug fixes, usability improvements, etc.
+R package for downstream analysis of transcript assemblies. Please feel very, very free to submit issues, pull requests, bug fixes, usability improvements, etc. 
+
+### "alpha" branch
+This branch is called "alpha," and to the best of our knowledge, it is functional as of June 18, 2014. In preparation for submission to Bioconductor, we are making a few major changes that will eventually be merged into the "master" branch. These changes might break code written with ballgown before June 2014, but never fear! This branch ("alpha") will help with backwards compatibility. Install with:
+
+```R
+library(devtools)
+install_github('ballgown', 'alyssafrazee', ref='alpha')
+```
 
 ## (0) installation
 After installing the `devtools` package from CRAN and the `GenomicRanges` package from Bioconductor, run:
