@@ -252,7 +252,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         tAll = NULL
         for(f in tFiles){
             ind = which(tFiles == f)
-            tAll[[ind]] = .readTrancript(f, meas)
+            tAll[[ind]] = .readTranscript(f, meas)
         }
 
         ## Merge the transcript results
