@@ -1,30 +1,47 @@
 ### constructor function for ballgown objects
 
+# "rcount", "ucount", 
+# "mrcount", "cov", "cov_sd", "mcov", "mcov_sd", or "FPKM"
+
 ### a couple helper functions:
-.readIntron <- function(file){
-    intron <- read.table(file, header=TRUE, sep="\t", colClasses=c("integer", "character", "factor", 
-        "integer", "integer", "integer", "integer", "numeric"))
-    intron <- intron[order(intron$i_id), ]
-    rownames(intron) <- 1:nrow(intron)
+.readIntron <- function(file, meas){
+    cc = c('integer', 'character', 'factor', 'integer', 'integer', 'integer', 'integer', 'numeric')
+    if(!identical(meas, 'all')){
+        dummy = c(rep(meas[1], 5), 'rcount', 'ucount', 'mrcount')
+        cc[which(!(dummy %in% meas))] = 'NULL'
+    }
+    intron = read.table(file, header=TRUE, sep="\t", colClasses=cc)
+    intron = intron[order(intron$i_id), ]
+    rownames(intron) = 1:nrow(intron)
     return(intron)
 }
 
-.readExon <- function(file) {
-    exon <- read.table(file, header=TRUE, sep="\t", colClasses=c("integer", "character", "factor", 
-        "integer", "integer", "integer", "integer", "numeric", "numeric", "numeric", "numeric", 
-        "numeric"))
-    exon <- exon[order(exon$e_id), ]
-    rownames(exon) <- 1:nrow(exon)
+.readExon <- function(file, meas) {
+    cc = c('integer', 'character', 'factor', 'integer', 'integer', 
+        'integer', 'integer', rep('numeric', 5))
+    if(!identical(meas, 'all')){
+        dummy = c(rep(meas[1], 5), 'rcount', 'ucount', 'mrcount', 'cov', 
+            'cov_sd', 'mcov', 'mcov_sd')
+        cc[which(!(dummy %in% meas))] = 'NULL'
+    }
+    exon = read.table(file, header=TRUE, sep="\t", colClasses=cc)
+    exon = exon[order(exon$e_id), ]
+    rownames(exon) = 1:nrow(exon)
     return(exon)
 }
 
-.readTrans <- function(file) {
-    trans <- read.table(file, header=TRUE, sep="\t", colClasses=c("integer", "character", "factor", 
-        "integer", "integer", "character", "integer", "integer", "character", "character", 
-        "numeric", "numeric"))
-    trans <- trans[order(trans$t_id), ]
-    rownames(trans) <- 1:nrow(trans)
-    return(trans)
+.readTranscript <- function(file, meas) {
+    cc = c('integer', 'character', 'factor', 'integer', 'integer', 
+        'character', 'integer', 'integer', 'character', 'character', 
+        'numeric', 'numeric')
+    if(!identical(meas, 'all')){
+        if(!('cov' %in% meas)) cc[11] = 'NULL'
+        if(!('FPKM' %in% meas)) cc[12] = 'NULL'
+    }
+    transscript = read.table(file, header=TRUE, sep="\t", colClasses=cc)
+    transcript = transcript[order(transcript$t_id), ]
+    rownames(transcript) = 1:nrow(transcript)
+    return(transcript)
 }
 
 #' constructor function for ballgown objects
@@ -45,6 +62,11 @@
 #' corresponding to phenotypic variables, or a path to a file containing phenotype data.
 #' @param verbose if \code{TRUE}, print status messages and timing information as the object is 
 #' constructed.
+#' @param meas character vector containing either "all" or one or more of: "rcount", "ucount", 
+#'   "mrcount", "cov", "cov_sd", "mcov", "mcov_sd", or "FPKM". The resulting ballgown object 
+#'   will only contain the specified expression measurements, for the appropriate features. See 
+#'   vignette for which expression measurements are available for which features. "all" creates the 
+#'   full object.
 #' @param ... extra arguments for \code{read.table}, if \code{pData} is a path to a file.
 #' 
 #' @details Because experimental data is recorded so variably, it is the user's responsibility to 
@@ -67,13 +89,16 @@
 #' @rdname ballgown-constructor
 #' 
 #' @export
-ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = NULL, pData = NULL, 
-    verbose=TRUE, ...){
+ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, 
+    bamfiles = NULL, pData = NULL, verbose=TRUE, meas="all", ...){
     if(verbose) message(date())
 
     if(all(c(is.null(samples),is.null(dataDir),is.null(samplePattern)))){
         stop("must provide either \"samples\" or both \"dataDir\" and \"samplePattern\"")
     }
+
+    meas = match.arg(meas, c("rcount", "ucount", "mrcount", "cov", 
+        "cov_sd", "mcov", "mcov_sd", "FPKM", "all"))
 
     ## Determine where data is located
     if(is.null(samples)){
@@ -88,7 +113,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     }
 
     ## check to see if you actually have ballgown data:
-    n <- length(samples)
+    n = length(samples)
     subfiles = list.files(samples)
     ctabs = subfiles[subfiles %in% 
         c('e_data.ctab', 'i_data.ctab', 't_data.ctab', 'e2t.ctab', 'i2t.ctab')]
@@ -99,34 +124,55 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
 
     ## Read tables linking exons/introns to transcripts
     if(verbose) message(paste0(date(), ": Reading linking tables"))
-    e2t <- read.table(list.files(samples[1], "e2t.ctab", full.names=TRUE), 
+    e2t = read.table(list.files(samples[1], "e2t.ctab", full.names=TRUE), 
         header=TRUE, sep="\t", colClasses=c("integer", "integer"))
-    i2t <- read.table(list.files(samples[1], "i2t.ctab", full.names=TRUE), 
+    i2t = read.table(list.files(samples[1], "i2t.ctab", full.names=TRUE), 
         header=TRUE, sep="\t", colClasses=c("integer", "integer"))
 
     ## Order by transcript id
-    e2t <- e2t[order(e2t$t_id), ]
-    i2t <- i2t[order(i2t$t_id), ]
-    rownames(e2t) <- 1:nrow(e2t)
-    rownames(i2t) <- 1:nrow(i2t)
+    e2t = e2t[order(e2t$t_id), ]
+    i2t = i2t[order(i2t$t_id), ]
+    rownames(e2t) = 1:nrow(e2t)
+    rownames(i2t) = 1:nrow(i2t)
 
     ## Read counts for all introns 
     if(verbose) message(paste0(date(), ": Reading intron data files"))
-    intronFiles <- sapply(samples, list.files, pattern="i_data.ctab", full.names=TRUE)
-    intronAll <- lapply(intronFiles, .readIntron)
 
-    ## Merge the intron results
-    if(verbose) message(paste0(date(), ": Merging intron data"))
-    #[ensure ctab files all contain same introns]
-    sumdiff <- sapply(intronAll, function(x) sum(x$i_id != intronAll[[1]]$i_id))
-    if(!(all(sumdiff==0))){
-        stop('intron ids were either not the same or not in the same order across samples. 
-            double check i_data.ctab for each sample.')
+    # if intron data is requested:
+    if( any(c('all', 'rcount', 'ucount', 'mrcount') %in% meas)){
+        intronFiles = sapply(samples, list.files, pattern="i_data.ctab", full.names=TRUE)
+        intronAll = NULL
+        for(f in intronFiles){
+            ind = which(intronFiles == f)
+            intronAll[[ind]] = .readIntron(f, meas)
+        }
+
+        ## Merge the intron results
+        if(verbose) message(paste0(date(), ": Merging intron data"))
+        #[ensure ctab files all contain same introns]
+        sumdiff = sapply(intronAll, function(x) sum(x$i_id != intronAll[[1]]$i_id))
+        if(!(all(sumdiff==0))){
+            stop('intron ids were either not the same or not in the same order across samples. 
+                double check i_data.ctab for each sample.')
+        }
+
+        idataOnly = lapply(intronAll[2:length(intronAll)], function(x) x[,-c(1:5)])
+        intron = data.frame(intronAll[[1]], as.data.frame(idataOnly))
+        if(identical(meas, 'all')){
+            colnames(intron) = c('i_id', 'chr', 'strand', 'start', 'end', 
+                paste(c('rcount', 'ucount', 'mrcount'), rep(names(samples), each=3), sep="."))
+        }else{
+            meas_avail = intersect(c('rcount', 'ucount', 'mrcount'), meas) 
+            #^order important! meas has to go after rcount/ucount/mrcount because of file order
+            #^intersect() keeps in order of first thing.
+            colnames(intron) = c('i_id', 'chr', 'strand', 'start', 'end',
+                paste(meas_avail, rep(names(samples), each=length(meas_avail)), sep="."))
+        }
+    } else { # no intron data requested:
+        f1 = list.files(samples[1], pattern='i_data.ctab', full.names=TRUE)
+        intron = .readIntron(f1, meas)
+        stopifnot(ncol(intron) == 5)
     }
-    idataOnly <- lapply(intronAll[2:length(intronAll)], function(x) x[,6:ncol(x)]);
-    intron <- data.frame(intronAll[[1]], as.data.frame(idataOnly))
-    colnames(intron)  <- c("i_id", "chr", "strand", "start", "end", 
-        paste(c("rcount", "ucount", "mrcount"), rep(names(samples), each=3), sep="."))
 
     ## Make intron data into GRanges object
     #A. fix strand information for compatibility w/ GRanges
@@ -136,27 +182,52 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     tnamesin = split(i2t$t_id, i2t$i_id)
     tnamesin.ord = as.character(tnamesin)[match(intron$i_id, names(tnamesin))]
     #C. make the GRanges object
-    introngr = GRanges(seqnames=Rle(intron$chr), ranges=IRanges(start=intron$start, end=intron$end),
-        strand = Rle(intron$strand), id=intron$i_id, transcripts = tnamesin.ord)
+    introngr = GRanges(seqnames=Rle(intron$chr), 
+        ranges=IRanges(start=intron$start, end=intron$end),
+        strand = Rle(intron$strand), 
+        id=intron$i_id, 
+        transcripts = tnamesin.ord)
 
     ## Read exon data
     if(verbose) message(paste0(date(), ": Reading exon data files"))
-    exonFiles <- sapply(samples, list.files, pattern="e_data.ctab", full.names=TRUE)
-    exonAll <- lapply(exonFiles, .readExon)
 
-    ## Merge the exon results
-    if(verbose) message(paste0(date(), ": Merging exon data"))
-    #[ensure ctab files all contain same exons]
-    sumdiffex <- sapply(exonAll, function(x) sum(x$e_id != exonAll[[1]]$e_id))
-    if(!(all(sumdiffex==0))){
-        stop('exon ids were either not the same or not in the same order across samples. 
-            double check e_data.ctab for each sample.')
+    # if any exon data is requested:
+    emeas = c('all', 'rcount', 'ucount', 'mrcount', 'cov', 'cov_sd', 'mcov', 'mcov_sd')
+    if( any(emeas %in% meas)){
+        exonFiles = sapply(samples, list.files, pattern="e_data.ctab", full.names=TRUE)
+        exonAll = NULL
+        for(f in exonFiles){
+            ind = which(exonFiles == f)
+            intronAll[[ind]] = .readExon(f, meas)
+        }
+
+        ## Merge the exon results
+        if(verbose) message(paste0(date(), ": Merging exon data"))
+        #[ensure ctab files all contain same exons]
+        sumdiffex = sapply(exonAll, function(x){
+            sum(x$e_id != exonAll[[1]]$e_id)
+        })
+        if(!(all(sumdiffex==0))){
+            stop('exon ids were either not the same or not in the same order across samples. 
+                double check e_data.ctab for each sample.')
+        }
+
+        edataOnly = lapply(exonAll[2:length(exonAll)], function(x) x[,-c(1:5)])
+        exon = data.frame(exonAll[[1]], as.data.frame(edataOnly))
+        if(identical(meas, 'all')){
+            colnames(exon) = c('e_id', 'chr', 'strand', 'start', 'end', 
+                paste(emeas[-1], rep(names(samples), each=7), sep="."))
+        }else{
+            meas_avail = intersect(emeas[-1], meas) 
+            #^order important! 
+            colnames(exon) = c('e_id', 'chr', 'strand', 'start', 'end',
+                paste(meas_avail, rep(names(samples), each=length(meas_avail)), sep="."))
+        }
+    } else { # no exon data requested:
+        f1 = list.files(samples[1], pattern='e_data.ctab', full.names=TRUE)
+        intron = .readExon(f1, meas)
+        stopifnot(ncol(exon) == 5)
     }
-    edataOnly <- lapply(exonAll[2:length(exonAll)], function(x) x[,6:ncol(x)])
-    exon <- data.frame(exonAll[[1]], as.data.frame(edataOnly))
-    colnames(exon) <- c("e_id", "chr", "strand", "start", "end", 
-        paste(c("rcount", "ucount", "mrcount", "cov", "cov_sd", "mcov", "mcov_sd"), 
-            rep(names(samples), each=7), sep="."))
 
     ## Make exon data into GRanges object
     #A. fix strand information for compatibility w/ GRanges
@@ -166,26 +237,51 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     tnamesex = split(e2t$t_id, e2t$e_id)
     #C. make the GRanges object
     tnamesex.ord = as.character(tnamesex)[match(exon$e_id, names(tnamesex))]
-    exongr = GRanges(seqnames=Rle(exon$chr), ranges=IRanges(start=exon$start, end=exon$end), 
-        strand=Rle(exon$strand), id=exon$e_id, transcripts=tnamesex.ord)
+    exongr = GRanges(seqnames=Rle(exon$chr), 
+        ranges=IRanges(start=exon$start, end=exon$end), 
+        strand=Rle(exon$strand), 
+        id=exon$e_id, 
+        transcripts=tnamesex.ord)
 
     ## Read transcript data
     if(verbose) message(paste0(date(), ": Reading transcript data files"))
-    transFiles <- sapply(samples, list.files, pattern="t_data.ctab", full.names=TRUE)
-    transAll <- lapply(transFiles, .readTrans)
 
-    ## Merge transcript results
-    if(verbose) message(paste0(date(),": Merging transcript data"))
-    #[ensure ctab files all contain same transcripts]
-    sumdifft <- sapply(transAll, function(x) sum(x$t_id != transAll[[1]]$t_id))
-    if(!(all(sumdifft==0))){
-        stop('transcript ids were either not the same or not in the same order across samples. 
+    # if any transcript data requested:
+    if( any(c('all', 'cov', 'FPKM') %in% meas)){
+        tFiles = sapply(samples, list.files, pattern="t_data.ctab", full.names=TRUE)
+        tAll = NULL
+        for(f in tFiles){
+            ind = which(tFiles == f)
+            tAll[[ind]] = .readTrancript(f, meas)
+        }
+
+        ## Merge the transcript results
+        if(verbose) message(paste0(date(), ": Merging transcript data"))
+        #[ensure ctab files all contain same transcripts]
+        sumdifft = sapply(tAll, function(x) sum(x$t_id != tAll[[1]]$t_id))
+        if(!(all(sumdifft==0))){
+            stop('transcript ids were either not the same or not in the same order across samples. 
             double check t_data.ctab for each sample.')
+        }
+
+        tdataOnly = lapply(tAll[2:length(tAll)], function(x) x[,-c(1:10)])
+        transcript = data.frame(tAll[[1]], as.data.frame(tdataOnly))
+        if(identical(meas, 'all')){
+            colnames(transcript) = c('t_id', 'chr', 'strand', 'start', 'end', 't_name', 
+                'num_exons', 'length', 'gene_id', 'gene_name', 
+                paste(c('cov', 'FPKM'), rep(names(samples), each=2), sep="."))
+        }else{
+            meas_avail = intersect(c('cov', 'FPKM'), meas) 
+            #^order important!
+            colnames(transcript) = c('i_id', 'chr', 'strand', 'start', 'end', 't_name',
+                'num_exons', 'length', 'gene_id', 'gene_name',
+                paste(meas_avail, rep(names(samples), each=length(meas_avail)), sep="."))
+        }
+    } else { # no transcript data requested:
+        f1 = list.files(samples[1], pattern='t_data.ctab', full.names=TRUE)
+        transcript = .readTranscript(f1, meas)
+        stopifnot(ncol(transcript) == 10)
     }
-    tdataOnly <- lapply(transAll[2:length(transAll)], function(x) x[,11:ncol(x)])
-    trans <- data.frame(transAll[[1]], as.data.frame(tdataOnly))
-    colnames(trans) <- c("t_id", "chr", "strand", "start", "end", "t_name", "num_exons", "length", 
-        "gene_id", "gene_name", paste(c("cov", "FPKM"), rep(names(samples), each=2), sep="."))
 
     ## Make transcripts into a GRanges list object
     mm = match(e2t$e_id, mcols(exongr)$id)
@@ -193,10 +289,10 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
         warning(paste('the following exon(s) did not appear in e_data.ctab:',
         paste(e2t$e_id[which(is.na(mm))], collapse=", ")))
     }
-    transgrl = split(exongr[mm[!is.na(mm)]], e2t$t_id[!is.na(mm)])
+    tgrl = split(exongr[mm[!is.na(mm)]], e2t$t_id[!is.na(mm)])
 
     ## Connect transcripts to genes:
-    t2g = data.frame(t_id = trans$t_id, g_id = trans$gene_id)
+    t2g = data.frame(t_id = transcript$t_id, g_id = transcript$gene_id)
 
     ## Read phenotype table, if given:
     if(is.character(pData)){
@@ -232,10 +328,10 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, bamfiles = N
     if(is.null(pData)) phx = NULL
 
     if(verbose) message("Wrapping up the results")
-    result <- new("ballgown", data=list(intron=intron, exon=exon, trans=trans), 
+    result = new("ballgown", data=list(intron=intron, exon=exon, trans=transcript), 
         indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles=bamfiles, pData=phx), 
         structure=list(intron=introngr, exon=exongr, trans=transgrl), 
-        dirs=samples, mergedDate=date())
+        dirs=samples, mergedDate=date(), meas=meas)
 
     if(verbose) message(date())
     return(result)

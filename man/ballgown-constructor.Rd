@@ -5,7 +5,7 @@
 \title{constructor function for ballgown objects}
 \usage{
 ballgown(samples = NULL, dataDir = NULL, samplePattern = NULL,
-  bamfiles = NULL, pData = NULL, verbose = TRUE, ...)
+  bamfiles = NULL, pData = NULL, verbose = TRUE, meas = "all", ...)
 }
 \arguments{
 \item{samples}{vector of file paths to folders containing sample-specific ballgown data
@@ -27,6 +27,12 @@ corresponding to phenotypic variables, or a path to a file containing phenotype 
 
 \item{verbose}{if \code{TRUE}, print status messages and timing information as the object is
 constructed.}
+
+\item{meas}{character vector containing either "all" or one or more of: "rcount", "ucount",
+"mrcount", "cov", "cov_sd", "mcov", "mcov_sd", or "FPKM". The resulting ballgown object
+will only contain the specified expression measurements, for the appropriate features. See
+vignette for which expression measurements are available for which features. "all" creates the
+full object.}
 
 \item{...}{extra arguments for \code{read.table}, if \code{pData} is a path to a file.}
 }

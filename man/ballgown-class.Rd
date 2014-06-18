@@ -20,6 +20,10 @@ information (e.g., phenotype data and locations of read alignment files)}
 \item{\code{dirs}}{directories holding data created by \code{tablemaker}}
 
 \item{\code{mergedDate}}{date the ballgown object was created}
+
+\item{\code{meas}}{which expression measurement(s) the object contains in its data slot. Vector of one or
+  more of "rcount", "ucount", "mrcount", "cov", "cov_sd", "mcov", "mcov_sd", or "FPKM". See
+  vignette for details.}
 }}
 \author{
 Alyssa Frazee, Leonardo Collado Torres, Jeff Leek
