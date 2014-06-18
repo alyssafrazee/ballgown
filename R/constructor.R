@@ -38,7 +38,7 @@
         if(!('cov' %in% meas)) cc[11] = 'NULL'
         if(!('FPKM' %in% meas)) cc[12] = 'NULL'
     }
-    transscript = read.table(file, header=TRUE, sep="\t", colClasses=cc)
+    transcript = read.table(file, header=TRUE, sep="\t", colClasses=cc)
     transcript = transcript[order(transcript$t_id), ]
     rownames(transcript) = 1:nrow(transcript)
     return(transcript)
