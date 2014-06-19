@@ -2,9 +2,18 @@
 R package for downstream analysis of transcript assemblies. This is the bleeding-edge, development version.  Please do submit issues, pull requests, bug fixes, usability improvements, etc.
 
 ## (0) installation
-After installing the `devtools` package from CRAN and the `GenomicRanges` package from Bioconductor, run:
+To install `ballgown`, you will need the `devtools` package from CRAN and a few other dependencies. The R code to install all dependencies and `ballgown` is:
 
-```S
+```R
+source("http://bioconductor.org/biocLite.R")
+biocLite('GenomicRanges')
+biocLite('sva')
+biocLite('cummeRbund')
+biocLite('rtracklayer')
+install.packages('RColorBrewer')
+install.packages('reshape')
+install.packages('devtools')
+
 library(devtools)
 install_github('ballgown', 'alyssafrazee')
 ```
