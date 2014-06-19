@@ -9,14 +9,26 @@
 #' @param meas type of measurement to extract. Can be "rcount", "ucount", "mrcount", "cov", "mcov",
 #'             or "all". Default "rcount".
 #' @return exon-by-sample matrix containing exon-level expression values (measured by \code{meas})
-setMethod("eexpr", "ballgown", function(x, meas="rcount"){
-    meas = match.arg(meas, c("rcount","ucount","mrcount","cov","mcov","all"))
-    if(meas!="all"){
+setMethod('eexpr', 'ballgown', function(x, meas='rcount'){
+    emeas = c('all', 'rcount', 'ucount', 'mrcount', 'cov', 'mcov', 'cov_sd', 'mcov_sd')
+    meas = match.arg(meas, emeas)
+    if(meas!='all'){
+        if(!identical(x@meas, 'all')){
+            if(!(meas %in% x@meas)){
+                meas_avail = c(intersect(x@meas, emeas), 'all')
+                stop(paste(meas, 'measurements were not included when this ballgown object was
+                    created. Instead, you can use eexpr with these measurements:', meas_avail))
+            }
+        }
         expr = data(x)$exon[,-c(1:5)]
         expr = expr[,sapply(colnames(expr), function(x) strsplit(x,split="\\.")[[1]][1]==meas)]
         rownames(expr) = data(x)$exon$e_id
         expr = as.matrix(expr)
     }else{
+        if(!any(emeas[-1] %in% x@meas) & !identical(x@meas, 'all')){
+            warning('No exon-level expression measurements are included in this ballgown object. 
+                Returning data frame of all exons\' genomic coordinates.')
+        }
         expr = data(x)$exon
     }
     return(expr)
@@ -32,14 +44,25 @@ setMethod("eexpr", "ballgown", function(x, meas="rcount"){
 #' @param x a ballgown object
 #' @param meas type of measurement to extract. Can be "cov", "FPKM", or "all". Default "FPKM".
 #' @return transcript-by-sample matrix containing expression values (measured by \code{meas})
-setMethod("texpr", "ballgown", function(x, meas="FPKM"){
-    meas = match.arg(meas, c("cov","FPKM","all"))
-    if(meas!="all"){
+setMethod('texpr', 'ballgown', function(x, meas='FPKM'){
+    meas = match.arg(meas, c('cov', 'FPKM', 'all'))
+    if(meas!='all'){
+        if(!identical(x@meas, 'all')){
+            if(!(meas %in% x@meas)){
+                meas_avail = c(intersect(x@meas, c('cov', 'FPKM')), 'all')
+                stop(paste(meas, 'measurements were not included when this ballgown object was
+                    created. Instead, you can use texpr with these measurements:', meas_avail))
+            }
+        }
         expr = data(x)$trans[,-c(1:10)]
         expr = expr[,sapply(colnames(expr), function(x) strsplit(x,split="\\.")[[1]][1]==meas)]
         rownames(expr) = data(x)$trans$t_id
         expr = as.matrix(expr)
     }else{
+        if(!any(c('cov', 'FPKM') %in% x@meas) & !identical(x@meas, 'all')){
+            warning('No transcript-level expression measurements are included in this ballgown 
+                object. Returning data frame of transcript structure information.')
+        }
         expr = data(x)$trans
     }
     return(expr)
@@ -57,14 +80,25 @@ setMethod("texpr", "ballgown", function(x, meas="FPKM"){
 #'   Default "rcount".
 #' @return intron-by-sample matrix containing the number of reads (measured as specified by 
 #'   \code{meas}) supporting each intron, in each sample.
-setMethod("iexpr", "ballgown", function(x, meas="rcount"){
-    meas = match.arg(meas, c("rcount","ucount","mrcount","all"))
-    if(meas!="all"){
+setMethod('iexpr', 'ballgown', function(x, meas='rcount'){
+    meas = match.arg(meas, c('rcount', 'ucount', 'mrcount', 'all'))
+    if(meas!='all'){
+        if(!identical(x@meas, 'all')){
+            if(!(meas %in% x@meas)){
+                meas_avail = c(intersect(x@meas, c('rcount', 'ucount', 'mrcount')), 'all')
+                stop(paste(meas, 'measurements were not included when this ballgown object was
+                    created. Instead, you can use iexpr with these measurements:', meas_avail))
+            }
+        }
         expr = data(x)$intron[,-c(1:5)]
         expr = expr[,sapply(colnames(expr), function(x) strsplit(x,split="\\.")[[1]][1]==meas)]
         rownames(expr) = data(x)$intron$i_id
         expr = as.matrix(expr)
     }else{
+        if(!any(c('ucount', 'rcount', 'mrcount') %in% x@meas) & !identical(x@meas, 'all')){
+            warning('No intron-level expression measurements are included in this ballgown object. 
+                Returning data frame of all introns\' genomic coordinates.')
+        }
         expr = data(x)$intron
     }
     return(expr)
@@ -82,7 +116,11 @@ setMethod("iexpr", "ballgown", function(x, meas="rcount"){
 #' @aliases gexpr,ballgown-method
 #' @param x a ballgown object
 #' @return gene-by-sample matrix containing per-sample gene FPKMs.
-setMethod("gexpr", "ballgown", function(x){
+setMethod('gexpr', 'ballgown', function(x){
+    if(!('FPKM' %in% x@meas) & !identical(x@meas, 'all')){
+        stop('gene expression measurements can only be calculated for ballgown objects including 
+            transcript-level FPKM values.')
+    }
     gnames = indexes(x)$t2g$g_id
     inds_by_gene = split(seq(along=gnames), gnames)
     tmeas = texpr(x, "FPKM")
