@@ -97,8 +97,15 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         stop("must provide either \"samples\" or both \"dataDir\" and \"samplePattern\"")
     }
 
-    meas = match.arg(meas, c("rcount", "ucount", "mrcount", "cov", 
-        "cov_sd", "mcov", "mcov_sd", "FPKM", "all"))
+    if(length(setdiff(meas, c("rcount", "ucount", "mrcount", "cov", 
+        "cov_sd", "mcov", "mcov_sd", "FPKM", "all"))) != 0){
+        stop('meas can be either "all" or one or more of "rcount", 
+            "ucount", "cov", "cov_sd", "mcov", "mcov_sd", or "FPKM". See
+            vignette for details.')
+    }
+    if('all' %in% meas & length(meas) > 1){
+        stop('when meas is "all", all types of measurements are included by default.')
+    }
 
     ## Determine where data is located
     if(is.null(samples)){
