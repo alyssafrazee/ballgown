@@ -104,8 +104,8 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
     if(is.null(samples)){
         if(is.null(samplePattern)|is.null(dataDir)) stop("must provide both \"dataDir\" and 
             \"samplePattern\" if \"samples\" is NULL.")
-        samples <- list.files(path=dataDir, pattern=samplePattern, full.names=TRUE)
-        names(samples) <- list.files(path=dataDir, pattern=samplePattern)
+        samples = list.files(path=dataDir, pattern=samplePattern, full.names=TRUE)
+        names(samples) = list.files(path=dataDir, pattern=samplePattern)
     }else{
         names(samples) = sapply(samples, function(x){
             tail(strsplit(x, split="/")[[1]],n=1)
@@ -273,7 +273,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         }else{
             meas_avail = intersect(c('cov', 'FPKM'), meas) 
             #^order important!
-            colnames(transcript) = c('i_id', 'chr', 'strand', 'start', 'end', 't_name',
+            colnames(transcript) = c('t_id', 'chr', 'strand', 'start', 'end', 't_name',
                 'num_exons', 'length', 'gene_id', 'gene_name',
                 paste(meas_avail, rep(names(samples), each=length(meas_avail)), sep="."))
         }
