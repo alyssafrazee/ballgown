@@ -70,19 +70,19 @@ setGeneric("pData<-", function(x, value) standardGeneric("pData<-"))
 #' @export
 #' @docType methods
 #' @rdname texpr
-setGeneric("texpr", function(x, meas) standardGeneric("texpr"))
+setGeneric("texpr", function(x, meas='FPKM') standardGeneric("texpr"))
 
 #' @name eexpr
 #' @export
 #' @docType methods
 #' @rdname eexpr
-setGeneric("eexpr", function(x, meas) standardGeneric("eexpr"))
+setGeneric("eexpr", function(x, meas='rcount') standardGeneric("eexpr"))
 
 #' @name iexpr
 #' @export
 #' @docType methods
 #' @rdname iexpr
-setGeneric("iexpr", function(x, meas) standardGeneric("iexpr"))
+setGeneric("iexpr", function(x, meas='rcount') standardGeneric("iexpr"))
 
 #' @name gexpr
 #' @export

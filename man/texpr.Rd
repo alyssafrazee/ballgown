@@ -5,7 +5,7 @@
 \alias{texpr,ballgown-method}
 \title{extract transcript-level expression measurements from ballgown objects}
 \usage{
-texpr(x, meas)
+texpr(x, meas = "FPKM")
 
 \S4method{texpr}{ballgown}(x, meas = "FPKM")
 }
