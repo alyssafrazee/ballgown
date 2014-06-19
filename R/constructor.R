@@ -225,7 +225,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         }
     } else { # no exon data requested:
         f1 = list.files(samples[1], pattern='e_data.ctab', full.names=TRUE)
-        intron = .readExon(f1, meas)
+        exon = .readExon(f1, meas)
         stopifnot(ncol(exon) == 5)
     }
 
