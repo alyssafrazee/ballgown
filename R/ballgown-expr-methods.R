@@ -15,7 +15,7 @@ setMethod('eexpr', 'ballgown', function(x, meas='rcount'){
     if(meas!='all'){
         if(!identical(x@meas, 'all')){
             if(!(meas %in% x@meas)){
-                meas_avail = c(intersect(x@meas, emeas), 'all')
+                meas_avail = paste(c(intersect(x@meas, emeas), 'all'), collapse=', ')
                 stop(paste(meas, 'measurements were not included when this ballgown object was
                     created. Instead, you can use eexpr with these measurements:', meas_avail))
             }
@@ -49,7 +49,7 @@ setMethod('texpr', 'ballgown', function(x, meas='FPKM'){
     if(meas!='all'){
         if(!identical(x@meas, 'all')){
             if(!(meas %in% x@meas)){
-                meas_avail = c(intersect(x@meas, c('cov', 'FPKM')), 'all')
+                meas_avail = paste(c(intersect(x@meas, c('cov', 'FPKM')), 'all'), collapse=', ')
                 stop(paste(meas, 'measurements were not included when this ballgown object was
                     created. Instead, you can use texpr with these measurements:', meas_avail))
             }
@@ -85,7 +85,8 @@ setMethod('iexpr', 'ballgown', function(x, meas='rcount'){
     if(meas!='all'){
         if(!identical(x@meas, 'all')){
             if(!(meas %in% x@meas)){
-                meas_avail = c(intersect(x@meas, c('rcount', 'ucount', 'mrcount')), 'all')
+                meas_avail = paste(c(intersect(x@meas, c('rcount', 'ucount', 'mrcount')), 'all'),
+                    collapse=', ')
                 stop(paste(meas, 'measurements were not included when this ballgown object was
                     created. Instead, you can use iexpr with these measurements:', meas_avail))
             }
