@@ -59,7 +59,7 @@ plotTranscripts = function(gene, gown, samples = NULL,
     n = length(samples)
     westval = ifelse(labelTranscripts, 4, 2)
     if(n > 1){
-        numrows = round(sqrt(n))
+        numrows = floor(sqrt(n))
         numcols = ceiling(n/numrows)
         par(mfrow=c(numrows, numcols), mar=c(5, westval, 4, 2), oma = c(0, 0, 2, 0))
     }else{
