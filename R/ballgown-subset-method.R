@@ -25,16 +25,16 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
 
     # if you are subsetting by something in the genome (say, a chromosome):
     if(genomesubset){
-        trans = subset(data(x)$trans, eval(parse(text=cond)))  
+        trans = subset(expr(x)$trans, eval(parse(text=cond)))  
         thetx = trans$t_id
     
         inttmp = split(indexes(x)$i2t$i_id, indexes(x)$i2t$t_id)
         theint = as.numeric(unique(unlist(inttmp[names(inttmp) %in% thetx])))
-        intron = subset(data(x)$intron, i_id %in% theint)
+        intron = subset(expr(x)$intron, i_id %in% theint)
     
         extmp = split(indexes(x)$e2t$e_id, indexes(x)$e2t$t_id)
         theex = as.numeric(unique(unlist(extmp[names(extmp) %in% thetx])))
-        exon = subset(data(x)$exon, e_id %in% theex)
+        exon = subset(expr(x)$exon, e_id %in% theex)
     
         e2t = subset(indexes(x)$e2t, t_id %in% thetx)
         i2t = subset(indexes(x)$i2t, t_id %in% thetx)
@@ -45,7 +45,7 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
         grltxids = as.numeric(names(structure(x)$trans))
         transgrl = structure(x)$trans[grltxids %in% thetx]
     
-        return(new("ballgown", data=list(intron=intron, exon=exon, trans=trans), 
+        return(new("ballgown", expr=list(intron=intron, exon=exon, trans=trans), 
             indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles=indexes(x)$bamfiles, 
                 pData=indexes(x)$pData), 
                 structure=list(intron=introngr, exon=exongr, trans=transgrl), 
@@ -82,7 +82,7 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
         iKeepCols = c(1:5, which(icolsamples %in% newsampnames))
         newidat = iexpr(x, 'all')[,iKeepCols]
 
-        return(new("ballgown", data=list(intron=newidat, exon=newedat, trans=newtdat), 
+        return(new("ballgown", expr=list(intron=newidat, exon=newedat, trans=newtdat), 
             indexes=list(e2t=indexes(x)$e2t, i2t=indexes(x)$i2t, t2g=indexes(x)$t2g, 
             bamfiles=newbamfiles, pData=newpd), 
             structure=list(intron=structure(x)$intron, exon=structure(x)$exon, 

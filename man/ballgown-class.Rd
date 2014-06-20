@@ -10,7 +10,7 @@ S4 class for storing and manipulating expression data from assembled transcripto
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{tables containing expression data for genomic features (introns, exons, transcripts)}
+\item{\code{expr}}{tables containing expression data for genomic features (introns, exons, transcripts)}
 
 \item{\code{structure}}{genomic locations of features and their relationships to one another}
 

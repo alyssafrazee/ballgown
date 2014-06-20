@@ -4,7 +4,7 @@
 #'
 #' @aliases Ballgown
 #' 
-#' @slot data tables containing expression data for genomic features (introns, exons, transcripts)
+#' @slot expr tables containing expression data for genomic features (introns, exons, transcripts)
 #' @slot structure genomic locations of features and their relationships to one another
 #' @slot indexes tables connecting components of the assembly and providing other experimental 
 #' information (e.g., phenotype data and locations of read alignment files)
@@ -23,7 +23,7 @@
 #' @author Alyssa Frazee, Leonardo Collado Torres, Jeff Leek
 setClass("ballgown", 
     representation(
-        data = "list",             # coverage data
+        expr = "list",             # coverage data
         indexes = "list",          # reference information
         structure = "list",        # assembly information
         dirs = "character",        # directories where ballgown data is stored

@@ -9,16 +9,16 @@
 #' @param value the updated value for \code{indexes(x)} or a subcomponent
 setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; x})
 
-#' Replacement method for data slot in ballgown objects
+#' Replacement method for expr slot in ballgown objects
 #' 
-#' @name data<-
-#' @exportMethod data<-
+#' @name expr<-
+#' @exportMethod expr<-
 #' @docType methods
-#' @aliases data<-,ballgown-method
-#' @rdname data-replace
+#' @aliases expr<-,ballgown-method
+#' @rdname expr-replace
 #' @param x a ballgown object
-#' @param value the updated value for \code{data(x)} or a subcomponent
-setReplaceMethod("data", "ballgown", function(x, value) {x@data <- value; x})
+#' @param value the updated value for \code{expr(x)} or a subcomponent
+setReplaceMethod("expr", "ballgown", function(x, value) {x@expr <- value; x})
 
 # setReplaceMethod did not work (since it's a subcomponent of indexes?)
 

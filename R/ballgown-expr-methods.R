@@ -21,19 +21,19 @@ setMethod('eexpr', 'ballgown', function(x, meas='rcount'){
                 stop(.makepretty(msg))
             }
         }
-        expr = data(x)$exon[,-c(1:5)]
-        expr = expr[,sapply(colnames(expr), function(x) strsplit(x,split="\\.")[[1]][1]==meas)]
-        rownames(expr) = data(x)$exon$e_id
-        expr = as.matrix(expr)
+        mat = expr(x)$exon[,-c(1:5)]
+        mat = mat[,sapply(colnames(mat), function(y) strsplit(y, split="\\.")[[1]][1]==meas)]
+        rownames(mat) = expr(x)$exon$e_id
+        mat = as.matrix(mat)
     }else{
         if(!any(emeas[-1] %in% x@meas) & !identical(x@meas, 'all')){
             msg = 'No exon-level expression measurements are included in this ballgown object. 
                 Returning data frame of all exons\' genomic coordinates.'
             warning(.makepretty(msg))
         }
-        expr = data(x)$exon
+        mat = expr(x)$exon
     }
-    return(expr)
+    return(mat)
 })
 
 #' extract transcript-level expression measurements from ballgown objects
@@ -57,19 +57,19 @@ setMethod('texpr', 'ballgown', function(x, meas='FPKM'){
                 stop(.makepretty(msg))
             }
         }
-        expr = data(x)$trans[,-c(1:10)]
-        expr = expr[,sapply(colnames(expr), function(x) strsplit(x,split="\\.")[[1]][1]==meas)]
-        rownames(expr) = data(x)$trans$t_id
-        expr = as.matrix(expr)
+        mat = expr(x)$trans[,-c(1:10)]
+        mat = mat[,sapply(colnames(mat), function(y) strsplit(y, split="\\.")[[1]][1]==meas)]
+        rownames(mat) = expr(x)$trans$t_id
+        mat = as.matrix(mat)
     }else{
         if(!any(c('cov', 'FPKM') %in% x@meas) & !identical(x@meas, 'all')){
             msg = 'No transcript-level expression measurements are included in this ballgown 
                 object. Returning data frame of transcript structure information.'
             warning(.makepretty(msg))
         }
-        expr = data(x)$trans
+        mat = expr(x)$trans
     }
-    return(expr)
+    return(mat)
 })
 
 #' extract transcript-level expression measurements from ballgown objects
@@ -96,19 +96,19 @@ setMethod('iexpr', 'ballgown', function(x, meas='rcount'){
                 stop(.makepretty(msg))
             }
         }
-        expr = data(x)$intron[,-c(1:5)]
-        expr = expr[,sapply(colnames(expr), function(x) strsplit(x,split="\\.")[[1]][1]==meas)]
-        rownames(expr) = data(x)$intron$i_id
-        expr = as.matrix(expr)
+        mat = expr(x)$intron[,-c(1:5)]
+        mat = mat[,sapply(colnames(mat), function(y) strsplit(y, split="\\.")[[1]][1]==meas)]
+        rownames(mat) = expr(x)$intron$i_id
+        mat = as.matrix(mat)
     }else{
         if(!any(c('ucount', 'rcount', 'mrcount') %in% x@meas) & !identical(x@meas, 'all')){
             msg = 'No intron-level expression measurements are included in this ballgown object. 
                 Returning data frame of all introns\' genomic coordinates.'
             warning(.makepretty(msg))
         }
-        expr = data(x)$intron
+        mat = expr(x)$intron
     }
-    return(expr)
+    return(mat)
 })
 
 #' extract gene-level expression measurements from ballgown objects
@@ -139,10 +139,10 @@ setMethod('gexpr', 'ballgown', function(x){
     glengths = sapply(width(reduce(glist)), sum)
     tlengths = sapply(width(structure(x)$trans), sum)
     tfrags = tlengths/1000 * tmeas
-    expr = t(sapply(1:length(inds_by_gene), function(i){
+    mat = t(sapply(1:length(inds_by_gene), function(i){
         colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
-    rownames(expr) = names(inds_by_gene)
-    return(expr)
+    rownames(mat) = names(inds_by_gene)
+    return(mat)
 })
 
 

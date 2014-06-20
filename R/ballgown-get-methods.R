@@ -14,17 +14,17 @@
 #'  representing a transcript.
 setMethod("structure", "ballgown", function(x) x@structure)
 
-#' extract data components from ballgown objects
+#' extract expression components from ballgown objects
 #' 
-#' @name data
-#' @exportMethod data
+#' @name expr
+#' @exportMethod expr
 #' @docType methods
-#' @rdname data
-#' @aliases data,ballgown-method
+#' @rdname expr
+#' @aliases expr,ballgown-method
 #' @param x a ballgown object
 #' @return list containing elements \code{intron}, \code{exon}, and \code{trans}, 
 #'  which are feature-by-sample data frames of expression data.
-setMethod("data", "ballgown", function(x) x@data)
+setMethod("expr", "ballgown", function(x) x@expr)
 
 #' extract the indexes from ballgown objects
 #' 

@@ -6,11 +6,11 @@
 #' @rdname structure
 setGeneric("structure", function(x) standardGeneric("structure"))
 
-#' @name data
+#' @name expr
 #' @export
 #' @docType methods
-#' @rdname data
-setGeneric("data", function(x) standardGeneric("data"))
+#' @rdname expr
+setGeneric("expr", function(x) standardGeneric("expr"))
 
 #' @name indexes
 #' @export
@@ -42,11 +42,11 @@ setGeneric("mergedDate", function(x) standardGeneric("mergedDate"))
 #' @rdname indexes-replace
 setGeneric("indexes<-", function(x, value) standardGeneric("indexes<-"))
 
-#' @name data<-
+#' @name expr<-
 #' @export
 #' @docType methods
-#' @rdname data-replace
-setGeneric("data<-", function(x, value) standardGeneric("data<-"))
+#' @rdname expr-replace
+setGeneric("expr<-", function(x, value) standardGeneric("expr<-"))
 
 #' @name subset
 #' @export

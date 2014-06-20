@@ -27,7 +27,7 @@ clusterTranscripts = function(gene, gown, k=NULL, method=c("hclust", "kmeans")){
         nchar(names(structure(gown)$trans))))
     inds = which(strucnames %in% txnames)
     tx = structure(gown)$trans[inds]
-    chr = data(gown)$trans$chr[inds[1]] 
+    chr = texpr(gown, 'all')$chr[inds[1]] 
     #TODO: add error check later, in case the tx's are on different chromosomes.
 
     covind = unique(as.numeric(lapply(tx, function(x) runValue(seqnames(x)))))
