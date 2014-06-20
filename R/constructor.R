@@ -44,6 +44,14 @@
     return(transcript)
 }
 
+# make it so I can write warning/messages and whatnot that respect the 100char limit in my script, 
+# but still look pretty when displayed.
+.makepretty = function(x){
+    msg = gsub('\n', '', x)
+    msg = gsub('    ', '', msg)
+    msg
+}
+
 #' constructor function for ballgown objects
 #' 
 #' @name ballgown-constructor
@@ -99,9 +107,10 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
 
     if(length(setdiff(meas, c("rcount", "ucount", "mrcount", "cov", 
         "cov_sd", "mcov", "mcov_sd", "FPKM", "all"))) != 0){
-        stop('meas can be either "all" or one or more of "rcount", 
+        msg = 'meas can be either "all" or one or more of "rcount", 
             "ucount", "cov", "cov_sd", "mcov", "mcov_sd", or "FPKM". See
-            vignette for details.')
+            vignette for details.'
+        stop(.makepretty(msg))
     }
     if('all' %in% meas & length(meas) > 1){
         stop('when meas is "all", all types of measurements are included by default.')
@@ -125,8 +134,9 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
     ctabs = subfiles[subfiles %in% 
         c('e_data.ctab', 'i_data.ctab', 't_data.ctab', 'e2t.ctab', 'i2t.ctab')]
     if(length(ctabs) != 5*n){
-        stop("something is wrong: are you missing .ctab files? do extra files/folders (other than 
-            tablemaker output folders) match your samples/dataDir/samplePattern argument(s)?")
+        msg = 'something is wrong: are you missing .ctab files? do extra files/folders (other than 
+            tablemaker output folders) match your samples/dataDir/samplePattern argument(s)?'
+        stop(.makepretty(msg))
     }
 
     ## Read tables linking exons/introns to transcripts
@@ -159,8 +169,9 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         #[ensure ctab files all contain same introns]
         sumdiff = sapply(intronAll, function(x) sum(x$i_id != intronAll[[1]]$i_id))
         if(!(all(sumdiff==0))){
-            stop('intron ids were either not the same or not in the same order across samples. 
-                double check i_data.ctab for each sample.')
+            msg = 'intron ids were either not the same or not in the same order across samples. 
+                double check i_data.ctab for each sample.' 
+            stop(.makepretty(msg))
         }
 
         idataOnly = lapply(intronAll[2:length(intronAll)], function(x) x[,-c(1:5)])
@@ -267,8 +278,9 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         #[ensure ctab files all contain same transcripts]
         sumdifft = sapply(tAll, function(x) sum(x$t_id != tAll[[1]]$t_id))
         if(!(all(sumdifft==0))){
-            stop('transcript ids were either not the same or not in the same order across samples. 
-            double check t_data.ctab for each sample.')
+            msg = 'transcript ids were either not the same or not in the same order across samples. 
+                double check t_data.ctab for each sample.'
+            stop(.makepretty(msg))
         }
 
         tdataOnly = lapply(tAll[2:length(tAll)], function(x) x[,-c(1:10)])
@@ -302,41 +314,26 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
     t2g = data.frame(t_id = transcript$t_id, g_id = transcript$gene_id)
 
     ## Read phenotype table, if given:
-    if(is.character(pData)){
-        if(verbose) message(paste0(date(),": Reading phenotype table"))
-        phx = read.table(pData, stringsAsFactors=FALSE, ...)
-        theorder = sapply(names(samples), function(x) which(phx[,1]==x))
-        phx = phx[theorder,]
-        meastypes = ss(colnames(trans)[-c(1:10)], pattern="\\.", slot=1)
-        column_order = ss(colnames(trans)[-c(1:10)], pattern="\\.", slot=2)[meastypes=="FPKM"]
-        if(!all(phx[,1] == column_order)){
-            warning('the rows of pData did not seem to be in the same order as the columns of the 
-                expression data. attempting to rearrange pData.')
-            tmp = try(phx <- phx[,match(column_order, phx[,1])])
+    stopifnot(is.null(pData) | class(pData) == 'data.frame')
+    if(!is.null(pData)){
+        if(!all(pData[,1] == samples)){
+            msg = 'Rows of pData did not seem to be in the same order as the columns of the 
+                expression data. Attempting to rearrange pData...'
+            warning(.makepretty(msg))
+            tmp = try(pData <- pData[,match(samples, pData[,1])])
             if(class(tmp) == "try-error"){
-                stop('first column of pData does not match the names of the folders containing the 
-                    ballgown data.')
-            }
-        }
-    }else if(is.data.frame(pData)){
-        phx = pData
-        meastypes = ss(colnames(trans)[-c(1:10)], pattern="\\.", slot=1)
-        column_order = ss(colnames(trans)[-c(1:10)], pattern="\\.", slot=2)[meastypes=="FPKM"]
-        if(!all(phx[,1] == column_order)){
-            warning('the rows of pData did not seem to be in the same order as the columns of the 
-                expression data. attempting to rearrange pData.')
-            tmp = try(phx <- phx[,match(column_order, phx[,1])])
-            if(class(tmp) == "try-error"){
-                stop('first column of pData does not match the names of the folders containing the 
-                    ballgown data.')
+                msg = 'first column of pData does not match the names of the folders containing the 
+                    ballgown data.'
+                stop(.makepretty(msg))
+            }else{
+                message('successfully rearranged!')
             }
         }
     }
-    if(is.null(pData)) phx = NULL
 
-    if(verbose) message("Wrapping up the results")
-    result = new("ballgown", data=list(intron=intron, exon=exon, trans=transcript), 
-        indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles=bamfiles, pData=phx), 
+    if(verbose) message('Wrapping up the results')
+    result = new('ballgown', data=list(intron=intron, exon=exon, trans=transcript), 
+        indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles=bamfiles, pData=pData), 
         structure=list(intron=introngr, exon=exongr, trans=tgrl), 
         dirs=samples, mergedDate=date(), meas=meas)
 
