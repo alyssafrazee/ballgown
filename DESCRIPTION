@@ -19,3 +19,6 @@ Imports:
     cummeRbund,
     reshape,
     rtracklayer
+Suggests:
+    testthat,
+    knitr
