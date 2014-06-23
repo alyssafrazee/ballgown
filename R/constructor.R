@@ -47,7 +47,7 @@
 # make it so I can write warning/messages and whatnot that respect the 100char limit in my script, 
 # but still look pretty when displayed.
 .makepretty = function(x){
-    msg = gsub('\n', '', x)
+    msg = gsub('\n', ' ', x)
     msg = gsub('    ', '', msg)
     msg
 }
