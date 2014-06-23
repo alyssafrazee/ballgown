@@ -332,7 +332,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
     }
 
     if(verbose) message('Wrapping up the results')
-    result = new('ballgown', data=list(intron=intron, exon=exon, trans=transcript), 
+    result = new('ballgown', expr=list(intron=intron, exon=exon, trans=transcript), 
         indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles=bamfiles, pData=pData), 
         structure=list(intron=introngr, exon=exongr, trans=tgrl), 
         dirs=samples, mergedDate=date(), meas=meas)

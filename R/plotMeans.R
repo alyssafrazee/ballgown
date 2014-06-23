@@ -102,8 +102,8 @@ plotMeans = function(gene, gown, overall=TRUE, groupvar="none",
             # mean transcript-level expression measurement for this group
             t_id = texpr(gown, 'all')$t_id
             smalldat = texpr(gown, 'all')[t_id %in% gtrans$tid,]
-            coltype = as.character(sapply(names(data(gown)$trans), gettype))
-            colsamp = as.character(sapply(names(data(gown)$trans), getsamp))
+            coltype = as.character(sapply(names(expr(gown)$trans), gettype))
+            colsamp = as.character(sapply(names(expr(gown)$trans), getsamp))
             datacols = which(coltype==dattype & colsamp %in% samples[[p]])
             smalldat2 = smalldat[,datacols]
             tmeans = apply(smalldat2, 1, mean)
@@ -113,8 +113,8 @@ plotMeans = function(gene, gown, overall=TRUE, groupvar="none",
             # mean exon-level expression measurement for this group
             e_id = eexpr(gown, 'all')$e_id
             smalldat = eexpr(gown, 'all')[e_id %in% gtrans$id,]
-            coltype = as.character(sapply(names(data(gown)$exon), gettype))
-            colsamp = as.character(sapply(names(data(gown)$exon), getsamp))
+            coltype = as.character(sapply(names(expr(gown)$exon), gettype))
+            colsamp = as.character(sapply(names(expr(gown)$exon), getsamp))
             datacols = which(coltype==dattype & colsamp %in% samples[[p]])
             smalldat2 = smalldat[,datacols]
             emeans = apply(smalldat2, 1, mean)

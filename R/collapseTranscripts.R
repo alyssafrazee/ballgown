@@ -28,7 +28,7 @@ collapseTranscripts = function(gown, dattype=c('cov','FPKM'), method=c('hclust',
     method = match.arg(method)
   
     # number of transcripts for each gene:
-    txnums = table(data(gown)$trans$gene_id)
+    txnums = table(expr(gown)$trans$gene_id)
     genes.uniq = names(txnums)
   
     # number of clusters for each transcript:
@@ -40,7 +40,7 @@ collapseTranscripts = function(gown, dattype=c('cov','FPKM'), method=c('hclust',
     tab = matrix(NA, nrow=sum(k), ncol=nrow(indexes(gown)$pData))
   
     # can test either "cov" or "FPKM" (need to choose one)
-    coltypes = sapply(names(data(gown)$trans), gettype)
+    coltypes = sapply(names(expr(gown)$trans), gettype)
     columns = which(coltypes==dattype)
   
     # set up vector to hold names of your clusters:
@@ -51,7 +51,7 @@ collapseTranscripts = function(gown, dattype=c('cov','FPKM'), method=c('hclust',
         ind = which(genes.uniq == g)
         if(ind==1) tabinds = c(1:(cumsum(k)[1]))
         if(ind!=1) tabinds = c((cumsum(k)[ind-1]+1):(cumsum(k)[ind]))
-        txdata = data(gown)$trans[data(gown)$trans$gene_id==g,]
+        txdata = expr(gown)$trans[expr(gown)$trans$gene_id==g,]
         if(k[ind]==txnums[[ind]]){
             tab[tabinds,]  <- as.matrix(txdata[, columns])
             tclustnames[tabinds] <- paste0("tx", txdata$t_id)
@@ -74,7 +74,7 @@ collapseTranscripts = function(gown, dattype=c('cov','FPKM'), method=c('hclust',
     }
   
     tab = as.data.frame(tab)
-    names(tab) = as.character(sapply(names(data(gown)$trans)[coltypes==dattype], getsamp))
+    names(tab) = as.character(sapply(names(expr(gown)$trans)[coltypes==dattype], getsamp))
     rownames(tab) = tclustnames
     return(tab)
 }  

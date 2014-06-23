@@ -115,7 +115,7 @@ plotTranscripts = function(gene, gown, samples = NULL,
         }
         maxcol = quantile(as.matrix(smalldat), 0.99)
         colscale = seq(0, maxcol, length.out=200)
-        introntypes = unique(as.character(sapply(names(data(gown)$intron)[-c(1:5)], gettype)))
+        introntypes = unique(as.character(sapply(names(expr(gown)$intron)[-c(1:5)], gettype)))
         color.introns = meas %in% introntypes
     }else{
         color.introns = FALSE
@@ -162,12 +162,12 @@ plotTranscripts = function(gene, gown, samples = NULL,
                             col="gray60")
                     }
                     if(color.introns){
-                        intronindex = which(data(gown)$intron$start == gtsub$end[exind]+1 & 
-                            data(gown)$intron$end == gtsub$start[exind+1]-1 & 
-                            data(gown)$intron$chr==unique(gtsub$seqnames) & 
-                            data(gown)$intron$strand == unique(gtsub$strand))
-                        icolumnind = which(names(data(gown)$intron) == colName)
-                        icol = closestColor(data(gown)$intron[intronindex,icolumnind], colscale)
+                        intronindex = which(expr(gown)$intron$start == gtsub$end[exind]+1 & 
+                            expr(gown)$intron$end == gtsub$start[exind+1]-1 & 
+                            expr(gown)$intron$chr==unique(gtsub$seqnames) & 
+                            expr(gown)$intron$strand == unique(gtsub$strand))
+                        icolumnind = which(names(expr(gown)$intron) == colName)
+                        icol = closestColor(expr(gown)$intron[intronindex,icolumnind], colscale)
                         lines(c(gtsub$end[exind]+10,gtsub$start[exind+1]-10),c(txind, txind), lwd=3,
                             col=icol)
                         lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind+0.1, txind+0.1), 
