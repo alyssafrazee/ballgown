@@ -49,7 +49,7 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
             indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles=indexes(x)$bamfiles, 
                 pData=indexes(x)$pData), 
             structure=list(intron=introngr, exon=exongr, trans=transgrl), 
-            dirs=dirs(x), mergedDate=mergedDate(x)), meas=x@meas)
+            dirs=dirs(x), mergedDate=mergedDate(x), meas=x@meas))
     }else{
         # you're doing a phenotype subset
         # structure, some indexes, dirs, and mergedDate stay the same
@@ -87,6 +87,6 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
             bamfiles=newbamfiles, pData=newpd), 
             structure=list(intron=structure(x)$intron, exon=structure(x)$exon, 
                 trans=structure(x)$trans),
-            dirs=dirs(x)[rowIndsToKeep], mergedDate=mergedDate(x)), meas=x@meas)
+            dirs=dirs(x)[rowIndsToKeep], mergedDate=mergedDate(x), meas=x@meas))
     }
 } )
