@@ -67,9 +67,23 @@ setMethod("mergedDate", "ballgown", function(x) x@mergedDate)
 #' @docType methods
 #' @rdname pData
 #' @aliases pData,ballgown-method
-#' @param x a ballgown object
+#' @param object a ballgown object
 #' @return sample-by-phenotype data frame
-setMethod("pData", "ballgown", function(x){
-    return(indexes(x)$pData)
+setMethod("pData", "ballgown", function(object){
+    return(indexes(object)$pData)
+})
+
+#' get names of samples in a ballgown objects
+#' 
+#' @name sampleNames
+#' @exportMethod sampleNames
+#' @docType methods
+#' @rdname sampleNames
+#' @aliases sampleNames,ballgown-method
+#' @param object a ballgown object
+#' @return vector of sample IDs for \code{x}. If \code{pData} exists, samples in its rows correspond 
+#'  to samples in \code{sampleNames(x)} (in order).
+setMethod("sampleNames", "ballgown", function(object){
+    return(names(object@dirs))
 })
 

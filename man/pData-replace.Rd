@@ -5,12 +5,12 @@
 \alias{pData<-,ballgown-method}
 \title{Replacement method for pData slot in ballgown objects}
 \usage{
-pData(x) <- value
+pData(object) <- value
 
-\S4method{pData}{ballgown}(x) <- value
+\S4method{pData}{ballgown,ANY}(object) <- value
 }
 \arguments{
-\item{x}{a ballgown object}
+\item{object}{a ballgown object}
 
 \item{value}{the updated value for \code{pData(x)}.}
 }

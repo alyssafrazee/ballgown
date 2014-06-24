@@ -5,12 +5,12 @@
 \alias{sampleNames,ballgown-method}
 \title{get names of samples in a ballgown objects}
 \usage{
-sampleNames(x)
+sampleNames(object)
 
-\S4method{sampleNames}{ballgown}(x)
+\S4method{sampleNames}{ballgown}(object)
 }
 \arguments{
-\item{x}{a ballgown object}
+\item{object}{a ballgown object}
 }
 \value{
 vector of sample IDs for \code{x}. If \code{pData} exists, samples in its rows correspond

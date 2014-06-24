@@ -29,10 +29,10 @@ setReplaceMethod("expr", "ballgown", function(x, value) {x@expr <- value; x})
 #' @docType methods
 #' @aliases pData<-,ballgown-method
 #' @rdname pData-replace
-#' @param x a ballgown object
+#' @param object a ballgown object
 #' @param value the updated value for \code{pData(x)}.
-setMethod("pData<-", "ballgown", function(x, value) {
-    x@indexes$pData <- value
+setMethod("pData<-", "ballgown", function(object, value) {
+    object@indexes$pData <- value
     ### TODO: check validity of provided pData
-    x}
+    object}
 )

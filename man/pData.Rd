@@ -5,12 +5,12 @@
 \alias{pData,ballgown-method}
 \title{extract phenotype data from a ballgown object}
 \usage{
-pData(x)
+pData(object)
 
-\S4method{pData}{ballgown}(x)
+\S4method{pData}{ballgown}(object)
 }
 \arguments{
-\item{x}{a ballgown object}
+\item{object}{a ballgown object}
 }
 \value{
 sample-by-phenotype data frame

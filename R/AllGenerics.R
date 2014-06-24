@@ -28,7 +28,8 @@ setGeneric("dirs", function(x) standardGeneric("dirs"))
 #' @export
 #' @docType methods
 #' @rdname sampleNames
-setGeneric("sampleNames", function(x) standardGeneric("sampleNames"))
+#' @importFrom Biobase sampleNames
+setGeneric("sampleNames")
 
 #' @name mergedDate
 #' @export
@@ -58,13 +59,15 @@ setGeneric("subset", function(x, ...) standardGeneric("subset"))
 #' @export
 #' @docType methods
 #' @rdname pData
-setGeneric("pData", function(x) standardGeneric("pData"))
+#' @importFrom Biobase pData
+setGeneric("pData")
 
 #' @name pData<-
 #' @export
 #' @docType methods
 #' @rdname pData-replace
-setGeneric("pData<-", function(x, value) standardGeneric("pData<-"))
+#' @importFrom Biobase pData<-
+setGeneric("pData<-")
 
 #' @name texpr
 #' @export
