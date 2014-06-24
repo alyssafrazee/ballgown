@@ -18,7 +18,8 @@ Imports:
     limma,
     cummeRbund,
     reshape,
-    rtracklayer
+    rtracklayer,
+    Biobase
 Suggests:
     testthat,
     knitr
