@@ -30,24 +30,27 @@
 #' @author Alyssa Frazee
 #' @export
 
-plotTranscripts = function(gene, gown, samples = NULL, 
-    colorby = 'transcript', meas = 'FPKM', legend = TRUE, 
-    labelTranscripts = FALSE, main = NULL, colorBorders = FALSE,
-    log = FALSE, logbase = 2, customCol=NULL){
-
+plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
+    meas='FPKM', legend=TRUE, labelTranscripts=FALSE, main=NULL, 
+    colorBorders=FALSE, log=FALSE, logbase=2, customCol=NULL){
 
     if(class(gown)!="ballgown") stop("gown must be a ballgown object")
+
     if(is.null(samples)){
         samples = sampleNames(gown)[1]
-        if(colorby!='none') message(paste('defaulting to sample',samples))
+        if(colorby!='none') message(paste('defaulting to sample', samples))
     }
     
     stopifnot(colorby %in% c('transcript', 'exon', 'none'))
+
     if(colorby == 'transcript'){
         stopifnot(meas %in% c('cov', 'FPKM'))
+        stopifnot(gown@meas %in% c('cov', 'FPKM', 'all'))
     }
     if(colorby == 'exon'){
-        stopifnot(meas %in% c('rcount', 'ucount', 'mrcount', 'cov', 'cov_sd', 'mcov', 'mcov_sd'))
+        emeas = c('rcount', 'ucount', 'mrcount', 'cov', 'cov_sd', 'mcov', 'mcov_sd')
+        stopifnot(meas %in% emeas)
+        stopifnot(gown@meas %in% c('all', emeas))
     }
 
     if(colorby=="none") legend = FALSE
@@ -69,28 +72,26 @@ plotTranscripts = function(gene, gown, samples = NULL,
     ma = IRanges::as.data.frame(structure(gown)$trans)
     thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
     
-    if(substr(ma$element[1],1,2) == "tx"){
+    if(substr(ma[1,1],1,2) == "tx"){
         warning('your ballgown object was built with a deprecated version of ballgown - would 
             probably be good to re-build!')
-        thetranscripts = paste0('tx',thetranscripts)
+        thetranscripts = paste0('tx', thetranscripts)
     }
     
     if(!is.null(customCol) & (length(customCol)!=length(thetranscripts))){
         stop("You must have the same number of custom colors as transcripts")
     }
 
-    gtrans = ma[ma$element %in% thetranscripts,]
+    gtrans = ma[ma[,1] %in% thetranscripts,]
     xax = seq(min(gtrans$start), max(gtrans$end), by=1)
     numtx = length(unique(thetranscripts))
     ymax = ifelse(legend, numtx+1.5, numtx+1)
     
     if(length(unique(gtrans$seqnames)) > 1){ 
-        stop("Your gene appears to span multiple chromosomes, which is interesting but also kind of 
-            annoying, R-wise.  Please choose another gene until additional functionality is added!")
+        stop("gene spans multiple chromosomes (?)")
     }
     if(length(unique(gtrans$strand)) > 1){ 
-        stop("Your gene appears to contain exons from both strands, which is potentially interesting
-            but also kind of confusing, so please choose another gene until we figure this out.")
+        stop("gene contains exons from both strands (?)")
     }
 
     # set appropriate color scale:
@@ -115,8 +116,8 @@ plotTranscripts = function(gene, gown, samples = NULL,
         }
         maxcol = quantile(as.matrix(smalldat), 0.99)
         colscale = seq(0, maxcol, length.out=200)
-        introntypes = unique(as.character(sapply(names(expr(gown)$intron)[-c(1:5)], gettype)))
-        color.introns = meas %in% introntypes
+        introntypes = c('ucount', 'rcount', 'mrcount')
+        color.introns = meas %in% introntypes & gown@meas %in% c('all', introntypes)
     }else{
         color.introns = FALSE
     }
@@ -133,7 +134,7 @@ plotTranscripts = function(gene, gown, samples = NULL,
         colName = paste(meas, samples[s], sep='.')
 
         # draw transcripts
-        for(tx in unique(gtrans$element)){
+        for(tx in unique(gtrans[,1])){
             if(colorby == "transcript"){
                 colIndex = which(names(smalldat) == colName)
                 mycolor = closestColor(smalldat[,colIndex][which(t_id==tx)], colscale)
@@ -141,10 +142,10 @@ plotTranscripts = function(gene, gown, samples = NULL,
             if(colorby == "none") mycolor = "gray70"
             
             if(!is.null(customCol)){
-              mycolor=customCol[which(unique(gtrans$element)==tx)]
+              mycolor = customCol[which(unique(gtrans[,1])==tx)]
             }
-            txind = which(unique(gtrans$element)==tx)
-            gtsub = gtrans[gtrans$element==tx,]
+            txind = which(unique(gtrans[,1])==tx)
+            gtsub = gtrans[gtrans[,1]==tx,]
             gtsub = gtsub[order(gtsub$start),]
             for(exind in 1:dim(gtsub)[1]){
                 if(colorby == "exon"){ 
@@ -152,10 +153,10 @@ plotTranscripts = function(gene, gown, samples = NULL,
                         colscale)
                 }
                 borderCol = ifelse(colorBorders, mycolor, 'black')
-                polygon(x=c(gtsub$start[exind], gtsub$start[exind], 
-                    gtsub$end[exind], gtsub$end[exind]), 
-                    y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), 
-                    col=mycolor, border=borderCol)
+                polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], 
+                            gtsub$end[exind]), 
+                        y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), 
+                        col=mycolor, border=borderCol)
                 if(exind!=dim(gtsub)[1]){
                     if(!color.introns){ 
                         lines(c(gtsub$end[exind],gtsub$start[exind+1]), c(txind, txind), lty=2, 
@@ -199,7 +200,7 @@ plotTranscripts = function(gene, gown, samples = NULL,
 
         # label the transcripts on the y-axis (if asked for)
         if(labelTranscripts){
-            axis(side=2, at=c(1:numtx), labels=unique(gtrans$element), cex.axis=0.75, las=1)
+            axis(side=2, at=c(1:numtx), labels=unique(gtrans[,1]), cex.axis=0.75, las=1)
         }
 
     } #end loop over samples
