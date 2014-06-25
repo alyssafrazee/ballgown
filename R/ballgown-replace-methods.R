@@ -27,7 +27,7 @@ setReplaceMethod("expr", "ballgown", function(x, value) {x@expr <- value; x})
 #' @name pData<-
 #' @exportMethod pData<-
 #' @docType methods
-#' @aliases pData<-,ballgown-method
+#' @aliases pData<-,ballgown,ANY-method
 #' @rdname pData-replace
 #' @param object a ballgown object
 #' @param value the updated value for \code{pData(x)}.

@@ -2,7 +2,7 @@
 \docType{methods}
 \name{pData<-}
 \alias{pData<-}
-\alias{pData<-,ballgown-method}
+\alias{pData<-,ballgown,ANY-method}
 \title{Replacement method for pData slot in ballgown objects}
 \usage{
 pData(object) <- value
