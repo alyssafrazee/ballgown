@@ -35,8 +35,6 @@
 #' comparing ballgown (as used to create \code{bg}) to cuffdiff and limma.
 #' 
 #' @author Alyssa Frazee
-#' 
-#' @export
 
 assessSim = function(bg, bgresults, annotation, chr, trulyDEids, 
     cuffdiffFile=NULL, qcut=0.05, UCSC=TRUE, ret=FALSE, nClosest=1, 
