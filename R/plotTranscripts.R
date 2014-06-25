@@ -1,31 +1,31 @@
 #' visualize structure of assembled transcripts
 #'
 #' @param gene name of gene whose transcripts will be plotted.  When using Cufflinks output, usually
-#' of the form \code{"XLOC_######"}
+#'   of the form \code{"XLOC_######"}
 #' @param gown ballgown object containing experimental and phenotype data
 #' @param samples vector of sample(s) to plot. Can be \code{'none'} if only one plot (showing 
-#' transcript structure in gray) is desired. Use \code{sampleNames(gown)} to see sample names for 
-#' \code{gown}. Defaults to \code{sampleNames(gown)[1]}.
+#'   transcript structure in gray) is desired. Use \code{sampleNames(gown)} to see sample names for 
+#'   \code{gown}. Defaults to \code{sampleNames(gown)[1]}.
 #' @param colorby one of \code{"transcript"}, \code{"exon"}, or \code{"none"}, indicating which 
-#' feature's abundances should dictate plot coloring.  If \code{"none"}, all transcripts are drawn 
-#' in gray.
+#'   feature's abundances should dictate plot coloring.  If \code{"none"}, all transcripts are drawn 
+#'   in gray.
 #' @param meas which expression measurement to color features by, if any. Must match an available 
-#' measurement for whatever feature you're plotting.
+#'   measurement for whatever feature you're plotting.
 #' @param legend if \code{TRUE} (as it is by default), a color legend is drawn on top of the plot 
-#' indicating scales for feature abundances.
+#'   indicating scales for feature abundances.
 #' @param labelTranscripts if \code{TRUE}, transcript ids are labeled on the left side of the plot. 
-#' Default \code{FALSE}.
+#'   Default \code{FALSE}.
 #' @param main optional string giving the desired plot title.
 #' @param colorBorders if \code{TRUE}, exon borders are also drawn in color (instead of black, as 
-#' they are by default). Useful for visualizing abundances for skinny exons and/or smaller plots, 
-#' as often happens when \code{length(samples)} is large.
+#'   they are by default). Useful for visualizing abundances for skinny exons and/or smaller plots, 
+#'   as often happens when \code{length(samples)} is large.
 #' @param log if \code{TRUE}, color transcripts on the log scale. Default \code{FALSE}. To account 
-#' for expression values of 0, we add 1 to all expression values before taking the log.
+#'   for expression values of 0, we add 1 to all expression values before taking the log.
 #' @param logbase log base to use if \code{log = TRUE}. default 2.
 #' @param customCol an optional vector of custom colors to color transcripts by. there must be the 
-#' same number of colors as transcripts in the gene being plotted.\
+#'   same number of colors as transcripts in the gene being plotted.
 #' @return produces a plot of the transcript structure for the specified gene in the current 
-#' graphics device.
+#'   graphics device.
 #' @seealso \code{\link{plotMeans}} 
 #' @author Alyssa Frazee
 #' @export
@@ -45,12 +45,14 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
 
     if(colorby == 'transcript'){
         stopifnot(meas %in% c('cov', 'FPKM'))
-        stopifnot(gown@meas %in% c('cov', 'FPKM', 'all'))
     }
     if(colorby == 'exon'){
         emeas = c('rcount', 'ucount', 'mrcount', 'cov', 'cov_sd', 'mcov', 'mcov_sd')
         stopifnot(meas %in% emeas)
-        stopifnot(gown@meas %in% c('all', emeas))
+    }
+
+    if(!(gown@meas == 'all' | meas %in% gown@meas)){
+        stop(paste('gown does not contain', meas, 'measurements.'))
     }
 
     if(colorby=="none") legend = FALSE

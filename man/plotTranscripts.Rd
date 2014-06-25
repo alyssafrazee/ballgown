@@ -46,7 +46,7 @@ same number of colors as transcripts in the gene being plotted.}
 }
 \value{
 produces a plot of the transcript structure for the specified gene in the current
-graphics device.
+  graphics device.
 }
 \description{
 visualize structure of assembled transcripts
