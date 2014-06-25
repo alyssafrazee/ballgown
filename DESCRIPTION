@@ -8,18 +8,19 @@ Description: Tools for statistical analysis of assembled transcriptomes,
     including flexible differential expression analysis, visualization of
     transcript structures, and matching of assembled transcripts to annotation.
 Depends:
+    R (>= 3.0.0),
     methods
 Imports:
-    GenomicRanges,
-    IRanges,
+    GenomicRanges (>= 1.16.3),
+    IRanges (>= 1.22.6),
     RColorBrewer,
     splines,
     sva,
     limma,
-    cummeRbund,
-    reshape,
-    rtracklayer,
-    Biobase
+    cummeRbund (>= 2.6.0),
+    reshape (>= 0.8.5),
+    rtracklayer (>= 1.24.1),
+    Biobase (>= 2.24.0)
 Suggests:
     testthat,
     knitr
