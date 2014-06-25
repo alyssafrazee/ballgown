@@ -3,14 +3,14 @@
 \alias{plotMeans}
 \title{visualize transcript abundance by group}
 \usage{
-plotMeans(gene, gown, overall = TRUE, groupvar = "none",
-  groupname = "none", dattype = c("cov", "FPKM", "rcount", "ucount",
-  "mrcount", "mcov"), colorby = c("transcript", "exon"), legend = TRUE,
+plotMeans(gene, gown, overall = FALSE, groupvar, groupname = "all",
+  meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
+  colorby = c("transcript", "exon"), legend = TRUE,
   labelTranscripts = FALSE)
 }
 \arguments{
-\item{gene}{name of gene whose transcripts will be plotted.  When using Cufflinks output, usually
-of the form \code{"XLOC_######"}}
+\item{gene}{name of gene whose transcripts will be plotted.  When using Cufflinks/Tablemaker
+output, usually of the form \code{"XLOC_######"}}
 
 \item{gown}{ballgown object containing experimental and phenotype data}
 
@@ -25,7 +25,7 @@ name of a column of \code{pData(gown)}.  Usually a categorical variable.}
 \code{"none"} (if you want the study-wide mean), \code{"all"} (if you want a multipanel plot of
 each group's mean expression), or any of the levels of \code{groupvar}.}
 
-\item{dattype}{type of expression measurement to plot. One of "cov", "FPKM", "rcount", "ucount",
+\item{meas}{type of expression measurement to plot. One of "cov", "FPKM", "rcount", "ucount",
 "mrcount", or "mcov". Not all types are valid for all features. (See description of tablemaker
 output for more information).}
 
@@ -36,7 +36,7 @@ should dictate plot coloring.}
 indicating the scale for feature abundances.}
 
 \item{labelTranscripts}{if \code{TRUE}, transcript ids are labeled on the left side of the plot.
-Default \code{FALSE}.}
+  Default \code{FALSE}.}
 }
 \value{
 produces a plot of the transcript structure for the specified gene in the current
