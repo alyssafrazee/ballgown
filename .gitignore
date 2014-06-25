@@ -5,3 +5,4 @@
 *.RData
 *.Rout
 .Rhistory
+make_example_dataset.R
