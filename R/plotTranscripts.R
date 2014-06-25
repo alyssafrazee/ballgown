@@ -23,7 +23,7 @@
 #' for expression values of 0, we add 1 to all expression values before taking the log.
 #' @param logbase log base to use if \code{log = TRUE}. default 2.
 #' @param customCol an optional vector of custom colors to color transcripts by. there must be the 
-#' same number of colors as transcripts in the gene being plotted.
+#' same number of colors as transcripts in the gene being plotted.\
 #' @return produces a plot of the transcript structure for the specified gene in the current 
 #' graphics device.
 #' @seealso \code{\link{plotMeans}} 
@@ -59,6 +59,10 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
       stop("Custom coloring is only available at transcript level currently")
     }
 
+    if(!is.null(customCol) & legend){
+        stop('legend must be FALSE if you provide custom colors')
+    }
+
     n = length(samples)
     westval = ifelse(labelTranscripts, 4, 2)
     if(n > 1){
@@ -70,9 +74,12 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
     }
 
     ma = IRanges::as.data.frame(structure(gown)$trans)
+    if(names(ma)[2] != 'group_name'){
+        stop('IRanges::as.data.frame has changed. Please report as issue.')
+    }
     thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
     
-    if(substr(ma[1,1],1,2) == "tx"){
+    if(substr(ma$group_name[1],1,2) == "tx"){
         warning('your ballgown object was built with a deprecated version of ballgown - would 
             probably be good to re-build!')
         thetranscripts = paste0('tx', thetranscripts)
@@ -82,7 +89,7 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
         stop("You must have the same number of custom colors as transcripts")
     }
 
-    gtrans = ma[ma[,1] %in% thetranscripts,]
+    gtrans = ma[ma$group_name %in% thetranscripts,]
     xax = seq(min(gtrans$start), max(gtrans$end), by=1)
     numtx = length(unique(thetranscripts))
     ymax = ifelse(legend, numtx+1.5, numtx+1)
@@ -132,20 +139,21 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
         }
         
         colName = paste(meas, samples[s], sep='.')
+        colIndex = which(colnames(smalldat) == colName)
 
         # draw transcripts
-        for(tx in unique(gtrans[,1])){
+        for(tx in unique(gtrans$group_name)){
             if(colorby == "transcript"){
-                colIndex = which(names(smalldat) == colName)
                 mycolor = closestColor(smalldat[,colIndex][which(t_id==tx)], colscale)
             }
             if(colorby == "none") mycolor = "gray70"
             
             if(!is.null(customCol)){
-              mycolor = customCol[which(unique(gtrans[,1])==tx)]
+              mycolor = customCol[which(unique(gtrans$group_name)==tx)]
             }
-            txind = which(unique(gtrans[,1])==tx)
-            gtsub = gtrans[gtrans[,1]==tx,]
+
+            txind = which(unique(gtrans$group_name)==tx)
+            gtsub = gtrans[gtrans$group_name==tx,]
             gtsub = gtsub[order(gtsub$start),]
             for(exind in 1:dim(gtsub)[1]){
                 if(colorby == "exon"){ 
@@ -200,7 +208,7 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
 
         # label the transcripts on the y-axis (if asked for)
         if(labelTranscripts){
-            axis(side=2, at=c(1:numtx), labels=unique(gtrans[,1]), cex.axis=0.75, las=1)
+            axis(side=2, at=c(1:numtx), labels=unique(gtrans$group_name), cex.axis=0.75, las=1)
         }
 
     } #end loop over samples
