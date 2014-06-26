@@ -29,7 +29,12 @@ test_that('plotMeans does not throw errors', {
 })
 
 test_that('plotLatentTranscripts does not throw errors', {
-    expect_that(1, equals(1)) # dummy test for now; I need to fix plotLatentTranscripts.
-})
+    expect_that(plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2), not(throws_error()))
+    expect_that(plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=8), throws_error())
+    expect_that(plotLatentTranscripts('XLOC_000454', bg, method='kmeans', choosek='var90'), 
+        not(throws_error()))
+    expect_that(plotLatentTranscripts('XLOC_000454', bg, method='hclust', k=2), 
+        not(throws_error()))
+}) #this function is mostly clusterTranscripts anyway
 
 dev.off()
