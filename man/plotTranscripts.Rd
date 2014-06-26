@@ -5,7 +5,8 @@
 \usage{
 plotTranscripts(gene, gown, samples = NULL, colorby = "transcript",
   meas = "FPKM", legend = TRUE, labelTranscripts = FALSE, main = NULL,
-  colorBorders = FALSE, log = FALSE, logbase = 2, customCol = NULL)
+  colorBorders = FALSE, log = FALSE, logbase = 2, customCol = NULL,
+  customOrder = NULL)
 }
 \arguments{
 \item{gene}{name of gene whose transcripts will be plotted.  When using Cufflinks output, usually
@@ -41,8 +42,12 @@ for expression values of 0, we add 1 to all expression values before taking the 
 
 \item{logbase}{log base to use if \code{log = TRUE}. default 2.}
 
-\item{customCol}{an optional vector of custom colors to color transcripts by. there must be the
+\item{customCol}{an optional vector of custom colors to color transcripts by. There must be the
 same number of colors as transcripts in the gene being plotted.}
+
+\item{customOrder}{an optional vector of transcript ids (matching ids in
+  \code{texpr(gown, 'all')$t_id}), indicating which order transcripts will appear in the plot.
+  All transcripts in \code{gene} must appear in the vector exactly once.}
 }
 \value{
 produces a plot of the transcript structure for the specified gene in the current
@@ -55,6 +60,6 @@ visualize structure of assembled transcripts
 Alyssa Frazee
 }
 \seealso{
-\code{\link{plotMeans}}
+\code{\link{plotMeans}}, \code{\link{plotLatentTranscripts}}
 }
 
