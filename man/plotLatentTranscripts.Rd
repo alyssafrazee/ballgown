@@ -34,6 +34,13 @@ style of \code{\link{plotTranscripts}}.
 This is an experimental, first-pass function that clusters assembled transcripts based on
 their overlap percentage, then plots and colors the transcript clusters.
 }
+\examples{
+\dontrun{
+data(simgown)
+plotLatentTranscripts('XLOC_000454', simgown, method='kmeans', k=2, returncluster=TRUE)
+# returns
+}
+}
 \author{
 Alyssa Frazee
 }
