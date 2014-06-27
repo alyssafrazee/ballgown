@@ -14,12 +14,12 @@ transcript.}
 \item{UCSC}{set to \code{TRUE} if you're using a UCSC gtf file. (Requires some extra
 text-processing).}
 
-\item{attribute}{set to \code{"gene_id"} (default) if you want the gene ID or \code{"gene_name"}
-if you want the gene symbol}
+\item{attribute}{set to attribute name in \code{gtf} that gives desired gene identifiers. Default
+\code{"gene_id"}; another commone one is \code{"gene_name"} (for the gene symbol).}
 }
 \value{
-a character vector of the same length as \code{assembled}, providing the name(s) of the
-gene(s) that overlaps each transcript in \code{assembled}.
+an \code{IRanges CharacterList} of the same length as \code{assembled}, providing the
+  name(s) of the gene(s) that overlaps each transcript in \code{assembled}.
 }
 \description{
 label assembled transcripts with gene names

@@ -2,13 +2,14 @@
 #' 
 #' @param gtf path to a GTF file containing locations of annotated transcripts
 #' @param assembled GRangesList object, with each set of ranges representing exons of an assembled 
-#' transcript.
+#'   transcript.
 #' @param UCSC set to \code{TRUE} if you're using a UCSC gtf file. (Requires some extra 
-#' text-processing).
-#' @param attribute set to \code{"gene_id"} (default) if you want the gene ID or \code{"gene_name"} 
-#' if you want the gene symbol
-#' @return a character vector of the same length as \code{assembled}, providing the name(s) of the 
-#' gene(s) that overlaps each transcript in \code{assembled}.
+#'   text-processing).
+#' @param attribute set to attribute name in \code{gtf} that gives desired gene identifiers. Default
+#'   \code{"gene_id"}; another commone one is \code{"gene_name"} (for the gene symbol).
+#' @return an \code{IRanges CharacterList} of the same length as \code{assembled}, providing the 
+#'   name(s) of the gene(s) that overlaps each transcript in \code{assembled}.
+#' 
 #' @details chromosome labels in \code{gtf} and \code{assembled} should match. (i.e., you should 
 #' provide the path to a gtf corrsponding to the same annotation you used when constructing 
 #' \code{assembled})
@@ -18,7 +19,6 @@
 
 getGenes = function(gtf, assembled, UCSC=TRUE, attribute = "gene_id"){
     # read in annotation and split by gene:
-    if(!attribute %in%  c("gene_id", "gene_name")) stop("attribute must be gene_id or gene_name\n")
     annot = gffReadGR(gtf)
     annotEx = annot[mcols(annot)$type=="exon"]
     annotEx$gene_id = getAttributeField(as.character(mcols(annotEx)$group), attribute)
@@ -40,7 +40,4 @@ getGenes = function(gtf, assembled, UCSC=TRUE, attribute = "gene_id"){
 		
     return(gene_id)
 }
-
-
-
 
