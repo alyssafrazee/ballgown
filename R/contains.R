@@ -57,8 +57,9 @@ contains = function(transcripts, cds){
     containsCDS = sum(runlengths[runvals==2]) == cds_lengths
 
     # return data in right order:
+    allOL = split(containsCDS, queryHits(ol))
     ret = rep(FALSE, length(transcripts))
-    ret[queryHits(ol)] = containsCDS
+    ret[as.numeric(names(allOL))] = sapply(allOL, any)
     return(ret)
 }
 
