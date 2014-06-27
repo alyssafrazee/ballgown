@@ -29,12 +29,10 @@ clusterTranscripts = function(gene, gown, k=NULL, method=c('hclust', 'kmeans')){
     method = match.arg(method)
 
     txnames = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id == gene]
-    if(is.null(k)){
+    if(!is.null(k) & length(txnames) <= k){
+        stop('k must be strictly less than the number of transcripts in gene')
+    }else if(is.null(k)){
         k = ceiling(sqrt(length(txnames)/2))
-    }else{
-        if(length(txnames) <= k){
-            stop('k must be strictly less than the number of transcripts in gene')
-        }
     }
 
     inds = which(names(structure(gown)$trans) %in% txnames)
