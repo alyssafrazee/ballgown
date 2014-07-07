@@ -1,46 +1,49 @@
 #' plot annotated and assembled transcripts together
 #'
-#' @param tx.assembled a GRangesList object where the GRanges objects in the list represent sets of
+#' @param assembled a GRangesList object where the GRanges objects in the list represent sets of
 #' exons comprising assembled transcripts
-#' @param tx.annotated a GRangesList object where the GRanges objects in the list represent sets of 
+#' @param annotated a GRangesList object where the GRanges objects in the list represent sets of 
 #' exons comprising annotated transcripts
-#' @param ind integer; index of \code{tx.annotated} specifying which annotated transcript to plot.  
-#' All transcripts (assembled and annotated) overlapping \code{tx.annotated[[ind]]} will be plotted. 
-#' Default 1.
+#' @param ind integer; index of \code{annotated} specifying which annotated transcript to plot.  
+#'   All transcripts (assembled and annotated) overlapping \code{annotated[[ind]]} will be plotted. 
+#'   Default 1.
 #' @param main optional character string giving the title for the resulting plot.  Default: 
-#' "Assembled and Annotated Transcripts"
+#'   "Assembled and Annotated Transcripts"
 #' 
-#' @return No return value, but a plot is produced with annotated transcripts on the bottom panel 
-#' (shaded in gray) and assembled transcripts on the top panel (shaded with diagonal lines).
+#' @return Plots annotated transcripts on the bottom panel (shaded in gray) and assembled 
+#'   transcripts on the top panel (shaded with diagonal lines).
 #' 
 #' @author Alyssa Frazee
 #' 
 #' @export
-checkAssembledTx = function(tx.assembled, tx.annotated, ind=1, 
+checkAssembledTx = function(assembled, annotated, ind=1, 
     main='Assembled and Annotated Transcripts'){
   
-    ol = findOverlaps(tx.annotated, tx.assembled)
-    ol.self = findOverlaps(tx.annotated, tx.annotated) #plot any overlapping transcripts also.
-    inds.asmb = subjectHits(ol)[which(queryHits(ol)==ind)]
+    ol = findOverlaps(annotated, assembled)
+    ol.self = findOverlaps(annotated, annotated) #plot any overlapping transcripts also.
+    indsas = subjectHits(ol)[which(queryHits(ol)==ind)]
   
-    if(length(inds.asmb)==0){
-        warning("This annotated transcript was not covered by any assembled transcripts. 
-            No plot will be produced", call.=FALSE)
+    if(length(indsas)==0){
+        warning(.makepretty("This annotated transcript was not covered by any assembled transcripts.
+            No plot will be produced"), call.=FALSE)
         return(0)
     }
   
     # plot setup:
     par(mar=c(5,3,4,2))
     annot.list = lapply(subjectHits(ol.self)[which(queryHits(ol.self)==ind)], 
-        function(i) tx.annotated[[i]])
-    names(annot.list) = names(tx.annotated)[subjectHits(ol.self)[which(queryHits(ol.self)==ind)]]
+        function(i) annotated[[i]])
+    names(annot.list) = names(annotated)[subjectHits(ol.self)[which(queryHits(ol.self)==ind)]]
     annot.df = as.data.frame(GRangesList(annot.list))
-    asmbl.list = lapply(inds.asmb, function(i) tx.assembled[[i]])
-    names(asmbl.list) = names(tx.assembled)[inds.asmb]
+    asmbl.list = lapply(indsas, function(i) assembled[[i]])
+    names(asmbl.list) = names(assembled)[indsas]
     asmbl.df = as.data.frame(GRangesList(asmbl.list))
     xax = seq(min(min(asmbl.df$start), min(annot.df$start)), max(max(asmbl.df$end),
         max(annot.df$end)), by=1)
-    numtx = length(unique(annot.df$element))+length(unique(asmbl.df$element))
+    if(names(asmbl.df)[2] != 'group_name'){
+        stop('issue with IRanges::as.data.frame has changed, please report')
+    }
+    numtx = length(unique(annot.df$group_name))+length(unique(asmbl.df$group_name))
   
     # plot base:
     plot(xax, rep(0, length(xax)), ylim=c(0.5, numtx+1), type="n", xlab="genomic position", 
@@ -48,9 +51,9 @@ checkAssembledTx = function(tx.assembled, tx.annotated, ind=1,
   
     # plot the annotated transcripts:
     txind = 0
-    for(tx in unique(annot.df$element)){
+    for(tx in unique(annot.df$group_name)){
         txind = txind+1 #counter
-        gtsub = annot.df[annot.df$element==tx,]
+        gtsub = annot.df[annot.df$group_name==tx,]
         gtsub = gtsub[order(gtsub$start),]
         for(exind in 1:dim(gtsub)[1]){
             polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), 
@@ -68,9 +71,9 @@ checkAssembledTx = function(tx.assembled, tx.annotated, ind=1,
     abline(h=txind+0.25)
 
     # plot the assembled transcripts
-    for(tx in unique(asmbl.df$element)){
+    for(tx in unique(asmbl.df$group_name)){
         txind = txind+1
-        gtsub = asmbl.df[asmbl.df$element==tx,]
+        gtsub = asmbl.df[asmbl.df$group_name==tx,]
         gtsub = gtsub[order(gtsub$start),]
         for(exind in 1:dim(gtsub)[1]){
             polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), 
@@ -85,7 +88,7 @@ checkAssembledTx = function(tx.assembled, tx.annotated, ind=1,
         if(any(diffs<0)) warning(paste("overlapping exons in assembled transcript",tx), call.=FALSE)
     }
     title(main)
-    axis(side=2, at=c(median(1:length(unique(annot.df$element))), 
-        median(1:length(unique(asmbl.df$element)))+length(unique(annot.df$element))+0.5), 
+    axis(side=2, at=c(median(1:length(unique(annot.df$group_name))), 
+        median(1:length(unique(asmbl.df$group_name)))+length(unique(annot.df$group_name))+0.5), 
         labels=c("annotated", "assembled"), tick=FALSE)
 }
