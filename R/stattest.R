@@ -82,20 +82,7 @@ stattest = function(gown, mod = NULL, mod0 = NULL,
     ## extract the right expression measurements
     if(feature == "gene"){
         if(is.null(gexpr)){
-            gnames = indexes(gown)$t2g$g_id
-            inds_by_gene = split(seq(along=gnames), gnames)
-            tmeas = texpr(gown, "FPKM")
-            gid_by_exon = lapply(1:nrow(texpr(gown)), function(i){
-                rep(texpr(gown, 'all')$gene_id[i], texpr(gown, 'all')$num_exons[i])
-            })
-            ulstruct = unlist(structure(gown)$trans)
-            glist = split(ulstruct, unlist(gid_by_exon))
-            glengths = sapply(width(reduce(glist)), sum)
-            tlengths = sapply(width(structure(gown)$trans), sum)
-            tfrags = tlengths * tmeas
-            expr = t(sapply(1:length(inds_by_gene), 
-                function(i){colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
-            rownames(expr) = names(inds_by_gene)
+            expr = gexpr(gown)
         }else{
             expr = gexpr
         }
