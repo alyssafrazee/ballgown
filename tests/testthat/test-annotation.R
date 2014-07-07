@@ -90,6 +90,7 @@ test_that('contains function works', {
     expect_that(length(contains(structure(bg)$trans, grl)), equals(100))
 })
 
+pdf(file=NULL) #don't print plots to screen while testing
 test_that('plot of assembled/annotated transcripts works', {
     expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, ind=4), 
         not(throws_error()))
@@ -98,7 +99,7 @@ test_that('plot of assembled/annotated transcripts works', {
     expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, ind=4, 
         main='hello!'), not(throws_error()))
 })
-
+dev.off()
 
 
 
