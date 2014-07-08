@@ -12,12 +12,11 @@ Depends:
     methods
 Imports:
     GenomicRanges (>= 1.16.3),
-    IRanges (>= 1.22.6),
+    IRanges (>= 1.99.15),
     RColorBrewer,
     splines,
     sva,
     limma,
-    cummeRbund (>= 2.6.0),
     reshape (>= 0.8.5),
     rtracklayer (>= 1.24.1),
     Biobase (>= 2.24.0)
