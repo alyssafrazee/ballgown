@@ -21,14 +21,17 @@ gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
 
 test_that('gtf read function works', {
     expect_that(gffRead(gtfPath), not(throws_error()))
+})
+
+x = gffRead(gtfPath)
+
+test_that('gtf read function gives the right answer', {    
     expect_that(ncol(x), equals(9))
     expect_that(nrow(x), equals(13732))
     expect_that(names(x), is_identical_to(c('seqname', 'source', 'feature',
         'start', 'end', 'score', 'strand', 'frame', 'attributes')))
     expect_that(x, is_a('data.frame'))
 })
-
-x = gffRead(gtfPath)
 
 test_that('splitting attribute fields works', {
     expect_that(getAttributeField(x$attributes, 'transcript_id'), not(throws_error()))
