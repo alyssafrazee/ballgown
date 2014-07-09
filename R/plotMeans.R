@@ -79,7 +79,7 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar,
     if(groupname == "all" & !overall){
         numplots = length(unique(pData(gown)[,pdatacol]))
         mf = c(floor(sqrt(numplots)), ceiling(sqrt(numplots)))
-        plot_titles = unique(pData(gown)[,pdatacol])
+        plot_titles = sort(unique(as.factor(pData(gown)[,pdatacol])))
     }else{
         numplots = 1
         mf = c(1,1)
@@ -90,11 +90,11 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar,
         }
     }
     if(overall){
-        samples = list(pData(gown)[,1])
+        samples = list(sampleNames(gown))
     }else if(groupname == "all"){
-        samples = split(pData(gown)[,1], pData(gown)[,pdatacol])
+        samples = split(sampleNames(gown), pData(gown)[,pdatacol])
     }else{
-        samples = list(pData(gown)[,1][pData(gown)[,pdatacol]==groupname]) 
+        samples = list(sampleNames(gown)[pData(gown)[,pdatacol]==groupname]) 
     }
     
     # plot base:
