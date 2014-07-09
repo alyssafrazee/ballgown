@@ -130,12 +130,15 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
 
         ## extract the covariate
         x = pData[,colind]
-        if(length(unique(as.factor(x))) == length(x) & !timecourse){
-            stop(.makepretty('Default models only support continuous covariates of interest when
-                timecourse is TRUE. Consider the timecourse option, or you can specify your own
+                
+        # make sure there are at least 2 reps per group:
+        if(any(table(x) < 2) & !timecourse){
+            stop(.makepretty('There must be at least two replicates per group. Make sure covariate
+                is categorical; if continuous, consider the timecourse option, or specify your own
                 models with mod and mod0.'))
         }
-        
+
+
         ## create model matrices
         if(!is.null(adjustvars)){
             variable_list = ""
