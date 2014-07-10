@@ -27,8 +27,8 @@ total sum of squares.
 group a gene's assembled transcripts into clusters
 }
 \examples{
-data(simgown)
-clusterTranscripts('XLOC_000454', simgown, k=2, method='kmeans')
+data(bg)
+clusterTranscripts('XLOC_000454', bg, k=2, method='kmeans')
 # transcripts 1294 and 1301 cluster together, 91\% variation explained.
 }
 \author{
