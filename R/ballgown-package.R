@@ -9,7 +9,6 @@
 #' @import splines
 #' @importFrom sva f.pvalue
 #' @importFrom rtracklayer import 
-#' @importFrom reshape cast
-#' @import limma
+#' @importFrom limma lmFit
 #' @import methods
 NULL
