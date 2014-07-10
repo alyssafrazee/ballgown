@@ -129,7 +129,7 @@ setMethod('gexpr', 'ballgown', function(x){
             transcript-level FPKM values.' 
         stop(.makepretty(msg))
     }
-    gnames = indexes(x)$t2g$g_id
+    gnames = as.character(indexes(x)$t2g$g_id)
     inds_by_gene = split(seq(along=gnames), gnames)
     tmeas = texpr(x, "FPKM")
     gid_by_exon = lapply(1:nrow(tmeas), function(i){
@@ -138,7 +138,7 @@ setMethod('gexpr', 'ballgown', function(x){
     glist = split(ulstruct, unlist(gid_by_exon))
     glengths = sapply(width(reduce(glist)), sum)
     tlengths = sapply(width(structure(x)$trans), sum)
-    tfrags = tlengths/1000 * tmeas
+    tfrags = tlengths * tmeas
     mat = t(sapply(1:length(inds_by_gene), function(i){
         colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
     rownames(mat) = names(inds_by_gene)
