@@ -6,3 +6,10 @@
 *.Rout
 .Rhistory
 make_example_dataset.R
+.vagrant
+Vagrantfile
+set_environment.sh
+vignettes/vignette.html
+vignettes/vignette.md
+vignettes/figure
+vignettes/*.bib
