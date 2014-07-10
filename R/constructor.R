@@ -97,6 +97,7 @@
 #' @rdname ballgown-constructor
 #' 
 #' @export
+#' @importFrom S4Vectors Rle
 ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, 
     bamfiles = NULL, pData = NULL, verbose=TRUE, meas="all", ...){
     if(verbose) message(date())
