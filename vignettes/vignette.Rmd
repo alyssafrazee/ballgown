@@ -1,0 +1,295 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Flexible isoform-level differential expression analysis with Ballgown}
+-->
+
+```{r loadcitations, echo=FALSE, message=FALSE}
+library(knitcitations)
+library(methods)
+cleanbib()
+```
+
+# Introduction
+Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data. 
+
+Before using the Ballgown R package, a few preprocessing steps are necessary:
+* RNA-seq reads should be aligned to a reference genome. Any junction-aware aligner is appropriate.
+* A transcriptome should be assembled, or a reference transcriptome should be downloaded. Any assembler or download that produces a GTF file denoting the transcriptome's structure is appropriate.
+* Expression for the features in the transcriptome should be estimated. We provide software called _Tablemaker_ that does this estimation. Tablemaker calls _Cufflinks_ version 2.1.1 `r citep('10.1038/nbt.1621')` to estimate transcript-level FPKMs, and provides several alternative expression measurements (e.g. average per-base coverage, number of mapped reads, etc.) for other features. Expression is estimated for each transcript, exon, and intron (junction) in the assembly. 
+
+The Ballgown package provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly. 
+
+# Installation
+Start R and run:
+
+```{r installme, eval=FALSE}
+source("http://bioconductor.org/biocLite.R")
+biocLite("ballgown")
+```
+
+# Running Tablemaker
+Users need to run _Tablemaker_ to organize assembly output into a format that Ballgown can load. Tablemaker can be downloaded from figshare:
+
+* [OSX binary](http://figshare.com/articles/Tablemaker_OS_X_Binary/1053136)
+* [Linux binary](http://figshare.com/articles/Tablemaker_Linux_Binary/1053137)
+
+Tablemaker can also be built from source from [this repository](https://github.com/alyssafrazee/ballgown/tree/master/tablemaker/tablemaker-2.1.1) by following [Cufflinks' instructions](http://cufflinks.cbcb.umd.edu/tutorial.html). 
+
+Tablemaker needs to be run on each RNA-seq sample in your experiment.  It requires one transcripome assembly, in [GTF format](http://www.ensembl.org/info/website/upload/gff.html), and read alignments for each sample, in BAM format. From the command line, _Tablemaker_ is run as follows:
+
+`tablemaker -p 4 -q -W -G merged.gtf -o sample01_output read_alignments.bam`
+
+where:
+* `-p` denotes how many threads to use (the program can take a few hours to run, but can be parallelized)
+* The `-q` can be removed for more verbose output messages  
+* `-W` and `-G merged.gtf` are required.  The `-W` tells the program to run in tablemaker mode (rather than Cufflinks mode), and the `-G` argument points to the assembly GTF file, which gives the assembled transcripts' structures. For Cufflinks users, often this is the `merged.gtf` output from Cuffmerge.
+* The argument to `-o` is the desired output directory for the sample (each sample should have its own output directory)
+* The read alignment file is the last argument.  If reads were aligned with TopHat, this is usually some variant of `accepted_hits.bam`
+
+The output is 5 files, written to the specified output directory:
+
+* `e_data.ctab`: exon-level expression measurements.  One row per exon.  Columns are `e_id` (numeric exon id), `chr`, `strand`, `start`, `end` (genomic location of the exon), and the following expression measurements for each sample:
+    * `rcount`:  reads overlapping the exon 
+    * `ucount`: uniquely mapped reads overlapping the exon 
+    * `mrcount`: multi-map-corrected number of reads overlapping the exon
+    * `cov` average per-base read coverage 
+    * `cov_sd`: standard deviation of per-base read coverage
+    * `mcov`: multi-map-corrected average per-base read coverage
+    * `mcov_sd`: standard deviation of multi-map-corrected per-base coverage
+* `i_data.ctab`: intron- (i.e., junction-) level expression measurements.  One row per intron.  Columns are `i_id` (numeric intron id), `chr`, `strand`, `start`, `end` (genomic location of the intron), and the following expression measurements for each sample: 
+    * `rcount`: number of reads supporting the intron
+    * `ucount`: number of uniquely mapped reads supporting the intron
+    * `mrcount`: multi-map-corrected number of reads supporting the intron
+* `t_data.ctab`: transcript-level expression measurements.  One row per transcript.  Columns are:
+    * `t_id`: numeric transcript id
+    * `chr`, `strand`, `start`, `end`: genomic location of the transcript
+    * `t_name`: Cufflinks-generated transcript id
+    * `num_exons`: number of exons comprising the transcript
+    * `length`: transcript length, including both exons and introns
+    * `gene_id`: gene the transcript belongs to
+    * `gene_name`: HUGO gene name for the transcript, if known
+    * `cov`: per-base coverage for the transcript (available for each sample)
+    * `FPKM`: Cufflinks-estimated FPKM for the transcript (available for each sample)
+* `e2t.ctab`: table with two columns, `e_id` and `t_id`, denoting which exons belong to which transcripts.  These ids match the ids in the `e_data` and `t_data` tables.
+* `i2t.ctab`: table with two columns, `i_id` and `t_id`, denoting which introns belong to which transcripts.  These ids match the ids in the `i_data` and `t_data` tables.
+
+
+# Loading data into R
+At this point, _Tablemaker_ should have been run on all samples in the experiment. For this example, assume each sample's _Tablemaker_ output directory is a subfolder of the same root directory. The Ballgown package's `extdata` folder provides an example of such a directory, where the folder structure looks like:
+
+```
+extdata/
+    sample01/
+        e2t.ctab
+        e_data.ctab
+        i2t.ctab
+        i_data.ctab
+        t_data.ctab
+    sample02/
+        e2t.ctab
+        e_data.ctab
+        i2t.ctab
+        i_data.ctab
+        t_data.ctab
+    ...
+    sample20/
+        e2t.ctab
+        e_data.ctab
+        i2t.ctab
+        i_data.ctab
+        t_data.ctab
+```
+
+Data is loaded using the `ballgown` function:
+
+```{r makebgobj}
+library(ballgown)
+data_directory = system.file('extdata', package='ballgown')
+bg = ballgown(dataDir=data_directory, samplePattern='sample', meas='all')
+bg
+```
+
+`bg` is an object of class `ballgown`.
+
+For large experiments, meaning experiments with many samples or experiments run on large genomes, loading the data might require a lot of time and memory. In these cases, it's often useful to do the data loading as a non-interactive batch job and to save the result as an R object (e.g. an `rda` file). The R object is compressed and is usually only a few Gb on disk, even for large experiments, and can usually be handled interactively with a reasonable amount of memory. It is also possible to load only a subset of all the expression measurements by changing the `meas` argument to the `ballgown` function. For example, to only load transcript-level FPKMs, set `meas = 'FPKM'` and to load average coverage values and read counts, set `meas=c('cov', 'rcount').`
+
+See `?ballgown` for detailed information on creating Ballgown objects.
+
+# Accessing assembly data
+A `ballgown` object has six slots: `structure`, `expr`, `indexes`, `dirs`, `mergedDate`, and `meas`. 
+
+#### structure
+The `structure` slot depends heavily on the `GenomicRanges` Bioconductor package `r citep('10.1371/journal.pcbi.1003118')`. The slot specifies the structure, i.e., genomic locations and relationships between exons, introns, and transcripts, of the transcriptome assembly.  It is convenient to represent exons and introns as intervals and to represent transcripts as a set of intervals (exons), so assembled exons and introns are available as `GRanges` objects, and the assembled transcripts are available as a `GRangesList` object.  This means that useful range operations, such as `findOverlaps` and `reduce`, are readily available for assembled features. 
+
+Exon, intron, and transcript structures are easily extracted from the main `ballgown` object:
+
+```{r struct}
+structure(bg)$exon
+structure(bg)$intron
+structure(bg)$trans
+```
+#### expr
+The `expr` slot is a list that contains tables of expression data for the genomic features.  These tables are very similar to the `*_data.ctab` _Tablemaker_ output files. Ballgown implements the following syntax to access components of the `expr` slot:
+
+```R
+*expr(ballgown_object_name, <EXPRESSION_MEASUREMENT>)
+``` 
+
+where `*` is either e for exon, i for intron, t for transcript, or g for gene, and <EXPRESSION MEASUREMENT> is an expression-measurement column name from the appropriate `.ctab` file.  Gene-level measurements are calculated by aggregating the transcript-level measurements for that gene.  All of the following are valid ways to extract expression data from the `bg` ballgown object:
+
+```{r getexpr}
+transcript_fpkm = texpr(bg, 'FPKM')
+transcript_cov = texpr(bg, 'cov')
+whole_tx_table = texpr(bg, 'all')
+exon_mcov = eexpr(bg, 'mcov')
+junction_rcount = iexpr(bg)
+whole_intron_table = iexpr(bg, 'all')
+gene_expression = gexpr(bg)
+```
+Calculating the gene-level expression measurements can be slow for large experiments.
+
+The `*expr` functions return matrices unless `meas = 'all'`, in which case some additional feature metadata is returned and the result is a `data.frame`.
+
+#### indexes
+The `indexes` slot of a ballgown object connects the pieces of the assembly and provides other experimental information. `indexes(bg)` is a list with several components that can be extracted with the `$` operator.
+
+Perhaps most importantly, there is a component called `pData` that should hold a data frame of phenotype information for the samples in the experiment. This must be created manually.  It is **very important** that the rows of pData are in the correct order. Each row corresponds to a sample, and the rows of pData should be ordered teh same as the tables in the `expr` slot. You can check that order by running `sampleNames(bg)`. The `pData` component can be added during construction (you can pass a data frame to the `ballgown` function), or you can add it later:
+
+```{r pData}
+pData(bg) = data.frame(id=sampleNames(bg), group=rep(c(1,0), each=10))
+```
+
+The other components of `indexes` are the `e2t` and `i2t` tables described in the _Tablemaker_ section, as well as a `t2g` table denoting which transcripts belong to which genes.  There is also a `bamfiles` component, designed to hold paths to the read alignment files for each sample. The `bamfiles` component isn't currently used by any ballgown functions, but it could come in handy for users of `RSamtools` or similar packages.  Here are some examples of how to extract `indexes` components from ballgown objects:
+
+```{r indexex}
+exon_transcript_table = indexes(bg)$e2t
+transcript_gene_table = indexes(bg)$t2g
+head(transcript_gene_table)
+phenotype_table = pData(bg)
+```
+
+#### other slots
+
+The `dirs` slot gives full filepaths to _Tablemaker_ output:
+
+```{r dirs}
+head(bg@dirs)
+```
+
+The `mergedDate` slot indicates when the `ballgown` object was created:
+
+```{r mergedDate}
+bg@mergedDate
+```
+
+And the `meas` slot gives the expression measurements present in the object:
+```{r meas}
+bg@meas
+``` 
+
+# Plotting transcript structures
+
+Visualization of the assembled transcripts is done with the `plotTranscripts` function. Transcripts or exons can be colored by expression level. This plot colors transcripts by expression level:
+
+```{r plotTranscripts, fig.height=8, fig.width=8, fig.cap=""}
+plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12', meas='FPKM', colorby='transcript', main='transcripts from gene XLOC_000454: sample 12, FPKM')
+```
+
+It is also possible to plot several samples at once:
+
+```{r plotTranscripts2, fig.height=10, fig.width=10, fig.cap=""}
+plotTranscripts('XLOC_000454', bg, samples=c('sample01', 'sample06', 'sample12', 'sample19'), meas='FPKM', colorby='transcript')
+```
+
+You can also make side-by-side plots comparing mean abundances between groups (here, 0 and 1):
+
+```{r plotMeans, fig.height=5, fig.width=10, fig.cap=""}
+plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM', colorby='transcript')
+```
+
+# Differential expression analysis
+
+Ballgown provides a wide selection of simple, fast statistical methods for testing whether transcripts are differentially expressed between experimental conditions or across a continuous covariate (such as time). 
+
+The default statistical test in ballgown is a parametric F-test comparing nested linear models; details are available in the Ballgown manuscript `r citep('http://biorxiv.org/content/early/2014/03/30/003665')`. These models are conceptually simialar to the models used by `r citet(citation('limma'))` in the `limma` package. In `limma`, more sophisticated empirical Bayes shrinkage methods are used, and generally a single linear model is fit per feature instead of doing a nested model comparison, but the flavor is similar (and in fact, `limma` can easily be run on any of the data matrices in a `ballgown` object).
+
+Ballgown's statistical models are implemented with the `stattest` function. Two models are fit to each feature, using expression as the outcome: one including the covariate of interest (e.g., case/control status or time) and one not including that covariate. An F statistic and p-value are calculated using the fits of the two models. A significant p-value means the model including the covariate of interest fits significantly better than the model without that covariate, indicating differential expression. We adjust for multiple testing by reporting q-values `r citep('10.1073/pnas.1530509100')` for each transcript in addition to p-values: reporting features with, say, q < 0.05 means the false discovery rate should be controlled at about 5%. 
+
+`stattest` automatically handles two-group (e.g. case/control) comparisons, multi-group comparisons (e.g. comparison of several tissue types), and "timecourse" comparisons (with the scare quotes meaning that these comparisons are also applicable to continuous covariates that aren't time). For two- and multi-group comparisons, a significant result indicates that the feature is differentially expressed in at least one of the groups. For timecourse comparisions, significant results mean the feature has an expression profile that varies significantly over time (i.e., values of the continuous covariate) as opposed to being flat over time. 
+
+The example dataset `bg` contains two group labels, 0 and 1. We can test each transcript for differential expression with `stattest`:
+
+```{r stattest}
+stat_results = stattest(bg, feature='transcript', meas='FPKM', covariate='group')
+head(stat_results)
+```
+The result is a data frame containing the feature tested, feature ids, and corresponding p- and q-values. See `?stattest` for further usage details.
+
+#### timecourse experiments
+For timecourse experiments, a smooth curve is fit to time (or the continuous covariate) using [natural splines](http://en.wikipedia.org/wiki/Spline_interpolation). The model for expression including these spline terms is compared to a model without any spline terms for the F-test. The results indicate which features' expression levels change significantly over time. For our example, we can define a "time" covariate and then demonstrate a typical call to `stattest` for a timecourse experiment:
+
+```{r stattest_time}
+pData(bg) = data.frame(pData(bg), time=rep(1:10, 2)) #dummy time covariate
+timecourse_results = stattest(bg, feature='transcript', meas='FPKM', covariate='time', timecourse=TRUE)
+```
+
+#### adjusting for confounders
+You can adjust for any or all variables in `pData` when testing for differential expression.  Ballgown automatically adjusts for library size using the sum of all logged nonzero expression measurements below the 75th percentile of those measurements, for each sample.  If you would like to adjust for other variables, just provide those confounders as the `adjustvars` argument to `stattest`:
+
+```{r stattest_adjust}
+group_adj_timecourse_results = stattest(bg, feature='transcript', meas='FPKM', covariate='time', timecourse=TRUE, adjustvars='group')
+```
+
+#### defining custom models
+It is also possible to explicitly provide the design matrices for the models to be compared. For example, suppose we had sex and age information available, in addition to group and time, and we wanted to compare a model including all information (sex, age, group, time) to a model including only group and time. Code to do this with `ballgown` is:
+
+```{r customMod}
+# create example data:
+set.seed(43)
+sex = sample(c('M','F'), size=nrow(pData(bg)), replace=TRUE)
+age = sample(21:52, size=nrow(pData(bg)), replace=TRUE)
+
+# create design matrices:
+mod = model.matrix(~ sex + age + pData(bg)$group + pData(bg)$time)
+mod0 = model.matrix(~ pData(bg)$group + pData(bg)$time)
+
+# run differential expression tests:
+adjusted_results = stattest(bg, feature='transcript', meas='FPKM', mod0=mod0, mod=mod)
+head(adjusted_results)
+```
+
+# Using alternative statistical methods
+Ballgown's statistical methods for differential expression testing are straightforward and accurate `r citep('http://biorxiv.org/content/early/2014/03/30/003665')`, but users may wish to use one of the many existing packages for differential expression. Ballgown's data structures make it easy to use table-based packages like limma `r citep(citation('limma'))`, limma Voom `r citep('10.1186/gb-2014-15-2-r29')`, DESeq `r citep('10.1186/gb-2010-11-10-r106')`, DEXSeq `r citep('10.1101/gr.133744.111')`, or EdgeR `r citep('10.1186/gb-2010-11-10-r106')` for differential expression analysis.  A feature-by-sample expression table can be easily created with a `*expr` function and used directly as input to these or other differential expression packages. 
+
+# Simple transcript clustering
+Sometimes several very similar transcripts are assembled for the same gene, which might cause expression estimates for those transcripts to be unreliable: statistically, it can very difficult or impossible to tell which of two very similar transcript a read came from. This means differential expression results might also be unreliable. 
+
+As a preliminary attempt at addressing this issue, Ballgown provides some simple transcript clustering functions. The idea is that similar assembled transcripts can be grouped together in clusters, and differential expression analysis could be performed on the cluster, whose expression measurement aggregates the expression estimates of the transcripts that compose it.
+
+These functions measure the distance between transcripts using [Jaccard distance](http://en.wikipedia.org/wiki/Jaccard_index), where each transcript's "set" is the nucleotides included in its exons. Transcripts can be clustered using either _k_-means clustering or hierarchical clustering.
+
+```{r cluster}
+clusterTranscripts(gene='XLOC_000454', gown=bg, k=2, method='kmeans')
+``` 
+
+You can also visualize the transcript clusters:
+
+```{r clusterviz, fig.height=8, fig.width=8, fig.cap=""}
+plotLatentTranscripts(gene='XLOC_000454', gown=bg, k=2, method='kmeans', returncluster=FALSE)
+```
+
+And you can calculate aggregate cluster expression measurements for some gene using `collapseTranscripts`. The `tab` result of `collapseTranscripts` can be passed to `stattest` as the `gowntable` argument, for differential expression analysis of the clusters:
+
+```{r collapse}
+agg = collapseTranscripts(gene='XLOC_000454', gown=bg, k=2, method='kmeans')
+stattest(gowntable=agg$tab, pData=pData(bg), feature='transcript_cluster', covariate='group', libadjust=FALSE)
+```
+
+This example clustered only three transcripts, but we imagine clustering could be useful when many more than three transcripts have been assembled for a single gene.
+
+# References
+```{r biblio, echo=FALSE, results='asis'}
+bibliography()
+```
+
+
