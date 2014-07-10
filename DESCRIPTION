@@ -17,9 +17,10 @@ Imports:
     splines,
     sva,
     limma,
-    reshape (>= 0.8.5),
     rtracklayer (>= 1.24.1),
     Biobase (>= 2.24.0)
 Suggests:
     testthat,
-    knitr
+    knitr,
+    knitcitations
+VignetteBuilder: knitr
