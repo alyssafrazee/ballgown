@@ -15,8 +15,10 @@
 #'   regression model including covariates of interest
 #' @param mod0 object of class \code{model.matrix} representing the design matrix for the linear 
 #'   regression model without the covariates of interest.
-#' @param feature the type of genomic feature to be tested for differential expression. Must be one 
-#'   of \code{"gene"}, \code{"transcript"}, \code{"exon"}, or \code{"intron"}.
+#' @param feature the type of genomic feature to be tested for differential expression. If
+#'   \code{gown} is used, must be one of \code{"gene"}, \code{"transcript"}, \code{"exon"}, or
+#'   \code{"intron"}. If \code{gowntable} is used, this is just used for labeling and can be
+#'   whatever the rows of \code{gowntable} represent.
 #' @param meas the expression measurement to use for statistical tests.  Must be one of 
 #'   \code{"cov"}, \code{"FPKM"}, \code{"rcount"}, \code{"ucount"}, \code{"mrcount"}, or 
 #'   \code{"mcov"}. Not all expression measurements are available for all features. Leave as default
@@ -36,14 +38,28 @@
 #'   confounders) between populations. Only available for 2-group comparisons at the moment. Default 
 #'   \code{FALSE}.
 #' @param libadjust if \code{TRUE} (default), include a library-size adjustment as a confounder in 
-#'   the fitted models. The adjustment is currently defined as the sum of the sample's counts below 
-#'   that sample's 75th percentile. You can change the library size adjustment by setting
-#'   \code{libadjust} to \code{FALSE} and providing \code{mod} and \code{mod0} with the desired
-#'   library size adjustments.
+#'   the fitted models. The adjustment is currently defined as the sum of the sample's log
+#'   expression measurements below the 75th percentile of those measurements.
 #' @param log if \code{TRUE}, outcome variable in linear models is log(expression+1), otherwise it's 
 #'   expression. Default TRUE.
 #' 
-#' @details \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is specified, you must
+#' @details At minimum, you need to provide a ballgown object or count table, the type of feature 
+#'   you want to test (gene, transcript, exon, or intron), the expression measurement you want to
+#'   use (FPKM, cov, rcount, etc.), and the covariate of interest, which must be the name of one of
+#'   the columns of the `pData` component of your ballgown object (or provided pData). This 
+#'   covariate is automatically converted to a factor during model fitting in non-timecourse
+#'   experiments.
+#' 
+#'   By default, models are fit using \code{log2(meas + 1)} as the outcome for each feature. To
+#'   disable the log transformation, provide `log = FALSE` as an argument to `stattest`. You can 
+#'   use the \code{gowntable} option if you'd like to to use a different transformation.
+#' 
+#'   Library size adjustment is performed by default by using the sum of the log nonzero expression
+#'   measurements for each sample, up to the 75th percentile of those measurements. This adjustment
+#'   can be disabled by setting \code{libadjust=FALSE}. You can use \code{mod} and \code{mod0} to
+#'   specify alternative library size adjustments.
+#' 
+#'   \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is specified, you must
 #'   also specify \code{mod0}.  If neither is specified, \code{mod0} defaults to the design matrix 
 #'   for a model including only a library-size adjustment, and \code{mod} defaults to the design 
 #'   matrix for a model including a library-size adjustment and \code{covariate}. Note that if you 
@@ -51,14 +67,19 @@
 #'   \code{df} are ignored, so make sure your covariate of interest and all appropriate confounder 
 #'   adjustments, including library size, are specified in \code{mod} and \code{mod0}.
 #' 
+#'   Full model details are described in the supplement of 
+#'   \url{http://biorxiv.org/content/early/2014/03/30/003665}.
+#' 
 #' @return data frame containing the columns \code{feature}, \code{id} representing feature id, 
 #'   \code{pval} representing the p-value for testing whether this feature was differentially 
 #'   expressed according to \code{covariate}, and \code{qval}, the estimated false discovery rate 
 #'   using this feature's signal strength as a significance cutoff. An additional column, \code{fc}, 
 #'   is included if \code{getFC} is \code{TRUE}.
-
+#' 
 #' @export
-
+#' 
+#' @references \url{http://biorxiv.org/content/early/2014/03/30/003665}
+#' 
 #' @author Jeff Leek, Alyssa Frazee
 
 stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod0 = NULL, 
@@ -66,8 +87,6 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
     meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"), timecourse = FALSE, 
     covariate = NULL, adjustvars = NULL, gexpr = NULL, df = 4, getFC = FALSE, libadjust = TRUE, 
     log = TRUE){
-
-    feature = match.arg(feature)
 
     if(!xor(is.null(gown), is.null(gowntable))){
         stop('must provide exactly one of gown and gowntable')
@@ -81,6 +100,7 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
         stopifnot(!is.null(pData))
         stopifnot(nrow(pData) == ncol(expr))
     } else {
+        feature = match.arg(feature)
         meas = match.arg(meas)
         if(feature == "transcript" & !(meas %in% c("cov", "FPKM"))){
             stop("transcripts only have cov and FPKM measurements")
@@ -118,8 +138,9 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
     ## library size adjustment
     if(libadjust){
         lib_adj = apply(expr, 2, function(x){
-            q3 = quantile(x, 0.75)
-            sum(x[x<q3])
+            lognz = log2(x[x!=0] + 1)
+            q3 = quantile(lognz, 0.75)
+            sum(lognz[lognz<q3])
         })
     }
 

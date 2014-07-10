@@ -20,7 +20,7 @@ test_that('default stat models work', {
     expect_that(statres, is_a('data.frame'))
     expect_that(nrow(statres), equals(100))
     expect_that(ncol(statres), equals(4))
-    expect_that(statres$pval[6], equals(0.1479, tolerance=0.001))
+    expect_that(statres$pval[6], equals(0.2731, tolerance=0.001))
 
     expect_that(stattest(bg, feature='gene', meas='FPKM', covariate='group'), not(throws_error()))
     expect_that(stattest(bg, feature='gene', meas='cov', covariate='group'), throws_error())
@@ -28,7 +28,7 @@ test_that('default stat models work', {
     expect_that(generes, is_a('data.frame'))
     expect_that(nrow(generes), equals(93))
     expect_that(ncol(generes), equals(4))
-    expect_that(generes$pval[4], equals(0.08, tolerance=0.001))
+    expect_that(generes$pval[4], equals(0.0677, tolerance=0.001))
 
     expect_that(stattest(bg, feature='exon', meas='cov', covariate='group'), not(throws_error()))
     expect_that(stattest(bg, feature='exon', meas='FPKM', covariate='group'), throws_error())
@@ -36,7 +36,7 @@ test_that('default stat models work', {
     expect_that(exonres, is_a('data.frame'))
     expect_that(nrow(exonres), equals(633))
     expect_that(ncol(exonres), equals(4))
-    expect_that(exonres$pval[3], equals(0.1645, tolerance=0.001))
+    expect_that(exonres$pval[3], equals(0.183, tolerance=0.001))
 
     expect_that(stattest(bg, feature='intron', meas='mrcount', covariate='group'), 
         not(throws_error()))
@@ -95,7 +95,7 @@ test_that('adjustment for covariates works', {
     expect_that(adjres, is_a('data.frame'))
     expect_that(ncol(adjres), equals(4))
     expect_that(nrow(adjres), equals(100))
-    expect_that(adjres$pval[1], equals(0.03665, tolerance=0.001))
+    expect_that(adjres$pval[1], equals(0.0218, tolerance=0.001))
     expect_that(stattest(bg, feature='transcript', meas='FPKM', covariate='group', 
         adjustvars=c('c1', 'c2')), not(throws_error()))
     expect_that(stattest(bg, feature='transcript', meas='FPKM', covariate='group', 
@@ -112,7 +112,7 @@ test_that('timecourse option works', {
     expect_that(tres, is_a('data.frame'))
     expect_that(nrow(tres), equals(100))
     expect_that(ncol(tres), equals(4))
-    expect_that(tres$pval[3], equals(0.6091, tolerance=0.001))
+    expect_that(tres$pval[3], equals(0.569, tolerance=0.001))
 
     expect_that(stattest(bg, feature='transcript', meas='FPKM', covariate='c1', adjustvars='group',
         timecourse=TRUE), not(throws_error()))
