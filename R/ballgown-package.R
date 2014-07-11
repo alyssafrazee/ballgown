@@ -11,4 +11,5 @@
 #' @importFrom rtracklayer import 
 #' @importFrom limma lmFit
 #' @import methods
+#' @importFrom S4Vectors runValue Rle
 NULL
