@@ -25,7 +25,7 @@ list with two elements:
   \item \code{tab}, a cluster-by-sample table of expression measurements
   (\code{meas}, either cov or FPKM), where the expression measurement for each cluster is the
   mean (for \code{'cov'}) or aggregate (for \code{'FPKM'}, as in \code{\link{gexpr}})
-  expression measurement for all the features in that cluster. This table can be used as the
+  expression measurement for all the transcripts in that cluster. This table can be used as the
   \code{gowntable} argument to \code{\link{stattest}}, if differential expression results for
   transcript *clusters* are desired.
   \item \code{cl} output from \code{\link{clusterTranscripts}} that was run to produce
