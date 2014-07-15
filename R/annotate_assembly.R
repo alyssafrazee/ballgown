@@ -15,6 +15,11 @@
 #' @author Alyssa Frazee
 #' 
 #' @export
+#' @examples
+#' data(bg)
+#' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+#' annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
+#' info = annotate_assembly(assembled=structure(bg)$trans, annotated=annot)
 
 annotate_assembly = function(assembled, annotated){
     

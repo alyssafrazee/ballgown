@@ -19,4 +19,8 @@ gene-by-sample matrix containing per-sample gene FPKMs.
 gene-level measurements are done by appropriately combining FPKMs from the transcripts comprising
 the gene.
 }
+\examples{
+data(bg)
+gene_matrix = gexpr(bg)
+}
 

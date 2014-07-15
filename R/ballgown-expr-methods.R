@@ -8,7 +8,14 @@
 #' @param x a ballgown object
 #' @param meas type of measurement to extract. Can be "rcount", "ucount", "mrcount", "cov", "mcov",
 #'             or "all". Default "rcount".
-#' @return exon-by-sample matrix containing exon-level expression values (measured by \code{meas})
+#' @return exon-by-sample matrix containing exon-level expression values (measured by \code{meas}).
+#'   If \code{meas} is \code{"all"}, a data frame is returned, containing all measurements and
+#'   location information.
+#' @examples 
+#' data(bg)
+#' exon_rcount_matrix = eexpr(bg)
+#' exon_ucount_matrix = eexpr(bg, 'ucount')
+#' exon_data_frame = eexpr(bg, 'all')
 setMethod('eexpr', 'ballgown', function(x, meas='rcount'){
     emeas = c('all', 'rcount', 'ucount', 'mrcount', 'cov', 'mcov', 'cov_sd', 'mcov_sd')
     meas = match.arg(meas, emeas)
@@ -45,7 +52,14 @@ setMethod('eexpr', 'ballgown', function(x, meas='rcount'){
 #' @aliases texpr,ballgown-method
 #' @param x a ballgown object
 #' @param meas type of measurement to extract. Can be "cov", "FPKM", or "all". Default "FPKM".
-#' @return transcript-by-sample matrix containing expression values (measured by \code{meas})
+#' @return transcript-by-sample matrix containing expression values (measured by \code{meas}). If 
+#' \code{meas} is \code{"all"}, a data frame is returned, containing all measurements and location
+#' information.
+#' 
+#' @examples
+#' data(bg)
+#' transcript_fpkm_matrix = texpr(bg)
+#' transcript_data_frame = texpr(bg, 'all')
 setMethod('texpr', 'ballgown', function(x, meas='FPKM'){
     meas = match.arg(meas, c('cov', 'FPKM', 'all'))
     if(meas!='all'){
@@ -83,7 +97,13 @@ setMethod('texpr', 'ballgown', function(x, meas='FPKM'){
 #' @param meas type of measurement to extract. Can be "rcount", "ucount", "mrcount", or "all". 
 #'   Default "rcount".
 #' @return intron-by-sample matrix containing the number of reads (measured as specified by 
-#'   \code{meas}) supporting each intron, in each sample.
+#'   \code{meas}) supporting each intron, in each sample. If \code{meas} is \code{"all"}, a data
+#'   frame is returned, containing all measurements and location information.
+#' 
+#' @examples
+#' data(bg)
+#' intron_rcount_matrix = iexpr(bg)
+#' intron_data_frame = iexpr(bg, 'all')
 setMethod('iexpr', 'ballgown', function(x, meas='rcount'){
     meas = match.arg(meas, c('rcount', 'ucount', 'mrcount', 'all'))
     if(meas!='all'){
@@ -123,6 +143,10 @@ setMethod('iexpr', 'ballgown', function(x, meas='rcount'){
 #' @aliases gexpr,ballgown-method
 #' @param x a ballgown object
 #' @return gene-by-sample matrix containing per-sample gene FPKMs.
+#' 
+#' @examples
+#' data(bg)
+#' gene_matrix = gexpr(bg)
 setMethod('gexpr', 'ballgown', function(x){
     if(!('FPKM' %in% x@meas) & !identical(x@meas, 'all')){
         msg = 'gene expression measurements can only be calculated for ballgown objects including 

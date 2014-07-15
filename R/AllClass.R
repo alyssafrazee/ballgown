@@ -21,6 +21,15 @@
 #' @exportClass ballgown
 #' 
 #' @author Alyssa Frazee, Leonardo Collado Torres, Jeff Leek
+#' @examples
+#'   data(bg)
+#'   class(bg) #"ballgown"
+#'   dim(bg@@expr$exon)
+#'   bg@@structure$exon
+#'   head(bg@@indexes$t2g)
+#'   head(bg@@dirs)
+#'   bg@@mergedDate
+#'   bg@@meas
 setClass("ballgown", 
     representation(
         expr = "list",             # coverage data

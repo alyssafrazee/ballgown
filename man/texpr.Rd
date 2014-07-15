@@ -15,9 +15,16 @@ texpr(x, meas = "FPKM")
 \item{meas}{type of measurement to extract. Can be "cov", "FPKM", or "all". Default "FPKM".}
 }
 \value{
-transcript-by-sample matrix containing expression values (measured by \code{meas})
+transcript-by-sample matrix containing expression values (measured by \code{meas}). If
+\code{meas} is \code{"all"}, a data frame is returned, containing all measurements and location
+information.
 }
 \description{
 extract transcript-level expression measurements from ballgown objects
+}
+\examples{
+data(bg)
+transcript_fpkm_matrix = texpr(bg)
+transcript_data_frame = texpr(bg, 'all')
 }
 

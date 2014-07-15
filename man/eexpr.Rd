@@ -16,9 +16,17 @@ eexpr(x, meas = "rcount")
 or "all". Default "rcount".}
 }
 \value{
-exon-by-sample matrix containing exon-level expression values (measured by \code{meas})
+exon-by-sample matrix containing exon-level expression values (measured by \code{meas}).
+  If \code{meas} is \code{"all"}, a data frame is returned, containing all measurements and
+  location information.
 }
 \description{
 extract exon-level expression measurements from ballgown objects
+}
+\examples{
+data(bg)
+exon_rcount_matrix = eexpr(bg)
+exon_ucount_matrix = eexpr(bg, 'ucount')
+exon_data_frame = eexpr(bg, 'all')
 }
 

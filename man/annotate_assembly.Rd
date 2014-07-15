@@ -24,6 +24,12 @@ If \code{gown} is a \code{ballgown} object, \code{assembled} can be
 containing annotated transcripts from a gtf file using the \code{\link{gffReadGR}} function and
 setting \code{splitByTranscripts=TRUE}.
 }
+\examples{
+data(bg)
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
+info = annotate_assembly(assembled=structure(bg)$trans, annotated=annot)
+}
 \author{
 Alyssa Frazee
 }
