@@ -78,17 +78,17 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
         }
 
         ## transcript data
-        txcolsamples = sapply(names(texpr(x, 'all')), getsamp, USE.NAMES=FALSE)
+        txcolsamples = ss(names(texpr(bg, 'all')), pattern='\\.', slot=2)
         txKeepCols = c(1:10, which(txcolsamples %in% newsampnames))
         newtdat = texpr(x, 'all')[,txKeepCols]
 
         ## exon data
-        excolsamples = sapply(names(eexpr(x, 'all')), getsamp, USE.NAMES=FALSE)
+        excolsamples = ss(names(eexpr(x, 'all')), pattern='\\.', slot=2)
         exKeepCols = c(1:5, which(excolsamples %in% newsampnames))
         newedat = eexpr(x, 'all')[,exKeepCols]
 
         ## intron data
-        icolsamples = sapply(names(iexpr(x, 'all')), getsamp, USE.NAMES=FALSE)
+        icolsamples = ss(names(iexpr(x, 'all')), pattern='\\.', slot=2)
         iKeepCols = c(1:5, which(icolsamples %in% newsampnames))
         newidat = iexpr(x, 'all')[,iKeepCols]
 
