@@ -1,9 +1,6 @@
 ### constructor function for ballgown objects
 
-# "rcount", "ucount", 
-# "mrcount", "cov", "cov_sd", "mcov", "mcov_sd", or "FPKM"
-
-### a couple helper functions:
+### helper functions:
 .readIntron <- function(file, meas){
     cc = c('integer', 'character', 'factor', 'integer', 'integer', 'integer', 'integer', 'numeric')
     if(!identical(meas, 'all')){
