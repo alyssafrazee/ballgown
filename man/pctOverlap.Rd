@@ -27,7 +27,7 @@ In the ballgown context, \code{tx1} and \code{tx2} are two transcripts, each rep
 data(bg)
 gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
 annot_grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
-pctOverlap(structure(bg)$trans[[2]], grl[[369]]) #79.9\%
+pctOverlap(structure(bg)$trans[[2]], annot_grl[[369]]) #79.9\%
 }
 \author{
 Alyssa Frazee
