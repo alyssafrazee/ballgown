@@ -36,9 +36,8 @@ their overlap percentage, then plots and colors the transcript clusters.
 }
 \examples{
 \dontrun{
-data(simgown)
-plotLatentTranscripts('XLOC_000454', simgown, method='kmeans', k=2, returncluster=TRUE)
-# returns
+data(bg)
+plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2, returncluster=TRUE)
 }
 }
 \author{

@@ -19,4 +19,8 @@ vector of sample IDs for \code{x}. If \code{pData} exists, samples in its rows c
 \description{
 get names of samples in a ballgown objects
 }
+\examples{
+data(bg)
+sampleNames(bg)
+}
 

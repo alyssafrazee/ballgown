@@ -14,6 +14,12 @@
 #' @author Alyssa Frazee
 
 #' @export
+#' 
+#' @examples
+#' data(bg)
+#' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+#' annot_grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
+#' pctOverlap(structure(bg)$trans[[2]], grl[[369]]) #79.9%
 pctOverlap = function(tx1, tx2){
     stopifnot(class(tx1) == 'GRanges' & class(tx2) == 'GRanges')
     ch1 = as.character(runValue(seqnames(tx1)))

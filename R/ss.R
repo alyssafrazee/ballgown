@@ -6,6 +6,9 @@
 #' @param ... other arguments to strsplit
 #' @details internal use only 
 #' @author Andrew Jaffe
+#' @examples
+#' x = c('sample1.FPKM', 'sample1.cov', 'sample2.FPKM', 'sample2.cov')
+#' ss(x, pattern='\\.', slot=1) # sample IDs from x
 ss = function(x, pattern, slot=1, ...){
     sapply(strsplit(x,pattern,...), "[", slot)  
 } 

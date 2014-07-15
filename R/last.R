@@ -10,6 +10,7 @@
 #' @author Alyssa Frazee
 #' 
 #' @export
-
+#' @examples
+#' last(c('h', 'e', 'l', 'l', 'o'))
 
 last = function(x) return(tail(x, n=1))

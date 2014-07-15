@@ -19,4 +19,13 @@ list containing elements \code{intron}, \code{exon}, and \code{trans},
 \description{
 extract expression components from ballgown objects
 }
+\examples{
+data(bg)
+names(expr(bg))
+class(expr(bg))
+dim(expr(bg)$exon)
+}
+\seealso{
+\code{\link{texpr}}, \code{\link{gexpr}}, \code{\link{eexpr}}, \code{\link{iexpr}}
+}
 

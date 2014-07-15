@@ -45,6 +45,12 @@ graphics device, colored by study-wide or group-specific mean expression level.
 \description{
 visualize transcript abundance by group
 }
+\examples{
+\dontrun{
+data(bg)
+plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM', colorby='transcript')
+}
+}
 \author{
 Alyssa Frazee
 }

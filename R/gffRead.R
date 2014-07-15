@@ -13,6 +13,9 @@
 #' @author Kasper Hansen
 #' 
 #' @export
+#' @examples
+#' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+#' annot = gffRead(gtfPath)
 gffRead <- function (gffFile, nrows = -1, verbose=FALSE) 
 {
     if(verbose){

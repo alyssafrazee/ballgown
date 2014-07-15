@@ -18,6 +18,10 @@ data frame representing the GTF/GFF file
 \description{
 read in GTF/GFF file as a data frame
 }
+\examples{
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+annot = gffRead(gtfPath)
+}
 \author{
 Kasper Hansen
 }

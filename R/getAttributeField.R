@@ -14,12 +14,10 @@
 #' @author Wolfgang Huber, in \code{davidTiling}
 #' 
 #' @export
-#' @examples \dontrun{
-#' ## not run:
-#' gffdata = gffRead('transcripts.gtf')
-#' transcriptID = getAttributeField(gffdata$V9, field = "transcript_id")
-#' gffdata$transcriptID = transcriptID
-#' }
+#' @examples
+#' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+#' gffdata = gffRead(gtfPath)
+#' gffdata$transcriptID = getAttributeField(gffdata$attributes, field = "transcript_id")
 getAttributeField <- function (x, field, attrsep = "; ") 
 {
     s = strsplit(x, split = attrsep, fixed = TRUE)

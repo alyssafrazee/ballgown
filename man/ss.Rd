@@ -20,6 +20,10 @@ nice wrapper for string splitting and subsetting
 \details{
 internal use only
 }
+\examples{
+x = c('sample1.FPKM', 'sample1.cov', 'sample2.FPKM', 'sample2.cov')
+ss(x, pattern='\\\\.', slot=1) # sample IDs from x
+}
 \author{
 Andrew Jaffe
 }

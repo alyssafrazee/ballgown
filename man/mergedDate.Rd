@@ -15,4 +15,8 @@ mergedDate(x)
 \description{
 extract package version & creation date from ballgown object
 }
+\examples{
+data(bg)
+mergedDate(bg)
+}
 

@@ -29,6 +29,11 @@ chromosome labels in \code{gtf} and \code{assembled} should match. (i.e., you sh
 provide the path to a gtf corrsponding to the same annotation you used when constructing
 \code{assembled})
 }
+\examples{
+data(bg)
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+geneoverlaps = getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE)
+}
 \author{
 Alyssa Frazee, Andrew Jaffe
 }

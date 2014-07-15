@@ -26,9 +26,8 @@
 #' 
 #' @export
 #' @examples \dontrun{
-#' data(simgown)
-#' plotLatentTranscripts('XLOC_000454', simgown, method='kmeans', k=2, returncluster=TRUE)
-#' # returns 
+#' data(bg)
+#' plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2, returncluster=TRUE)
 #' }
 plotLatentTranscripts = function(gene, gown, method=c("hclust", "kmeans"), k=NULL, 
     choosek=c("var90", "thumb"), returncluster=TRUE){

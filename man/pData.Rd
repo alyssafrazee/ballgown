@@ -18,4 +18,8 @@ sample-by-phenotype data frame
 \description{
 extract phenotype data from a ballgown object
 }
+\examples{
+data(bg)
+pData(bg)
+}
 

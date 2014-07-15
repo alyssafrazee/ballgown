@@ -21,4 +21,10 @@ list containing elements \code{intron}, \code{exon}, and \code{trans}. \code{exo
 \description{
 extract structure components from ballgown objects
 }
+\examples{
+data(bg)
+names(structure(bg))
+class(structure(bg))
+structure(bg)$exon
+}
 

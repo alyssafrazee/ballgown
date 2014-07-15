@@ -16,7 +16,11 @@
 #' 
 #' @author Alyssa Frazee, Andrew Jaffe
 #' @export
-
+#' 
+#' @examples
+#' data(bg)
+#' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+#' geneoverlaps = getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE)
 getGenes = function(gtf, assembled, UCSC=TRUE, attribute = "gene_id"){
     # read in annotation and split by gene:
     annot = gffReadGR(gtf)

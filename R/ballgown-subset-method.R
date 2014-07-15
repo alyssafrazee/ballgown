@@ -20,6 +20,16 @@
 #' (Be sure to handle quotes within character strings appropriately). 
 #' 
 #' @author Alyssa Frazee
+#' 
+#' @examples
+#' data(bg)
+#' bg_twogenes = subset(bg, "gene_id=='XLOC_000454' | gene_id=='XLOC_000024'")
+#' bg_twogenes 
+#' # ballgown instance with 4 assembled transcripts and 20 samples
+#' 
+#' bg_group0 = subset(bg, "group == 0", genomesubset=FALSE)
+#' bg_group0 
+#' # ballgown instance with 100 assembled transcripts and 10 samples
 setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
     stopifnot(class(cond) == 'character')
 

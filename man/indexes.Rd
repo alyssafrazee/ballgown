@@ -21,4 +21,10 @@ list containing elements \code{e2t}, \code{i2t}, \code{t2g},
 \description{
 extract the indexes from ballgown objects
 }
+\examples{
+data(bg)
+names(indexes(bg))
+class(indexes(bg))
+head(indexes(bg)$t2g)
+}
 

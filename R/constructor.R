@@ -97,6 +97,10 @@
 #' @rdname ballgown-constructor
 #' 
 #' @export
+#' @examples
+#' bg = ballgown(dataDir=system.file('extdata', package='ballgown'), 
+#'     samplePattern='sample')
+#' pData(bg) = data.frame(id=sampleNames(bg), group=rep(c(1,0), each=10))
 ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL, 
     bamfiles = NULL, pData = NULL, verbose=TRUE, meas="all", ...){
     if(verbose) message(date())

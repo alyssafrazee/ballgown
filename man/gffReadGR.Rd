@@ -28,6 +28,15 @@ annotated transcript (designated in \code{names}).
 \description{
 (very) light wrapper for rtracklayer::import
 }
+\examples{
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+
+# read in exons as GRanges:
+annotgr = gffReadGR(gtfPath)
+
+# read in groups of exons as transcripts, in GRangesList:
+transcripts_grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
+}
 \author{
 Alyssa Frazee
 }

@@ -7,6 +7,11 @@
 \description{
 Small ballgown object created with simulated toy data, for demonstration purposes
 }
+\examples{
+data(bg)
+bg
+# ballgown instance with 100 transcripts and 20 samples
+}
 \author{
 Alyssa Frazee
 }

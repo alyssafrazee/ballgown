@@ -15,4 +15,8 @@ dirs(x)
 \description{
 extract paths to tablemaker output
 }
+\examples{
+data(bg)
+dirs(bg)
+}
 

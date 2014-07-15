@@ -5,7 +5,8 @@
 #' @param dataDir top-level directory for sample-specific folders
 #' @export
 #' @examples \dontrun{
-#'   # put example here.
+#'   data(bg)
+#'   writeFiles(bg, dataDir=getwd())
 #'}
 writeFiles = function(gown, dataDir){
     # write tablemaker output files to disk (from ballgown object)

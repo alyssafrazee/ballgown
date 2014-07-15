@@ -34,6 +34,16 @@ column names of \code{texpr(x, "all")} (if \code{genomesubset} is \code{TRUE}) o
 object for only chromosome 22, you might call \code{subset(x, "chr == 'chr22'")}.
 (Be sure to handle quotes within character strings appropriately).
 }
+\examples{
+data(bg)
+bg_twogenes = subset(bg, "gene_id=='XLOC_000454' | gene_id=='XLOC_000024'")
+bg_twogenes
+# ballgown instance with 4 assembled transcripts and 20 samples
+
+bg_group0 = subset(bg, "group == 0", genomesubset=FALSE)
+bg_group0
+# ballgown instance with 100 assembled transcripts and 10 samples
+}
 \author{
 Alyssa Frazee
 }

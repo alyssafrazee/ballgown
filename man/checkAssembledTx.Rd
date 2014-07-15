@@ -27,6 +27,14 @@ Plots annotated transcripts on the bottom panel (shaded in gray) and assembled
 \description{
 plot annotated and assembled transcripts together
 }
+\examples{
+\dontrun{
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
+data(bg)
+checkAssembledTx(annotated=annot, assembled=structure(bg)$trans, ind=4)
+}
+}
 \author{
 Alyssa Frazee
 }

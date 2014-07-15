@@ -29,6 +29,10 @@
 #' @author Alyssa Frazee
 #' 
 #' @export
+#' @examples \dontrun{
+#' data(bg)
+#' plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM', colorby='transcript')
+#' }
 
 plotMeans = function(gene, gown, overall=FALSE, groupvar, 
     groupname='all', meas=c('cov', 'FPKM', 'rcount', 'ucount', 'mrcount', 'mcov'),

@@ -33,7 +33,18 @@
 #' @seealso \code{\link{plotMeans}}, \code{\link{plotLatentTranscripts}}
 #' @author Alyssa Frazee
 #' @export
-
+#' @examples \dontrun{
+#' data(bg)
+#' 
+#' # plot one gene for one sample:
+#' plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12', meas='FPKM', 
+#'     colorby='transcript', main='transcripts from gene XLOC_000454: sample 12, FPKM')
+#' 
+#' # plot one gene for many samples:
+#' plotTranscripts('XLOC_000454', bg, samples=c('sample01', 'sample06', 'sample12', 'sample19'), 
+#'     meas='FPKM', colorby='transcript')
+#' 
+#' }
 plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
     meas='FPKM', legend=TRUE, labelTranscripts=FALSE, main=NULL, 
     colorBorders=FALSE, log=FALSE, logbase=2, customCol=NULL, customOrder=NULL){

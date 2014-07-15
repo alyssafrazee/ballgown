@@ -17,4 +17,10 @@ pData(object) <- value
 \description{
 Replacement method for pData slot in ballgown objects
 }
+\examples{
+# add "timepoint" covariate to ballgown object:
+data(bg) # already contains pData
+pData(bg) = data.frame(pData(bg), timepoint=rep(1:10, 2))
+head(pData(bg))
+}
 

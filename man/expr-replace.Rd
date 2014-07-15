@@ -15,4 +15,10 @@ expr(x) <- value
 \description{
 Replacement method for expr slot in ballgown objects
 }
+\examples{
+data(bg)
+n = ncol(bg@expr$trans)
+#multiply all transcript expression measurements by 10:
+bg@expr$trans[,11:n] = 10*bg@expr$trans[11:n]
+}
 

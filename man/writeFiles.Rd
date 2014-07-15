@@ -15,7 +15,8 @@ create tablemaker-like files on disk from a given ballgown object
 }
 \examples{
 \dontrun{
-  # put example here.
+  data(bg)
+  writeFiles(bg, dataDir=getwd())
 }
 }
 

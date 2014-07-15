@@ -81,6 +81,33 @@
 #' @references \url{http://biorxiv.org/content/early/2014/03/30/003665}
 #' 
 #' @author Jeff Leek, Alyssa Frazee
+#' @examples
+#' data(bg)
+#' 
+#' # two-group comparison:
+#' stat_results = stattest(bg, feature='transcript', meas='FPKM', covariate='group')
+#' 
+#' # timecourse test:
+#' pData(bg) = data.frame(pData(bg), time=rep(1:10, 2)) #dummy time covariate
+#' timecourse_results = stattest(bg, feature='transcript', meas='FPKM', 
+#'   covariate='time', timecourse=TRUE)
+#' 
+#' # timecourse test, adjusting for group:
+#' group_adj_timecourse_results = stattest(bg, feature='transcript', meas='FPKM', 
+#'   covariate='time', timecourse=TRUE, adjustvars='group')
+#' 
+#' # custom model matrices:
+#' ### create example data:
+#' set.seed(43)
+#' sex = sample(c('M','F'), size=nrow(pData(bg)), replace=TRUE)
+#' age = sample(21:52, size=nrow(pData(bg)), replace=TRUE)
+#' 
+#' ### create design matrices:
+#' mod = model.matrix(~ sex + age + pData(bg)$group + pData(bg)$time)
+#' mod0 = model.matrix(~ pData(bg)$group + pData(bg)$time)
+#'
+#' ### build model: 
+#' adjusted_results = stattest(bg, feature='transcript', meas='FPKM', mod0=mod0, mod=mod)
 
 stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod0 = NULL, 
     feature = c("gene", "exon", "intron", "transcript"), 

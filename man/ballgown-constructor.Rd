@@ -56,6 +56,11 @@ resulting ballgown object as an rda file.  The rda file usually has reasonable s
 the object in it shouldn't take up too much RAM when loaded, so the time and memory use in
 creating the object is a one-time cost.
 }
+\examples{
+bg = ballgown(dataDir=system.file('extdata', package='ballgown'),
+    samplePattern='sample')
+pData(bg) = data.frame(id=sampleNames(bg), group=rep(c(1,0), each=10))
+}
 \author{
 Leonardo Collado Torres, Alyssa Frazee
 }

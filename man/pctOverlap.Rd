@@ -23,6 +23,12 @@ In the ballgown context, \code{tx1} and \code{tx2} are two transcripts, each rep
   overlap is the number of nucleotides falling within both transcripts divided by the number of
   nucleotides falling within either transcript.  Useful as a measure of transcript closeness.
 }
+\examples{
+data(bg)
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+annot_grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
+pctOverlap(structure(bg)$trans[[2]], grl[[369]]) #79.9\%
+}
 \author{
 Alyssa Frazee
 }

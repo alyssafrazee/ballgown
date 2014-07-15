@@ -16,6 +16,12 @@
 #' @author Alyssa Frazee
 #' 
 #' @export
+#' @examples \dontrun{
+#' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+#' annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
+#' data(bg)
+#' checkAssembledTx(annotated=annot, assembled=structure(bg)$trans, ind=4)
+#' }
 checkAssembledTx = function(assembled, annotated, ind=1, 
     main='Assembled and Annotated Transcripts'){
   
