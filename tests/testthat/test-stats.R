@@ -28,7 +28,7 @@ test_that('default stat models work', {
     expect_that(generes, is_a('data.frame'))
     expect_that(nrow(generes), equals(93))
     expect_that(ncol(generes), equals(4))
-    expect_that(generes$pval[4], equals(0.0677, tolerance=0.001))
+    expect_that(generes$pval[4], equals(0.124, tolerance=0.001))
 
     expect_that(stattest(bg, feature='exon', meas='cov', covariate='group'), not(throws_error()))
     expect_that(stattest(bg, feature='exon', meas='FPKM', covariate='group'), throws_error())

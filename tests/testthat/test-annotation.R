@@ -1,12 +1,13 @@
 context('test annotation-related functions')
 
-test_that('ballgown reader is not broken and data was installed properly', {
-    expect_that(ballgown(dataDir=system.file('extdata', package='ballgown'),
-        samplePattern='sample', verbose=FALSE), not(throws_error()))
-})
-
 test_that('GenomicRanges is installed', {
     expect_that(suppressMessages(library(GenomicRanges)), not(throws_error()))
+})
+
+test_that('ballgown reader is not broken and data was installed properly', {
+    suppressMessages(library(GenomicRanges))
+    expect_that(ballgown(dataDir=system.file('extdata', package='ballgown'),
+        samplePattern='sample', verbose=FALSE), not(throws_error()))
 })
 
 test_that('example annotation was installed properly', {
