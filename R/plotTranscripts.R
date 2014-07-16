@@ -16,9 +16,10 @@
 #' @param labelTranscripts if \code{TRUE}, transcript ids are labeled on the left side of the plot. 
 #'   Default \code{FALSE}.
 #' @param main optional string giving the desired plot title.
-#' @param colorBorders if \code{TRUE}, exon borders are also drawn in color (instead of black, as 
-#'   they are by default). Useful for visualizing abundances for skinny exons and/or smaller plots, 
-#'   as often happens when \code{length(samples)} is large.
+#' @param blackBorders if \code{TRUE}, exon borders are drawn in black. Otherwise, they are drawn
+#'   in the same color as their transcript or exon. Switching blackBorders to FALSE can be useful
+#'   for visualizing abundances for skinny exons and/or smaller plots, which can be the case when
+#'   \code{length(samples)} is large.
 #' @param log if \code{TRUE}, color transcripts on the log scale. Default \code{FALSE}. To account 
 #'   for expression values of 0, we add 1 to all expression values before taking the log.
 #' @param logbase log base to use if \code{log = TRUE}. default 2.
@@ -47,7 +48,7 @@
 #' }
 plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
     meas='FPKM', legend=TRUE, labelTranscripts=FALSE, main=NULL, 
-    colorBorders=FALSE, log=FALSE, logbase=2, customCol=NULL, customOrder=NULL){
+    blackBorders=TRUE, log=FALSE, logbase=2, customCol=NULL, customOrder=NULL){
 
     if(class(gown)!="ballgown") stop("gown must be a ballgown object")
 
@@ -192,7 +193,7 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
                         colscale)
                     stopifnot(length(mycolor) > 0)
                 }
-                borderCol = ifelse(colorBorders, mycolor, 'black')
+                borderCol = ifelse(blackBorders, 'black', mycolor)
                 polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], 
                             gtsub$end[exind]), 
                         y=c(txind-0.4,txind+0.4,txind+0.4,txind-0.4), 

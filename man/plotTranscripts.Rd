@@ -5,7 +5,7 @@
 \usage{
 plotTranscripts(gene, gown, samples = NULL, colorby = "transcript",
   meas = "FPKM", legend = TRUE, labelTranscripts = FALSE, main = NULL,
-  colorBorders = FALSE, log = FALSE, logbase = 2, customCol = NULL,
+  blackBorders = TRUE, log = FALSE, logbase = 2, customCol = NULL,
   customOrder = NULL)
 }
 \arguments{
@@ -33,9 +33,10 @@ Default \code{FALSE}.}
 
 \item{main}{optional string giving the desired plot title.}
 
-\item{colorBorders}{if \code{TRUE}, exon borders are also drawn in color (instead of black, as
-they are by default). Useful for visualizing abundances for skinny exons and/or smaller plots,
-as often happens when \code{length(samples)} is large.}
+\item{blackBorders}{if \code{TRUE}, exon borders are drawn in black. Otherwise, they are drawn
+in the same color as their transcript or exon. Switching blackBorders to FALSE can be useful
+for visualizing abundances for skinny exons and/or smaller plots, which can be the case when
+\code{length(samples)} is large.}
 
 \item{log}{if \code{TRUE}, color transcripts on the log scale. Default \code{FALSE}. To account
 for expression values of 0, we add 1 to all expression values before taking the log.}
