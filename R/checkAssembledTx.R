@@ -9,6 +9,8 @@
 #'   Default 1.
 #' @param main optional character string giving the title for the resulting plot.  Default: 
 #'   "Assembled and Annotated Transcripts"
+#' @param customCol optional vector of custom colors for the annotated transcripts. If not the same
+#'   length as the number of annotated transcripts in the plot, recycling or truncation might occur.
 #' 
 #' @return Plots annotated transcripts on the bottom panel (shaded in gray) and assembled 
 #'   transcripts on the top panel (shaded with diagonal lines).
@@ -23,7 +25,7 @@
 #' checkAssembledTx(annotated=annot, assembled=structure(bg)$trans, ind=4)
 #' }
 checkAssembledTx = function(assembled, annotated, ind=1, 
-    main='Assembled and Annotated Transcripts'){
+    main='Assembled and Annotated Transcripts', customCol=NULL){
   
     ol = findOverlaps(annotated, assembled)
     ol.self = findOverlaps(annotated, annotated) #plot any overlapping transcripts also.
@@ -73,6 +75,9 @@ checkAssembledTx = function(assembled, annotated, ind=1,
         diffs = st.compare-en.compare
         if(any(diffs<0)) warning(paste("overlapping exons in annotated transcript",tx), call.=FALSE)
     }
+    if(!is.null(customCol)){
+        colorind = 0
+    }
     txind = txind+0.5
     abline(h=txind+0.25)
 
@@ -81,9 +86,17 @@ checkAssembledTx = function(assembled, annotated, ind=1,
         txind = txind+1
         gtsub = asmbl.df[asmbl.df$group_name==tx,]
         gtsub = gtsub[order(gtsub$start),]
+        if(is.null(customCol)){
+            mycolor = 'black'
+            density = 15
+        }else{
+            mycolor = customCol[(colorind %% length(customCol))+1]
+            density = NULL
+        }
+        mycolor = ifelse(is.null(customCol), 'black', customCol[(colorind %% length(customCol))+1])
         for(exind in 1:dim(gtsub)[1]){
             polygon(x=c(gtsub$start[exind], gtsub$start[exind], gtsub$end[exind], gtsub$end[exind]), 
-                y=c(txind-0.4, txind+0.4, txind+0.4, txind-0.4), col="black", density=15, angle=45)
+                y=c(txind-0.4, txind+0.4, txind+0.4, txind-0.4), col=mycolor, density=density)
             if(exind!=dim(gtsub)[1]){
                 lines(c(gtsub$end[exind],gtsub$start[exind+1]),c(txind, txind), lty=2, col="gray50")
             }
@@ -91,7 +104,12 @@ checkAssembledTx = function(assembled, annotated, ind=1,
         st.compare = gtsub$start[-1]
         en.compare = gtsub$end[-length(gtsub$end)]
         diffs = st.compare-en.compare
-        if(any(diffs<0)) warning(paste("overlapping exons in assembled transcript",tx), call.=FALSE)
+        if(any(diffs<0)){
+            warning(paste("overlapping exons in assembled transcript",tx), call.=FALSE)
+        }
+        if(!is.null(customCol)){
+            colorind = colorind+1
+        }
     }
     title(main)
     axis(side=2, at=c(median(1:length(unique(annot.df$group_name))), 
