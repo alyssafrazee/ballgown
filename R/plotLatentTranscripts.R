@@ -15,12 +15,14 @@
 #' for \code{gene})
 #' @param returncluster if TRUE (as it is by default), return the results of the call to 
 #' \code{clusterTrancsripts} so the data is available for later use.  Nothing is returned if FALSE.
+#' @param labelTranscripts if TRUE (as it is by default), print transcript IDs on the y-axis
+#' @param ... other arguments to pass to plotTranscripts
 #' 
 #' @return if \code{returncluster} is TRUE, the transcript clusters are returned as described in
 #' \code{\link{clusterTranscripts}}. A plot of the transcript clusters is also produced, in the 
 #' style of \code{\link{plotTranscripts}}.
 #' 
-#' @seealso \code{\link{clusterTranscripts}}
+#' @seealso \code{\link{clusterTranscripts}}, \code{\link{plotTranscripts}}
 #' 
 #' @author Alyssa Frazee
 #' 
@@ -30,7 +32,7 @@
 #' plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2, returncluster=TRUE)
 #' }
 plotLatentTranscripts = function(gene, gown, method=c("hclust", "kmeans"), k=NULL, 
-    choosek=c("var90", "thumb"), returncluster=TRUE){
+    choosek=c("var90", "thumb"), returncluster=TRUE, labelTranscripts=TRUE, ...){
   
     ## check validity:
     method = match.arg(method)
@@ -69,7 +71,7 @@ plotLatentTranscripts = function(gene, gown, method=c("hclust", "kmeans"), k=NUL
     pTitle = paste0(gene, ": transcripts clustered with ", method, ", k=", numcolors)
     plotTranscripts(gene, gown, legend=FALSE, samples=sampleNames(gown)[1], main=pTitle,
         customCol=cols[sorted_clusters$cluster], customOrder=sorted_clusters$t_id, 
-        labelTranscripts=TRUE)
+        labelTranscripts=labelTranscripts, ...)
 	
 	if(returncluster) return(cl) 
 }

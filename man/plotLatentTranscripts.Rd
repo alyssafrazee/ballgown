@@ -4,7 +4,8 @@
 \title{cluster assembled transcripts and plot the results}
 \usage{
 plotLatentTranscripts(gene, gown, method = c("hclust", "kmeans"), k = NULL,
-  choosek = c("var90", "thumb"), returncluster = TRUE)
+  choosek = c("var90", "thumb"), returncluster = TRUE,
+  labelTranscripts = TRUE, ...)
 }
 \arguments{
 \item{gene}{string, name of gene whose transcripts should be clustered (e.g., "XLOC_000001")}
@@ -24,6 +25,10 @@ for \code{gene})}
 
 \item{returncluster}{if TRUE (as it is by default), return the results of the call to
 \code{clusterTrancsripts} so the data is available for later use.  Nothing is returned if FALSE.}
+
+\item{labelTranscripts}{if TRUE (as it is by default), print transcript IDs on the y-axis}
+
+\item{...}{other arguments to pass to plotTranscripts}
 }
 \value{
 if \code{returncluster} is TRUE, the transcript clusters are returned as described in
@@ -44,6 +49,6 @@ plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2, returncluster=TRU
 Alyssa Frazee
 }
 \seealso{
-\code{\link{clusterTranscripts}}
+\code{\link{clusterTranscripts}}, \code{\link{plotTranscripts}}
 }
 
