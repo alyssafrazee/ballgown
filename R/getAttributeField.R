@@ -11,7 +11,7 @@
 #' \url{http://useast.ensembl.org/info/website/upload/gff.html} for specifics of the GFF/GTF file 
 #' format.
 #' 
-#' @author Wolfgang Huber, in \code{davidTiling}
+#' @author Wolfgang Huber, in the \code{davidTiling} R package (LGPL license)
 #' 
 #' @export
 #' @examples
@@ -34,7 +34,4 @@ getAttributeField <- function (x, field, attrsep = "; ")
     })
 }
 
-### needs attribution
 ### https://stat.ethz.ch/pipermail/bioconductor/2008-October/024669.html
-### this function comes from the davidTiling package, but I changed the default attribute separator
-### don't want to import the whole package, but would like to include this function in ballgown
