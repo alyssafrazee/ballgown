@@ -15,3 +15,8 @@ ballgown/R/transcriptOverlaps.R
 ballgown/R/getRefSeq.R
 ballgown/R/bpset.R
 .Rhistory
+.vagrant/
+Vagrantfile
+make_example_dataset.R
+set_environment.sh
+test_vagrant_install.R
