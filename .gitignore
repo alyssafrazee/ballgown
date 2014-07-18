@@ -13,3 +13,4 @@ vignettes/vignette.html
 vignettes/vignette.md
 vignettes/figure
 vignettes/*.bib
+test_vagrant_install.R
