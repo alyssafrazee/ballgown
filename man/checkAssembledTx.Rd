@@ -3,23 +3,40 @@
 \alias{checkAssembledTx}
 \title{plot annotated and assembled transcripts together}
 \usage{
-checkAssembledTx(tx.assembled, tx.annotated, ind = 1,
-  main = "Assembled and Annotated Transcripts")
+checkAssembledTx(assembled, annotated, ind = 1,
+  main = "Assembled and Annotated Transcripts", customCol = NULL)
 }
 \arguments{
-\item{tx.assembled}{a GRangesList object where the GRanges objects in the list represent sets of exons comprising assembled transcripts}
+\item{assembled}{a GRangesList object where the GRanges objects in the list represent sets of
+exons comprising assembled transcripts}
 
-\item{tx.annotated}{a GRangesList object where the GRanges objects in the list represent sets of exons comprising annotated transcripts}
+\item{annotated}{a GRangesList object where the GRanges objects in the list represent sets of
+exons comprising annotated transcripts}
 
-\item{ind}{integer; index of \code{tx.annotated} specifying which annotated transcript to plot.  All transcripts (assembled and annotated) overlapping \code{tx.annotated[[ind]]} will be plotted.  Default 1.}
+\item{ind}{integer; index of \code{annotated} specifying which annotated transcript to plot.
+All transcripts (assembled and annotated) overlapping \code{annotated[[ind]]} will be plotted.
+Default 1.}
 
-\item{main}{optional character string giving the title for the resulting plot.  Default: "Assembled and Annotated Transcripts"}
+\item{main}{optional character string giving the title for the resulting plot.  Default:
+"Assembled and Annotated Transcripts"}
+
+\item{customCol}{optional vector of custom colors for the annotated transcripts. If not the same
+  length as the number of annotated transcripts in the plot, recycling or truncation might occur.}
 }
 \value{
-No return value, but a plot is produced with annotated transcripts on the bottom panel (shaded in gray) and assembled transcripts on the top panel (shaded with diagonal lines).
+Plots annotated transcripts on the bottom panel (shaded in gray) and assembled
+  transcripts on the top panel (shaded with diagonal lines).
 }
 \description{
 plot annotated and assembled transcripts together
+}
+\examples{
+\dontrun{
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
+data(bg)
+checkAssembledTx(annotated=annot, assembled=structure(bg)$trans, ind=4)
+}
 }
 \author{
 Alyssa Frazee

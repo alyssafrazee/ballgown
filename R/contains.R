@@ -2,13 +2,26 @@
 #' 
 #' @param transcripts \code{GRangesList} object (assume for now that it represents transcripts)
 #' @param cds \code{GRangesList} object (assume for now that it represents sets of coding sequences)
-#' @details If \code{gown} is a \code{ballgown} object, \code{transcripts} can be \code{structure(gown)$trans} (or any subset). 
-#' @return vector with length equal to \code{length(transcripts)}, where each entry is \code{TRUE} if the corresponding transcript contains a coding sequence (i.e., is a superset of at least one entry of \code{cds}). 
+#' 
+#' @details If \code{gown} is a \code{ballgown} object, \code{transcripts} can be 
+#' \code{structure(gown)$trans} (or any subset). 
+#' 
+#' @return vector with length equal to \code{length(transcripts)}, where each entry is \code{TRUE} 
+#' if the corresponding transcript contains a coding sequence (i.e., is a superset of at least one 
+#' entry of \code{cds}). 
 #' 
 #' @author Alyssa Frazee
+#' 
 #' @export
-
-
+#' 
+#' @examples
+#' ## pretend this annotation is coding sequence:
+#' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+#' annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
+#' data(bg)
+#' results = contains(structure(bg)$trans, annot)
+#' # results is a boolean vector
+#' sum(results) #61
 contains = function(transcripts, cds){
     
     stopifnot(class(transcripts) == 'GRangesList' & class(cds) == 'GRangesList')
@@ -52,8 +65,9 @@ contains = function(transcripts, cds){
     containsCDS = sum(runlengths[runvals==2]) == cds_lengths
 
     # return data in right order:
+    allOL = split(containsCDS, queryHits(ol))
     ret = rep(FALSE, length(transcripts))
-    ret[queryHits(ol)] = containsCDS
+    ret[as.numeric(names(allOL))] = sapply(allOL, any)
     return(ret)
 }
 

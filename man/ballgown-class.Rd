@@ -10,7 +10,7 @@ S4 class for storing and manipulating expression data from assembled transcripto
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{tables containing expression data for genomic features (introns, exons, transcripts)}
+\item{\code{expr}}{tables containing expression data for genomic features (introns, exons, transcripts)}
 
 \item{\code{structure}}{genomic locations of features and their relationships to one another}
 
@@ -20,7 +20,21 @@ information (e.g., phenotype data and locations of read alignment files)}
 \item{\code{dirs}}{directories holding data created by \code{tablemaker}}
 
 \item{\code{mergedDate}}{date the ballgown object was created}
+
+\item{\code{meas}}{which expression measurement(s) the object contains in its data slot. Vector of one or
+  more of "rcount", "ucount", "mrcount", "cov", "cov_sd", "mcov", "mcov_sd", or "FPKM". See
+  vignette for details.}
 }}
+\examples{
+data(bg)
+  class(bg) #"ballgown"
+  dim(bg@expr$exon)
+  bg@structure$exon
+  head(bg@indexes$t2g)
+  head(bg@dirs)
+  bg@mergedDate
+  bg@meas
+}
 \author{
 Alyssa Frazee, Leonardo Collado Torres, Jeff Leek
 }

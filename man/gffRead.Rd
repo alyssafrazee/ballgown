@@ -8,7 +8,9 @@ gffRead(gffFile, nrows = -1, verbose = FALSE)
 \arguments{
 \item{gffFile}{name of GTF/GFF on disk}
 
-\item{nrows}{optional argument; number of rows to read in (default -1, which means read all rows)}
+\item{nrows}{number of rows to read in (default -1, which means read all rows)}
+
+\item{verbose}{if TRUE, print status info at beginning and end of file read. Default FALSE.}
 }
 \value{
 data frame representing the GTF/GFF file
@@ -16,10 +18,16 @@ data frame representing the GTF/GFF file
 \description{
 read in GTF/GFF file as a data frame
 }
+\examples{
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+annot = gffRead(gtfPath)
+}
 \author{
 Kasper Hansen
 }
 \seealso{
-\code{\link{getAttributeField}} to extract data from "attributes" column; \link{http://useast.ensembl.org/info/website/upload/gff.html} for more information on GTF/GFF files.
+\code{\link{getAttributeField}} to extract data from "attributes" column;
+\url{http://useast.ensembl.org/info/website/upload/gff.html} for more information on the GTF/GFF
+file format.
 }
 

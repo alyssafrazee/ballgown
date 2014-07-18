@@ -1,63 +1,94 @@
 #' cluster a gene's transcripts and calculate cluster-level expression
 #'
-#' @param gown ballgown object containing experimental data
-#' @param dattype which transcript-level expression measurement to use (\code{'cov'}, average per-base coverage, or \code{'FPKM'})
-#' @param method which clustering method to use (\code{'hclust'}, hierarchical clustering, or \code{'kmeans'}, k-means clustering)
-#' @return data frame with one row per transcript cluster and one column per sample, where entries are summed expression measurements for all the transcripts in the appropriate cluster
-#' @details Transcript clustering methods are in development, so use this function with caution: for example, it's not clear that the appropriate cluster-level expression measurement is the sum.  
+#' @param gene which gene's transcripts should be clustered
+#' @param gown ballgown object
+#' @param meas which transcript-level expression measurement to use (\code{'cov'}, average 
+#'   per-base coverage, or \code{'FPKM'})
+#' @param method which clustering method to use: \code{'hclust'} (hierarchical clustering) or 
+#'   \code{'kmeans'} (k-means clustering).
+#' @param k how many clusters to use. 
 #' 
-#' Also, this function runs clustering and collapsing on the entire ballgown object and could be very slow, so you may want to check out the \code{\link{subset}} method for ballgown objects and run this function on small chunks of genes.
-#' @seealso \code{\link{hclust}}, \code{\link{kmeans}}, \code{\link{clusterTranscripts}} for gene-level transcript clustering, \code{\link{plotLatentTranscripts}} for visualizing transcript clusters
+#' @return list with two elements:
+#' \itemize{
+#'   \item \code{tab}, a cluster-by-sample table of expression measurements
+#'   (\code{meas}, either cov or FPKM), where the expression measurement for each cluster is the 
+#'   mean (for \code{'cov'}) or aggregate (for \code{'FPKM'}, as in \code{\link{gexpr}}) 
+#'   expression measurement for all the transcripts in that cluster. This table can be used as the
+#'   \code{gowntable} argument to \code{\link{stattest}}, if differential expression results for 
+#'   transcript *clusters* are desired. 
+#'   \item \code{cl} output from \code{\link{clusterTranscripts}} that was run to produce
+#'       \code{tab}, for reference. Cluster IDs in the \code{cluster} component correspond to 
+#'       row names of \code{tab}
+#' }
+#' 
+#' @seealso \code{\link{hclust}}, \code{\link{kmeans}}, \code{\link{clusterTranscripts}}, 
+#'    \code{\link{plotLatentTranscripts}}
+#' 
 #' @author Alyssa Frazee
+#' 
 #' @export
-collapseTranscripts = function(gown, dattype=c('cov','FPKM'), method=c('hclust', 'kmeans')){
-  dattype = match.arg(dattype)
-  method = match.arg(method)
-  
-  # number of transcripts for each gene:
-  txnums = table(data(gown)$trans$gene_id)
-  genes.uniq = names(txnums)
-  
-  # number of clusters for each transcript:
-  k = sapply(genes.uniq, function(g) ifelse(txnums[[g]]<4, txnums[[g]], ceiling(sqrt(txnums[[g]]/2)))) #number of clusters for each gene - only cluster if >3 transcripts
-  
-  # set up the tx-by-sample table:
-  tab = matrix(NA, nrow=sum(k), ncol=nrow(indexes(gown)$pData))
-  
-  # can test either "cov" or "FPKM" (need to choose one)
-  coltypes = sapply(names(data(gown)$trans), gettype)
-  columns = which(coltypes==dattype)
-  
-  # set up vector to hold names of your clusters:
-  tclustnames = NULL
-    
-  # for each gene, cluster transcripts & sum counts to fill table:
-  for(g in genes.uniq){
-    ind = which(genes.uniq == g)
-    if(ind==1) tabinds = c(1:(cumsum(k)[1]))
-    if(ind!=1) tabinds = c((cumsum(k)[ind-1]+1):(cumsum(k)[ind]))
-    txdata = data(gown)$trans[data(gown)$trans$gene_id==g,]
-    if(k[ind]==txnums[[ind]]){
-      tab[tabinds,]  <- as.matrix(txdata[, columns])
-      tclustnames[tabinds] <- paste0("tx", txdata$t_id)
+#' @examples 
+#' data(bg)
+#' collapseTranscripts(bg, gene='XLOC_000454', meas='FPKM', method='kmeans')
+#' 
+collapseTranscripts = function(gene, gown, meas=c('cov', 'FPKM'), method=c('hclust', 'kmeans'), 
+    k=NULL){
+    meas = match.arg(meas)
+    method = match.arg(method)
+    if(is.null(k)){
+        k = 'thumb'
+    } else if(is.character(k)){
+        k = match.arg('thumb', 'var90')
+        if(k == 'var90' & method != 'kmeans'){
+            stop(.makepretty('choosing k explaining 90% of variability is only available with
+                kmeans clustering.'))
+        }
+    } else if(as.integer(k) != k){
+        k = floor(k)
+        warning('k must be an integer. Rounding down.')
+    } else if(!is.numeric(k)){
+        stop('k must be "var90", "thumb", or an integer (number of clusters)')
     }
-    if(k[ind] != txnums[[ind]]){
-      # do clustering:
-      cl = clusterTranscripts(gene=g, gown=gown, k=k[ind], method=method)
-      clusters = split(cl$clusters$tname, cl$clusters$cluster)
-      sumdat = matrix(NA, nrow=k[ind], ncol=length(columns))
-      for(i in 1:(k[ind])){
-        tids = as.numeric(sapply(as.character(clusters[[i]]), function(x) substr(x, 3, nchar(x))))
-        trows = which(txdata$t_id %in% tids)
-        sumdat[i,] = apply(txdata[trows, columns], 2, sum)
-      }
-      tab[tabinds,] <- sumdat
-      tclustnames[tabinds] <- as.character(sapply(clusters, function(x) paste(x, collapse="-")))
+
+    gown = subset(gown, paste0("gene_id == '", gene, '\''))
+    ntranscripts = length(structure(gown)$trans)
+
+    # cluster:
+    if(k == 'thumb'){
+        k = ceiling(sqrt(ntranscripts/2))
+        cl = clusterTranscripts(gene=gene, gown=gown, method=method, k=k)
+        message(paste('using k =', k, 'clusters'))
+    } else if(k == "var90"){
+        for(i in 1:(ntranscripts-1)){
+            cl = clusterTranscripts(gene=gene, gown=gown, method="kmeans", k=i)
+            if(cl$pctvar>=0.9) break
+        }
+        if(i==ntranscripts-1 & cl$pctvar < 0.9){
+            # either k=n-1 or nothing explained 90% of variation:
+            stop("k = n-1 did not explain 90% of variation. Try no clustering, or specifying k.")
+        }
+    } else {
+        cl = clusterTranscripts(gene=gene, gown=gown, method=method, k=k)
     }
-  }
-  
-  tab = as.data.frame(tab)
-  names(tab) = as.character(sapply(names(data(simgown)$trans)[coltypes==dattype], getsamp))
-  rownames(tab) = tclustnames
-  return(tab)
+
+    clusterList = split(cl$clusters$t_id, cl$clusters$cluster)
+    collapsed = lapply(clusterList, function(x){
+        if(length(x) > 1){
+            if(meas == 'cov'){
+                colMeans(texpr(gown)[texpr(gown,'all')$t_id %in% x,])    
+            } else {
+                tstruct = structure(gown)$trans[names(structure(gown)$trans) %in% x]
+                tlengths = sapply(width(tstruct), sum)
+                clength = sum(width(reduce(unlist(tstruct))))
+                totfrags = colSums(tlengths * texpr(gown)[texpr(gown,'all')$t_id %in% x,])
+                totfrags / clength
+            }
+        }else{
+            texpr(gown)[texpr(gown,'all')$t_id == x,]
+        }
+    })
+
+    tab = t(as.data.frame(collapsed))
+    rownames(tab) = names(collapsed)
+    return(list(tab=tab, cl=cl))
 }  

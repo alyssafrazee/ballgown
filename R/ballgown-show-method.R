@@ -2,5 +2,5 @@
 setMethod("show", "ballgown", 
     function(object)
         cat(class(object), "instance with", length(structure(object)$trans), 
-            "assembled transcripts and", nrow(indexes(object)$pData), "samples\n")
+            "assembled transcripts and", length(object@dirs), "samples\n")
 )

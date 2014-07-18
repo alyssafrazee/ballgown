@@ -1,2 +1,9 @@
-polyester
 tablemaker
+README.md
+Vagrantfile
+.vagrant
+.git
+.gitignore
+make_example_dataset.R
+set_environment.sh
+figure

@@ -11,13 +11,25 @@ contains(transcripts, cds)
 \item{cds}{\code{GRangesList} object (assume for now that it represents sets of coding sequences)}
 }
 \value{
-vector with length equal to \code{length(transcripts)}, where each entry is \code{TRUE} if the corresponding transcript contains a coding sequence (i.e., is a superset of at least one entry of \code{cds}).
+vector with length equal to \code{length(transcripts)}, where each entry is \code{TRUE}
+if the corresponding transcript contains a coding sequence (i.e., is a superset of at least one
+entry of \code{cds}).
 }
 \description{
 determine if one set of GRanges fully contains any of another set of GRanges
 }
 \details{
-If \code{gown} is a \code{ballgown} object, \code{transcripts} can be \code{structure(gown)$trans} (or any subset).
+If \code{gown} is a \code{ballgown} object, \code{transcripts} can be
+\code{structure(gown)$trans} (or any subset).
+}
+\examples{
+## pretend this annotation is coding sequence:
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
+data(bg)
+results = contains(structure(bg)$trans, annot)
+# results is a boolean vector
+sum(results) #61
 }
 \author{
 Alyssa Frazee

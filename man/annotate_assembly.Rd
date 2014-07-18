@@ -11,13 +11,24 @@ annotate_assembly(assembled, annotated)
 \item{annotated}{\code{GRangesList} object representing annotated transcripts}
 }
 \value{
-data frame, where each row contains \code{assembledInd} and \code{annotatedInd} (indexes of overlapping transcripts in \code{assembled} and \code{annotated}), and the percent overlap between the two transcripts.
+data frame, where each row contains \code{assembledInd} and \code{annotatedInd} (indexes
+of overlapping transcripts in \code{assembled} and \code{annotated}), and the percent overlap
+between the two transcripts.
 }
 \description{
 match assembled transcripts to annotated transcripts
 }
 \details{
-If \code{gown} is a \code{ballgown} object, \code{assembled} can be \code{structure(gown)$trans} (or any subset). You can generate a \code{GRangesList} object containing annotated transcripts from a gtf file using the \code{\link{gffReadGR}} function and setting \code{splitByTranscripts=TRUE}.
+If \code{gown} is a \code{ballgown} object, \code{assembled} can be
+\code{structure(gown)$trans} (or any subset). You can generate a \code{GRangesList} object
+containing annotated transcripts from a gtf file using the \code{\link{gffReadGR}} function and
+setting \code{splitByTranscripts=TRUE}.
+}
+\examples{
+data(bg)
+gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
+info = annotate_assembly(assembled=structure(bg)$trans, annotated=annot)
 }
 \author{
 Alyssa Frazee
