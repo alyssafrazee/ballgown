@@ -1,80 +1,96 @@
 #' statistical tests for differential expression in ballgown
 #'
-#' Test each transcript, gene, exon, or intron in a ballgown object for differential expression, 
-#' using comparisons of linear models.
+#' Test each transcript, gene, exon, or intron in a ballgown object for 
+#' differential expression, using comparisons of linear models.
 #' 
 #' @param gown name of an object of class \code{ballgown}
-#' @param gowntable matrix or matrix-like object with \code{rownames} representing feature IDs and 
-#'   columns representing samples, with expression estimates in the cells. Provide the feature name 
-#'   with \code{feature}. You must provide exactly one of \code{gown} or \code{gowntable}.
-#' @param pData Required if \code{gowntable} is provided: data frame giving phenotype data for the
-#'    samples in the columns of \code{gowntable}. (Rows of \code{pData} correspond to columns of
-#'    \code{gowntable}). If \code{gown} is used instead, it must have a non-null, valid \code{pData}
-#'    slot (and the \code{pData} argument to \code{stattest} should be left \code{NULL}).
-#' @param mod object of class \code{model.matrix} representing the design matrix for the linear 
-#'   regression model including covariates of interest
-#' @param mod0 object of class \code{model.matrix} representing the design matrix for the linear 
-#'   regression model without the covariates of interest.
-#' @param feature the type of genomic feature to be tested for differential expression. If
-#'   \code{gown} is used, must be one of \code{"gene"}, \code{"transcript"}, \code{"exon"}, or
-#'   \code{"intron"}. If \code{gowntable} is used, this is just used for labeling and can be
-#'   whatever the rows of \code{gowntable} represent.
-#' @param meas the expression measurement to use for statistical tests.  Must be one of 
-#'   \code{"cov"}, \code{"FPKM"}, \code{"rcount"}, \code{"ucount"}, \code{"mrcount"}, or 
-#'   \code{"mcov"}. Not all expression measurements are available for all features. Leave as default
-#'    if \code{gowntable} is provided.
-#' @param timecourse if \code{TRUE}, tests whether or not the expression profiles of genomic 
-#'   features vary over time (or another continuous covariate) in the study.  Default \code{FALSE}.
-#' @param covariate string representing the name of the covariate of interest for the differential 
-#'   expression tests.  Must correspond to the name of a column of \code{pData(gown)}. If 
-#'   \code{timecourse=TRUE}, this should be the study's time variable.
-#' @param adjustvars optional vector of strings representing the names of potential confounders.  
-#'   Must correspond to names of columns of \code{pData(gown)}.
-#' @param gexpr optional data frame that is the result of calling \code{gexpr(gown))}.  (You can 
-#'   speed this function up by pre-creating \code{gexpr(gown)}.)
-#' @param df degrees of freedom used for modeling expression over time with natural cubic splines.  
-#'   Default 4.  Only used if \code{timecourse=TRUE}.
-#' @param getFC if \code{TRUE}, also return estimated fold changes (adjusted for library size and 
-#'   confounders) between populations. Only available for 2-group comparisons at the moment. Default 
-#'   \code{FALSE}.
-#' @param libadjust if \code{TRUE} (default), include a library-size adjustment as a confounder in 
-#'   the fitted models. The adjustment is currently defined as the sum of the sample's log
-#'   expression measurements below the 75th percentile of those measurements.
-#' @param log if \code{TRUE}, outcome variable in linear models is log(expression+1), otherwise it's 
-#'   expression. Default TRUE.
+#' @param gowntable matrix or matrix-like object with \code{rownames} 
+#'   representing feature IDs and columns representing samples, with expression
+#'   estimates in the cells. Provide the feature name with \code{feature}. You
+#'   must provide exactly one of \code{gown} or \code{gowntable}.
+#' @param pData Required if \code{gowntable} is provided: data frame giving
+#'   phenotype data for the samples in the columns of \code{gowntable}. (Rows of
+#'   \code{pData} correspond to columns of \code{gowntable}). If \code{gown} is
+#'   used instead, it must have a non-null, valid \code{pData} slot (and the 
+#'   \code{pData} argument to \code{stattest} should be left \code{NULL}).
+#' @param mod object of class \code{model.matrix} representing the design matrix
+#'   for the linear regression model including covariates of interest
+#' @param mod0 object of class \code{model.matrix} representing the design 
+#'   matrix for the linear regression model without the covariates of interest.
+#' @param feature the type of genomic feature to be tested for differential 
+#'   expression. If \code{gown} is used, must be one of \code{"gene"}, 
+#'   \code{"transcript"}, \code{"exon"}, or \code{"intron"}. If \code{gowntable}
+#'   is used, this is just used for labeling and can be whatever the rows of 
+#'   \code{gowntable} represent.
+#' @param meas the expression measurement to use for statistical tests.  Must be
+#'   one of \code{"cov"}, \code{"FPKM"}, \code{"rcount"}, \code{"ucount"}, 
+#'   \code{"mrcount"}, or \code{"mcov"}. Not all expression measurements are 
+#'   available for all features. Leave as default if \code{gowntable} is 
+#'   provided.
+#' @param timecourse if \code{TRUE}, tests whether or not the expression 
+#'   profiles of genomic features vary over time (or another continuous 
+#'   covariate) in the study.  Default \code{FALSE}.
+#' @param covariate string representing the name of the covariate of interest 
+#'   for the differential expression tests.  Must correspond to the name of a 
+#'   column of \code{pData(gown)}. If \code{timecourse=TRUE}, this should be the
+#'   study's time variable.
+#' @param adjustvars optional vector of strings representing the names of 
+#'   potential confounders.  Must correspond to names of columns of 
+#'   \code{pData(gown)}.
+#' @param gexpr optional data frame that is the result of calling 
+#'   \code{gexpr(gown))}.  (You can speed this function up by pre-creating 
+#'   \code{gexpr(gown)}.)
+#' @param df degrees of freedom used for modeling expression over time with 
+#'   natural cubic splines.  Default 4.  Only used if \code{timecourse=TRUE}.
+#' @param getFC if \code{TRUE}, also return estimated fold changes (adjusted for
+#'   library size and confounders) between populations. Only available for 
+#'   2-group comparisons at the moment. Default \code{FALSE}.
+#' @param libadjust if \code{TRUE} (default), include a library-size adjustment 
+#'   as a confounder in the fitted models. The adjustment is currently defined 
+#'   as the sum of the sample's log expression measurements below the 75th 
+#'   percentile of those measurements.
+#' @param log if \code{TRUE}, outcome variable in linear models is 
+#'   log(expression+1), otherwise it's expression. Default TRUE.
 #' 
-#' @details At minimum, you need to provide a ballgown object or count table, the type of feature 
-#'   you want to test (gene, transcript, exon, or intron), the expression measurement you want to
-#'   use (FPKM, cov, rcount, etc.), and the covariate of interest, which must be the name of one of
-#'   the columns of the `pData` component of your ballgown object (or provided pData). This 
-#'   covariate is automatically converted to a factor during model fitting in non-timecourse
-#'   experiments.
+#' @details At minimum, you need to provide a ballgown object or count table, 
+#'   the type of feature you want to test (gene, transcript, exon, or intron), 
+#'   the expression measurement you want to use (FPKM, cov, rcount, etc.), and 
+#'   the covariate of interest, which must be the name of one of the columns of 
+#'   the `pData` component of your ballgown object (or provided pData). This 
+#'   covariate is automatically converted to a factor during model fitting in 
+#'   non-timecourse experiments.
 #' 
-#'   By default, models are fit using \code{log2(meas + 1)} as the outcome for each feature. To
-#'   disable the log transformation, provide `log = FALSE` as an argument to `stattest`. You can 
-#'   use the \code{gowntable} option if you'd like to to use a different transformation.
+#'   By default, models are fit using \code{log2(meas + 1)} as the outcome for 
+#'   each feature. To disable the log transformation, provide `log = FALSE` as 
+#'   an argument to `stattest`. You can use the \code{gowntable} option if you'd
+#'   like to to use a different transformation.
 #' 
-#'   Library size adjustment is performed by default by using the sum of the log nonzero expression
-#'   measurements for each sample, up to the 75th percentile of those measurements. This adjustment
-#'   can be disabled by setting \code{libadjust=FALSE}. You can use \code{mod} and \code{mod0} to
-#'   specify alternative library size adjustments.
+#'   Library size adjustment is performed by default by using the sum of the log
+#'   nonzero expression measurements for each sample, up to the 75th percentile
+#'   of those measurements. This adjustment can be disabled by setting 
+#'   \code{libadjust=FALSE}. You can use \code{mod} and \code{mod0} to specify 
+#'   alternative library size adjustments.
 #' 
-#'   \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is specified, you must
-#'   also specify \code{mod0}.  If neither is specified, \code{mod0} defaults to the design matrix 
-#'   for a model including only a library-size adjustment, and \code{mod} defaults to the design 
-#'   matrix for a model including a library-size adjustment and \code{covariate}. Note that if you 
-#'   supply \code{mod} and \code{mod0}, \code{covariate}, \code{timecourse}, \code{adjustvars}, and 
-#'   \code{df} are ignored, so make sure your covariate of interest and all appropriate confounder 
-#'   adjustments, including library size, are specified in \code{mod} and \code{mod0}.
+#'   \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is 
+#'   specified, you must also specify \code{mod0}.  If neither is specified, 
+#'   \code{mod0} defaults to the design matrix for a model including only a 
+#'   library-size adjustment, and \code{mod} defaults to the design matrix for a
+#'   model including a library-size adjustment and \code{covariate}. Note that 
+#'   if you supply \code{mod} and \code{mod0}, \code{covariate}, 
+#'   \code{timecourse}, \code{adjustvars}, and \code{df} are ignored, so make 
+#'   sure your covariate of interest and all appropriate confounder 
+#'   adjustments, including library size, are specified in \code{mod} and 
+#'   \code{mod0}.
 #' 
 #'   Full model details are described in the supplement of 
 #'   \url{http://biorxiv.org/content/early/2014/03/30/003665}.
 #' 
-#' @return data frame containing the columns \code{feature}, \code{id} representing feature id, 
-#'   \code{pval} representing the p-value for testing whether this feature was differentially 
-#'   expressed according to \code{covariate}, and \code{qval}, the estimated false discovery rate 
-#'   using this feature's signal strength as a significance cutoff. An additional column, \code{fc}, 
-#'   is included if \code{getFC} is \code{TRUE}.
+#' @return data frame containing the columns \code{feature}, \code{id} 
+#'   representing feature id, \code{pval} representing the p-value for testing 
+#'   whether this feature was differentially expressed according to 
+#'   \code{covariate}, and \code{qval}, the estimated false discovery rate 
+#'   using this feature's signal strength as a significance cutoff. An 
+#'   additional column, \code{fc}, is included if \code{getFC} is \code{TRUE}.
 #' 
 #' @export
 #' 
@@ -85,7 +101,8 @@
 #' data(bg)
 #' 
 #' # two-group comparison:
-#' stat_results = stattest(bg, feature='transcript', meas='FPKM', covariate='group')
+#' stat_results = stattest(bg, feature='transcript', meas='FPKM', 
+#'   covariate='group')
 #' 
 #' # timecourse test:
 #' pData(bg) = data.frame(pData(bg), time=rep(1:10, 2)) #dummy time covariate
@@ -93,8 +110,8 @@
 #'   covariate='time', timecourse=TRUE)
 #' 
 #' # timecourse test, adjusting for group:
-#' group_adj_timecourse_results = stattest(bg, feature='transcript', meas='FPKM', 
-#'   covariate='time', timecourse=TRUE, adjustvars='group')
+#' group_adj_timecourse_results = stattest(bg, feature='transcript', 
+#'   meas='FPKM', covariate='time', timecourse=TRUE, adjustvars='group')
 #' 
 #' # custom model matrices:
 #' ### create example data:
@@ -107,13 +124,14 @@
 #' mod0 = model.matrix(~ pData(bg)$group + pData(bg)$time)
 #'
 #' ### build model: 
-#' adjusted_results = stattest(bg, feature='transcript', meas='FPKM', mod0=mod0, mod=mod)
+#' adjusted_results = stattest(bg, feature='transcript', meas='FPKM', 
+#'   mod0=mod0, mod=mod)
 
-stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod0 = NULL, 
-    feature = c("gene", "exon", "intron", "transcript"), 
-    meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"), timecourse = FALSE, 
-    covariate = NULL, adjustvars = NULL, gexpr = NULL, df = 4, getFC = FALSE, libadjust = TRUE, 
-    log = TRUE){
+stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, 
+    mod0 = NULL, feature = c("gene", "exon", "intron", "transcript"), 
+    meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"), 
+    timecourse = FALSE, covariate = NULL, adjustvars = NULL, gexpr = NULL, 
+    df = 4, getFC = FALSE, libadjust = TRUE, log = TRUE){
 
     if(!xor(is.null(gown), is.null(gowntable))){
         stop('must provide exactly one of gown and gowntable')
@@ -138,13 +156,14 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
         if((feature == "exon") & meas == "FPKM"){
             stop("exons do not have FPKM measurements")
         }
-        if((feature == "intron") & !(meas %in% c("rcount", "ucount", "mrcount"))){
+        if((feature == "intron") & 
+            !(meas %in% c("rcount", "ucount", "mrcount"))){
             stop("introns only have rcount, ucount, and mrcount measurements")
         }
         pData = pData(gown)
         if(is.null(pData) & is.null(mod)){
-            stop(.makepretty('to do statistical tests, either gown must contain pData or you must
-                specify models.'))
+            stop(.makepretty('to do statistical tests, either gown must contain
+                pData or you must specify models.'))
         }
             ## extract the right expression measurements
         if(feature == "gene"){
@@ -181,9 +200,10 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
                 
         # make sure there are at least 2 reps per group:
         if(any(table(x) < 2) & !timecourse){
-            stop(.makepretty('There must be at least two replicates per group. Make sure covariate
-                is categorical; if continuous, consider the timecourse option, or specify your own
-                models with mod and mod0.'))
+            stop(.makepretty('There must be at least two replicates per group.
+                Make sure covariate is categorical; if continuous, consider the
+                timecourse option, or specify your own models with mod and
+                mod0.'))
         }
 
 
@@ -195,27 +215,34 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
                     stop(paste(adjustvars[i], 'is not a valid covariate'))
                 }
                 column_ind = which(names(pData) == adjustvars[i])
-                eval(parse(text=paste0(adjustvars[i], " <- pData[,",column_ind,"]")))
+                eval(parse(text=paste0(adjustvars[i], 
+                    " <- pData[,",column_ind,"]")))
                 variable_list = paste(variable_list, adjustvars[i], sep="+")
             }
             if(libadjust){
-                eval(parse(text=paste0("mod0 = model.matrix(~ lib_adj", variable_list, ")")))
+                eval(parse(text=paste0("mod0 = model.matrix(~ lib_adj", 
+                    variable_list, ")")))
                 if(timecourse){
-                    eval(parse(text=paste0("mod = model.matrix(~ ns(x, df = ", df, ") + lib_adj", 
+                    eval(parse(text=paste0(
+                        "mod = model.matrix(~ ns(x, df = ", df, ") + lib_adj", 
                         variable_list, ")")))
                 } else {
-                    eval(parse(text=paste0("mod = model.matrix(~ as.factor(x) + lib_adj", 
+                    eval(parse(text=paste0(
+                        "mod = model.matrix(~ as.factor(x) + lib_adj", 
                         variable_list, ")")))
                 }
             } else {
                 variable_list = substr(variable_list, 2, nchar(variable_list)) 
                 #^^strip off "+" at beginning of variable_list
-                eval(parse(text=paste0("mod0 = model.matrix(~", variable_list, ")")))
+                eval(parse(text=paste0("mod0 = model.matrix(~", 
+                    variable_list, ")")))
                 if(timecourse){
-                    eval(parse(text=paste0("mod = model.matrix(~ ns(x, df = ", df, ") + ", 
+                    eval(parse(text=paste0(
+                        "mod = model.matrix(~ ns(x, df = ", df, ") + ", 
                         variable_list,")")))
                 } else {
-                    eval(parse(text=paste0("mod = model.matrix(~ as.factor(x) + ", variable_list, 
+                    eval(parse(text=paste0(
+                        "mod = model.matrix(~ as.factor(x) + ", variable_list, 
                         ")")))
                 }                
             }
@@ -242,7 +269,8 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
     } else {
         ## test whether custom models are, in fact, nested.
         stopifnot(class(mod0) == 'matrix' & class(mod) == 'matrix')
-        if(!('assign' %in% names(attributes(mod0))) | !('assign' %in% names(attributes(mod)))){
+        if(!('assign' %in% names(attributes(mod0))) | !('assign' %in% 
+                names(attributes(mod)))){
             stop('mod and mod0 must both be model.matrix objects')
         }
         stopifnot(ncol(mod) > ncol(mod0))
@@ -271,12 +299,13 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
             if(log){
                 estFC = 2^(lmodels$coefficients[,2])
             }else{
-                warning(.makepretty('log is FALSE, so estimated difference (not fold change) is
-                    reported.'))
+                warning(.makepretty('log is FALSE, so estimated difference (not
+                    fold change) is reported.'))
                 estFC = lmodels$coefficients[,2]
             }
             presults = f.pvalue(y, mod, mod0)
-            results = data.frame(feature=rep(feature, nrow(expr)), id=rownames(expr), fc=estFC, 
+            results = data.frame(feature=rep(feature, nrow(expr)), 
+                id=rownames(expr), fc=estFC, 
                 pval=presults, qval=p.adjust(presults, "fdr"))
             if(!log){
                 names(results)[3] = 'difference'
@@ -287,8 +316,8 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL, mod
     }
 
     presults = f.pvalue(y, mod, mod0)
-    results = data.frame(feature=rep(feature, nrow(expr)), id=rownames(expr), pval=presults, 
-        qval=p.adjust(presults, "fdr")) 
+    results = data.frame(feature=rep(feature, nrow(expr)), 
+        id=rownames(expr), pval=presults, qval=p.adjust(presults, "fdr")) 
     rownames(results) = NULL
     return(results)
 }

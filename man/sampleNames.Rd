@@ -13,8 +13,8 @@ sampleNames(object)
 \item{object}{a ballgown object}
 }
 \value{
-vector of sample IDs for \code{x}. If \code{pData} exists, samples in its rows correspond
- to samples in \code{sampleNames(x)} (in order).
+vector of sample IDs for \code{x}. If \code{pData} exists, samples in
+its rows correspond to samples in \code{sampleNames(x)} (in order).
 }
 \description{
 get names of samples in a ballgown objects

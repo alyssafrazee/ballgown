@@ -7,25 +7,27 @@ checkAssembledTx(assembled, annotated, ind = 1,
   main = "Assembled and Annotated Transcripts", customCol = NULL)
 }
 \arguments{
-\item{assembled}{a GRangesList object where the GRanges objects in the list represent sets of
-exons comprising assembled transcripts}
+\item{assembled}{a GRangesList object where the GRanges objects in the list
+represent sets of exons comprising assembled transcripts}
 
-\item{annotated}{a GRangesList object where the GRanges objects in the list represent sets of
+\item{annotated}{a GRangesList object where the GRanges objects in the list
+  represent sets of
 exons comprising annotated transcripts}
 
-\item{ind}{integer; index of \code{annotated} specifying which annotated transcript to plot.
-All transcripts (assembled and annotated) overlapping \code{annotated[[ind]]} will be plotted.
-Default 1.}
+\item{ind}{integer; index of \code{annotated} specifying which annotated
+transcript to plot.  All transcripts (assembled and annotated) overlapping
+\code{annotated[[ind]]} will be plotted. Default 1.}
 
-\item{main}{optional character string giving the title for the resulting plot.  Default:
-"Assembled and Annotated Transcripts"}
+\item{main}{optional character string giving the title for the resulting
+plot.  Default: "Assembled and Annotated Transcripts"}
 
-\item{customCol}{optional vector of custom colors for the annotated transcripts. If not the same
-  length as the number of annotated transcripts in the plot, recycling or truncation might occur.}
+\item{customCol}{optional vector of custom colors for the annotated
+  transcripts. If not the same length as the number of annotated transcripts
+  in the plot, recycling or truncation might occur.}
 }
 \value{
-Plots annotated transcripts on the bottom panel (shaded in gray) and assembled
-  transcripts on the top panel (shaded with diagonal lines).
+Plots annotated transcripts on the bottom panel (shaded in gray) and
+  assembled transcripts on the top panel (shaded with diagonal lines).
 }
 \description{
 plot annotated and assembled transcripts together

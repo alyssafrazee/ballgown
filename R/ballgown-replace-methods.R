@@ -10,8 +10,10 @@
 #' 
 #' @examples
 #' data(bg)
-#' indexes(bg)$bamfiles = paste0('/path/to/bamfolder/', sampleNames(bg), '_accepted_hits.bam')
-setReplaceMethod("indexes", "ballgown", function(x, value) {x@indexes <- value; x})
+#' indexes(bg)$bamfiles = paste0('/path/to/bamfolder/', 
+#'   sampleNames(bg), '_accepted_hits.bam')
+setReplaceMethod("indexes", "ballgown", function(x, value){
+    x@indexes <- value; x})
 
 #' Replacement method for expr slot in ballgown objects
 #' 

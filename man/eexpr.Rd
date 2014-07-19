@@ -12,13 +12,13 @@ eexpr(x, meas = "rcount")
 \arguments{
 \item{x}{a ballgown object}
 
-\item{meas}{type of measurement to extract. Can be "rcount", "ucount", "mrcount", "cov", "mcov",
-or "all". Default "rcount".}
+\item{meas}{type of measurement to extract. Can be "rcount", "ucount",
+"mrcount", "cov", "mcov", or "all". Default "rcount".}
 }
 \value{
-exon-by-sample matrix containing exon-level expression values (measured by \code{meas}).
-  If \code{meas} is \code{"all"}, a data frame is returned, containing all measurements and
-  location information.
+exon-by-sample matrix containing exon-level expression values
+  (measured by \code{meas}). If \code{meas} is \code{"all"}, a data frame is
+  returned, containing all measurements and location information.
 }
 \description{
 extract exon-level expression measurements from ballgown objects

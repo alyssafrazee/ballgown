@@ -8,10 +8,11 @@
 #' @rdname structure
 #' @aliases structure,ballgown-method
 #' @param x a ballgown object
-#' @return list containing elements \code{intron}, \code{exon}, and \code{trans}. \code{exon} and 
-#'  \code{intron} are \code{GRanges} objects, where each range is an exon or intron, and 
-#'  \code{trans} is a \code{GRangesList} object, where each \code{GRanges} element is a set of exons
-#'  representing a transcript.
+#' @return list containing elements \code{intron}, \code{exon}, and 
+#'  \code{trans}. \code{exon} and \code{intron} are \code{GRanges} objects,
+#'  where each range is an exon or intron, and \code{trans} is a
+#'  \code{GRangesList} object, where each \code{GRanges} element is a set of 
+#'  exons representing a transcript.
 #'
 #' @examples
 #' data(bg)
@@ -28,8 +29,8 @@ setMethod("structure", "ballgown", function(x) x@structure)
 #' @rdname expr
 #' @aliases expr,ballgown-method
 #' @param x a ballgown object
-#' @return list containing elements \code{intron}, \code{exon}, and \code{trans}, 
-#'  which are feature-by-sample data frames of expression data.
+#' @return list containing elements \code{intron}, \code{exon}, and 
+#'  \code{trans}, which are feature-by-sample data frames of expression data.
 #' 
 #' @examples
 #' data(bg)
@@ -37,7 +38,8 @@ setMethod("structure", "ballgown", function(x) x@structure)
 #' class(expr(bg))
 #' dim(expr(bg)$exon)
 #' 
-#' @seealso \code{\link{texpr}}, \code{\link{gexpr}}, \code{\link{eexpr}}, \code{\link{iexpr}}
+#' @seealso \code{\link{texpr}}, \code{\link{gexpr}}, \code{\link{eexpr}}, 
+#'   \code{\link{iexpr}}
 setMethod("expr", "ballgown", function(x) x@expr)
 
 #' extract the indexes from ballgown objects
@@ -49,9 +51,10 @@ setMethod("expr", "ballgown", function(x) x@expr)
 #' @aliases indexes,ballgown-method
 #' @param x a ballgown object
 #' @return list containing elements \code{e2t}, \code{i2t}, \code{t2g}, 
-#'  \code{bamfiles}, and \code{pData}, where \code{e2t} and \code{i2t} are data frames linking exons 
-#'  and introns (respectively) to transcripts, \code{t2g} is a data frame linking transcripts to 
-#'  genes, and \code{bamfiles} and \code{pData} are described in \code{?ballgown}.
+#'  \code{bamfiles}, and \code{pData}, where \code{e2t} and \code{i2t} are data
+#'  frames linking exons and introns (respectively) to transcripts, \code{t2g}
+#'  is a data frame linking transcripts to genes, and \code{bamfiles} and 
+#'  \code{pData} are described in \code{?ballgown}.
 #' 
 #' @examples
 #' data(bg)
@@ -113,8 +116,8 @@ setMethod("pData", "ballgown", function(object){
 #' @rdname sampleNames
 #' @aliases sampleNames,ballgown-method
 #' @param object a ballgown object
-#' @return vector of sample IDs for \code{x}. If \code{pData} exists, samples in its rows correspond 
-#'  to samples in \code{sampleNames(x)} (in order).
+#' @return vector of sample IDs for \code{x}. If \code{pData} exists, samples in
+#' its rows correspond to samples in \code{sampleNames(x)} (in order).
 #' 
 #' @examples
 #' data(bg)

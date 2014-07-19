@@ -14,9 +14,10 @@ indexes(x)
 }
 \value{
 list containing elements \code{e2t}, \code{i2t}, \code{t2g},
- \code{bamfiles}, and \code{pData}, where \code{e2t} and \code{i2t} are data frames linking exons
- and introns (respectively) to transcripts, \code{t2g} is a data frame linking transcripts to
- genes, and \code{bamfiles} and \code{pData} are described in \code{?ballgown}.
+ \code{bamfiles}, and \code{pData}, where \code{e2t} and \code{i2t} are data
+ frames linking exons and introns (respectively) to transcripts, \code{t2g}
+ is a data frame linking transcripts to genes, and \code{bamfiles} and
+ \code{pData} are described in \code{?ballgown}.
 }
 \description{
 extract the indexes from ballgown objects

@@ -12,93 +12,109 @@ stattest(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
 \arguments{
 \item{gown}{name of an object of class \code{ballgown}}
 
-\item{gowntable}{matrix or matrix-like object with \code{rownames} representing feature IDs and
-columns representing samples, with expression estimates in the cells. Provide the feature name
-with \code{feature}. You must provide exactly one of \code{gown} or \code{gowntable}.}
+\item{gowntable}{matrix or matrix-like object with \code{rownames}
+representing feature IDs and columns representing samples, with expression
+estimates in the cells. Provide the feature name with \code{feature}. You
+must provide exactly one of \code{gown} or \code{gowntable}.}
 
-\item{pData}{Required if \code{gowntable} is provided: data frame giving phenotype data for the
-samples in the columns of \code{gowntable}. (Rows of \code{pData} correspond to columns of
-\code{gowntable}). If \code{gown} is used instead, it must have a non-null, valid \code{pData}
-slot (and the \code{pData} argument to \code{stattest} should be left \code{NULL}).}
+\item{pData}{Required if \code{gowntable} is provided: data frame giving
+phenotype data for the samples in the columns of \code{gowntable}. (Rows of
+\code{pData} correspond to columns of \code{gowntable}). If \code{gown} is
+used instead, it must have a non-null, valid \code{pData} slot (and the
+\code{pData} argument to \code{stattest} should be left \code{NULL}).}
 
-\item{mod}{object of class \code{model.matrix} representing the design matrix for the linear
-regression model including covariates of interest}
+\item{mod}{object of class \code{model.matrix} representing the design matrix
+for the linear regression model including covariates of interest}
 
-\item{mod0}{object of class \code{model.matrix} representing the design matrix for the linear
-regression model without the covariates of interest.}
+\item{mod0}{object of class \code{model.matrix} representing the design
+matrix for the linear regression model without the covariates of interest.}
 
-\item{feature}{the type of genomic feature to be tested for differential expression. If
-\code{gown} is used, must be one of \code{"gene"}, \code{"transcript"}, \code{"exon"}, or
-\code{"intron"}. If \code{gowntable} is used, this is just used for labeling and can be
-whatever the rows of \code{gowntable} represent.}
+\item{feature}{the type of genomic feature to be tested for differential
+expression. If \code{gown} is used, must be one of \code{"gene"},
+\code{"transcript"}, \code{"exon"}, or \code{"intron"}. If \code{gowntable}
+is used, this is just used for labeling and can be whatever the rows of
+\code{gowntable} represent.}
 
-\item{meas}{the expression measurement to use for statistical tests.  Must be one of
-\code{"cov"}, \code{"FPKM"}, \code{"rcount"}, \code{"ucount"}, \code{"mrcount"}, or
-\code{"mcov"}. Not all expression measurements are available for all features. Leave as default
- if \code{gowntable} is provided.}
+\item{meas}{the expression measurement to use for statistical tests.  Must be
+one of \code{"cov"}, \code{"FPKM"}, \code{"rcount"}, \code{"ucount"},
+\code{"mrcount"}, or \code{"mcov"}. Not all expression measurements are
+available for all features. Leave as default if \code{gowntable} is
+provided.}
 
-\item{timecourse}{if \code{TRUE}, tests whether or not the expression profiles of genomic
-features vary over time (or another continuous covariate) in the study.  Default \code{FALSE}.}
+\item{timecourse}{if \code{TRUE}, tests whether or not the expression
+profiles of genomic features vary over time (or another continuous
+covariate) in the study.  Default \code{FALSE}.}
 
-\item{covariate}{string representing the name of the covariate of interest for the differential
-expression tests.  Must correspond to the name of a column of \code{pData(gown)}. If
-\code{timecourse=TRUE}, this should be the study's time variable.}
+\item{covariate}{string representing the name of the covariate of interest
+for the differential expression tests.  Must correspond to the name of a
+column of \code{pData(gown)}. If \code{timecourse=TRUE}, this should be the
+study's time variable.}
 
-\item{adjustvars}{optional vector of strings representing the names of potential confounders.
-Must correspond to names of columns of \code{pData(gown)}.}
+\item{adjustvars}{optional vector of strings representing the names of
+potential confounders.  Must correspond to names of columns of
+\code{pData(gown)}.}
 
-\item{gexpr}{optional data frame that is the result of calling \code{gexpr(gown))}.  (You can
-speed this function up by pre-creating \code{gexpr(gown)}.)}
+\item{gexpr}{optional data frame that is the result of calling
+\code{gexpr(gown))}.  (You can speed this function up by pre-creating
+\code{gexpr(gown)}.)}
 
-\item{df}{degrees of freedom used for modeling expression over time with natural cubic splines.
-Default 4.  Only used if \code{timecourse=TRUE}.}
+\item{df}{degrees of freedom used for modeling expression over time with
+natural cubic splines.  Default 4.  Only used if \code{timecourse=TRUE}.}
 
-\item{getFC}{if \code{TRUE}, also return estimated fold changes (adjusted for library size and
-confounders) between populations. Only available for 2-group comparisons at the moment. Default
-\code{FALSE}.}
+\item{getFC}{if \code{TRUE}, also return estimated fold changes (adjusted for
+library size and confounders) between populations. Only available for
+2-group comparisons at the moment. Default \code{FALSE}.}
 
-\item{libadjust}{if \code{TRUE} (default), include a library-size adjustment as a confounder in
-the fitted models. The adjustment is currently defined as the sum of the sample's log
-expression measurements below the 75th percentile of those measurements.}
+\item{libadjust}{if \code{TRUE} (default), include a library-size adjustment
+as a confounder in the fitted models. The adjustment is currently defined
+as the sum of the sample's log expression measurements below the 75th
+percentile of those measurements.}
 
-\item{log}{if \code{TRUE}, outcome variable in linear models is log(expression+1), otherwise it's
-  expression. Default TRUE.}
+\item{log}{if \code{TRUE}, outcome variable in linear models is
+  log(expression+1), otherwise it's expression. Default TRUE.}
 }
 \value{
-data frame containing the columns \code{feature}, \code{id} representing feature id,
-  \code{pval} representing the p-value for testing whether this feature was differentially
-  expressed according to \code{covariate}, and \code{qval}, the estimated false discovery rate
-  using this feature's signal strength as a significance cutoff. An additional column, \code{fc},
-  is included if \code{getFC} is \code{TRUE}.
+data frame containing the columns \code{feature}, \code{id}
+  representing feature id, \code{pval} representing the p-value for testing
+  whether this feature was differentially expressed according to
+  \code{covariate}, and \code{qval}, the estimated false discovery rate
+  using this feature's signal strength as a significance cutoff. An
+  additional column, \code{fc}, is included if \code{getFC} is \code{TRUE}.
 }
 \description{
-Test each transcript, gene, exon, or intron in a ballgown object for differential expression,
-using comparisons of linear models.
+Test each transcript, gene, exon, or intron in a ballgown object for
+differential expression, using comparisons of linear models.
 }
 \details{
-At minimum, you need to provide a ballgown object or count table, the type of feature
-  you want to test (gene, transcript, exon, or intron), the expression measurement you want to
-  use (FPKM, cov, rcount, etc.), and the covariate of interest, which must be the name of one of
-  the columns of the `pData` component of your ballgown object (or provided pData). This
-  covariate is automatically converted to a factor during model fitting in non-timecourse
-  experiments.
+At minimum, you need to provide a ballgown object or count table,
+  the type of feature you want to test (gene, transcript, exon, or intron),
+  the expression measurement you want to use (FPKM, cov, rcount, etc.), and
+  the covariate of interest, which must be the name of one of the columns of
+  the `pData` component of your ballgown object (or provided pData). This
+  covariate is automatically converted to a factor during model fitting in
+  non-timecourse experiments.
 
-  By default, models are fit using \code{log2(meas + 1)} as the outcome for each feature. To
-  disable the log transformation, provide `log = FALSE` as an argument to `stattest`. You can
-  use the \code{gowntable} option if you'd like to to use a different transformation.
+  By default, models are fit using \code{log2(meas + 1)} as the outcome for
+  each feature. To disable the log transformation, provide `log = FALSE` as
+  an argument to `stattest`. You can use the \code{gowntable} option if you'd
+  like to to use a different transformation.
 
-  Library size adjustment is performed by default by using the sum of the log nonzero expression
-  measurements for each sample, up to the 75th percentile of those measurements. This adjustment
-  can be disabled by setting \code{libadjust=FALSE}. You can use \code{mod} and \code{mod0} to
-  specify alternative library size adjustments.
+  Library size adjustment is performed by default by using the sum of the log
+  nonzero expression measurements for each sample, up to the 75th percentile
+  of those measurements. This adjustment can be disabled by setting
+  \code{libadjust=FALSE}. You can use \code{mod} and \code{mod0} to specify
+  alternative library size adjustments.
 
-  \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is specified, you must
-  also specify \code{mod0}.  If neither is specified, \code{mod0} defaults to the design matrix
-  for a model including only a library-size adjustment, and \code{mod} defaults to the design
-  matrix for a model including a library-size adjustment and \code{covariate}. Note that if you
-  supply \code{mod} and \code{mod0}, \code{covariate}, \code{timecourse}, \code{adjustvars}, and
-  \code{df} are ignored, so make sure your covariate of interest and all appropriate confounder
-  adjustments, including library size, are specified in \code{mod} and \code{mod0}.
+  \code{mod} and \code{mod0} are optional arguments.  If \code{mod} is
+  specified, you must also specify \code{mod0}.  If neither is specified,
+  \code{mod0} defaults to the design matrix for a model including only a
+  library-size adjustment, and \code{mod} defaults to the design matrix for a
+  model including a library-size adjustment and \code{covariate}. Note that
+  if you supply \code{mod} and \code{mod0}, \code{covariate},
+  \code{timecourse}, \code{adjustvars}, and \code{df} are ignored, so make
+  sure your covariate of interest and all appropriate confounder
+  adjustments, including library size, are specified in \code{mod} and
+  \code{mod0}.
 
   Full model details are described in the supplement of
   \url{http://biorxiv.org/content/early/2014/03/30/003665}.
@@ -107,7 +123,8 @@ At minimum, you need to provide a ballgown object or count table, the type of fe
 data(bg)
 
 # two-group comparison:
-stat_results = stattest(bg, feature='transcript', meas='FPKM', covariate='group')
+stat_results = stattest(bg, feature='transcript', meas='FPKM',
+  covariate='group')
 
 # timecourse test:
 pData(bg) = data.frame(pData(bg), time=rep(1:10, 2)) #dummy time covariate
@@ -115,8 +132,8 @@ timecourse_results = stattest(bg, feature='transcript', meas='FPKM',
   covariate='time', timecourse=TRUE)
 
 # timecourse test, adjusting for group:
-group_adj_timecourse_results = stattest(bg, feature='transcript', meas='FPKM',
-  covariate='time', timecourse=TRUE, adjustvars='group')
+group_adj_timecourse_results = stattest(bg, feature='transcript',
+  meas='FPKM', covariate='time', timecourse=TRUE, adjustvars='group')
 
 # custom model matrices:
 ### create example data:
@@ -129,7 +146,8 @@ mod = model.matrix(~ sex + age + pData(bg)$group + pData(bg)$time)
 mod0 = model.matrix(~ pData(bg)$group + pData(bg)$time)
 
 ### build model:
-adjusted_results = stattest(bg, feature='transcript', meas='FPKM', mod0=mod0, mod=mod)
+adjusted_results = stattest(bg, feature='transcript', meas='FPKM',
+  mod0=mod0, mod=mod)
 }
 \author{
 Jeff Leek, Alyssa Frazee

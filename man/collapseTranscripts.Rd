@@ -11,11 +11,11 @@ collapseTranscripts(gene, gown, meas = c("cov", "FPKM"),
 
 \item{gown}{ballgown object}
 
-\item{meas}{which transcript-level expression measurement to use (\code{'cov'}, average
-per-base coverage, or \code{'FPKM'})}
+\item{meas}{which transcript-level expression measurement to use
+(\code{'cov'}, average per-base coverage, or \code{'FPKM'})}
 
-\item{method}{which clustering method to use: \code{'hclust'} (hierarchical clustering) or
-\code{'kmeans'} (k-means clustering).}
+\item{method}{which clustering method to use: \code{'hclust'} (hierarchical
+clustering) or \code{'kmeans'} (k-means clustering).}
 
 \item{k}{how many clusters to use.}
 }
@@ -23,14 +23,15 @@ per-base coverage, or \code{'FPKM'})}
 list with two elements:
 \itemize{
   \item \code{tab}, a cluster-by-sample table of expression measurements
-  (\code{meas}, either cov or FPKM), where the expression measurement for each cluster is the
-  mean (for \code{'cov'}) or aggregate (for \code{'FPKM'}, as in \code{\link{gexpr}})
-  expression measurement for all the transcripts in that cluster. This table can be used as the
-  \code{gowntable} argument to \code{\link{stattest}}, if differential expression results for
-  transcript *clusters* are desired.
-  \item \code{cl} output from \code{\link{clusterTranscripts}} that was run to produce
-      \code{tab}, for reference. Cluster IDs in the \code{cluster} component correspond to
-      row names of \code{tab}
+    (\code{meas}, either cov or FPKM), where the expression measurement for
+    each cluster is the mean (for \code{'cov'}) or aggregate (for
+    \code{'FPKM'}, as in \code{\link{gexpr}}) expression measurement for all
+    the transcripts in that cluster. This table can be used as the
+    \code{gowntable} argument to \code{\link{stattest}}, if differential
+    expression results for transcript *clusters* are desired.
+  \item \code{cl} output from \code{\link{clusterTranscripts}} that was run
+    to produce \code{tab}, for reference. Cluster IDs in the \code{cluster}
+    component correspond to row names of \code{tab}
 }
 }
 \description{
@@ -44,7 +45,7 @@ collapseTranscripts(bg, gene='XLOC_000454', meas='FPKM', method='kmeans')
 Alyssa Frazee
 }
 \seealso{
-\code{\link{hclust}}, \code{\link{kmeans}}, \code{\link{clusterTranscripts}},
-   \code{\link{plotLatentTranscripts}}
+\code{\link{hclust}}, \code{\link{kmeans}},
+   \code{\link{clusterTranscripts}}, \code{\link{plotLatentTranscripts}}
 }
 

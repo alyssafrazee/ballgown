@@ -4,13 +4,15 @@
 #' @param annotated \code{GRangesList} object representing annotated transcripts
 #' 
 #' @details If \code{gown} is a \code{ballgown} object, \code{assembled} can be 
-#' \code{structure(gown)$trans} (or any subset). You can generate a \code{GRangesList} object 
-#' containing annotated transcripts from a gtf file using the \code{\link{gffReadGR}} function and 
+#'   \code{structure(gown)$trans} (or any subset). You can generate a 
+#'   \code{GRangesList} object 
+#' containing annotated transcripts from a gtf file using the 
+#'   \code{\link{gffReadGR}} function and 
 #' setting \code{splitByTranscripts=TRUE}.
 #' 
-#' @return data frame, where each row contains \code{assembledInd} and \code{annotatedInd} (indexes 
-#' of overlapping transcripts in \code{assembled} and \code{annotated}), and the percent overlap 
-#' between the two transcripts.
+#' @return data frame, where each row contains \code{assembledInd} and 
+#'   \code{annotatedInd} (indexes of overlapping transcripts in \code{assembled}
+#'   and \code{annotated}), and the percent overlap between the two transcripts.
 #' 
 #' @author Alyssa Frazee
 #' 
@@ -23,7 +25,8 @@
 
 annotate_assembly = function(assembled, annotated){
     
-    stopifnot(class(annotated) == 'GRangesList' & class(assembled) == 'GRangesList')
+    stopifnot(class(annotated) == 'GRangesList' & 
+        class(assembled) == 'GRangesList')
 
     # things will get out of order: keep track
     names_annot = names(annotated)
@@ -49,10 +52,13 @@ annotate_assembly = function(assembled, annotated){
     annotated_sort = annotated[subjectHits(ol)]
 
     # concatenate the appropriate GRanges objects (for overlapping transcripts)
-    assembled_overlapIDs = rep(1:length(ol), times=elementLengths(assembled_sort))
-    annotated_overlapIDs = rep(1:length(ol), times=elementLengths(annotated_sort))
+    assembled_overlapIDs = rep(1:length(ol), 
+        times=elementLengths(assembled_sort))
+    annotated_overlapIDs = rep(1:length(ol), 
+        times=elementLengths(annotated_sort))
     all_transcripts = c(unlist(assembled_sort), unlist(annotated_sort))
-    overlapping = split(all_transcripts, c(assembled_overlapIDs, annotated_overlapIDs))
+    overlapping = split(all_transcripts, 
+        c(assembled_overlapIDs, annotated_overlapIDs))
     
     # calculate percentage overlap:
     coverages = coverage(ranges(overlapping))
@@ -60,6 +66,7 @@ annotate_assembly = function(assembled, annotated){
     runlengths = runLength(coverages)
     pct = sum(runlengths[runvals==2]) / sum(runlengths[runvals==1 | runvals==2])
 
-    return(data.frame(assembledInd=queryHits(ol), annotatedInd=subjectHits(ol), percent=pct))
+    return(data.frame(assembledInd=queryHits(ol), 
+        annotatedInd=subjectHits(ol), percent=pct))
 }
 

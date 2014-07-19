@@ -5,25 +5,29 @@
 \alias{ballgown-class}
 \title{Ballgown}
 \description{
-S4 class for storing and manipulating expression data from assembled transcriptomes
+S4 class for storing and manipulating expression data from assembled
+transcriptomes
 }
 \section{Slots}{
 
 \describe{
-\item{\code{expr}}{tables containing expression data for genomic features (introns, exons, transcripts)}
+\item{\code{expr}}{tables containing expression data for genomic features (introns,
+exons, transcripts)}
 
-\item{\code{structure}}{genomic locations of features and their relationships to one another}
+\item{\code{structure}}{genomic locations of features and their relationships to one
+another}
 
-\item{\code{indexes}}{tables connecting components of the assembly and providing other experimental
+\item{\code{indexes}}{tables connecting components of the assembly and providing
+  other experimental
 information (e.g., phenotype data and locations of read alignment files)}
 
 \item{\code{dirs}}{directories holding data created by \code{tablemaker}}
 
 \item{\code{mergedDate}}{date the ballgown object was created}
 
-\item{\code{meas}}{which expression measurement(s) the object contains in its data slot. Vector of one or
-  more of "rcount", "ucount", "mrcount", "cov", "cov_sd", "mcov", "mcov_sd", or "FPKM". See
-  vignette for details.}
+\item{\code{meas}}{which expression measurement(s) the object contains in its data
+  slot. Vector of one or more of "rcount", "ucount", "mrcount", "cov",
+  "cov_sd", "mcov", "mcov_sd", or "FPKM". See vignette for details.}
 }}
 \examples{
 data(bg)

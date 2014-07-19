@@ -12,13 +12,14 @@ iexpr(x, meas = "rcount")
 \arguments{
 \item{x}{a ballgown object}
 
-\item{meas}{type of measurement to extract. Can be "rcount", "ucount", "mrcount", or "all".
-Default "rcount".}
+\item{meas}{type of measurement to extract. Can be "rcount", "ucount",
+"mrcount", or "all". Default "rcount".}
 }
 \value{
-intron-by-sample matrix containing the number of reads (measured as specified by
-  \code{meas}) supporting each intron, in each sample. If \code{meas} is \code{"all"}, a data
-  frame is returned, containing all measurements and location information.
+intron-by-sample matrix containing the number of reads (measured as
+  specified by \code{meas}) supporting each intron, in each sample. If
+  \code{meas} is \code{"all"}, a data frame is returned, containing all
+  measurements and location information.
 }
 \description{
 extract transcript-level expression measurements from ballgown objects

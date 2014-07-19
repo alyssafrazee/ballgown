@@ -11,7 +11,7 @@ writeFiles(gown, dataDir)
 \item{dataDir}{top-level directory for sample-specific folders}
 }
 \description{
-create tablemaker-like files on disk from a given ballgown object
+create tablemaker-like files on disk from a ballgown object
 }
 \examples{
 \donttest{

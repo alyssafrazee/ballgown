@@ -13,10 +13,11 @@ structure(x)
 \item{x}{a ballgown object}
 }
 \value{
-list containing elements \code{intron}, \code{exon}, and \code{trans}. \code{exon} and
- \code{intron} are \code{GRanges} objects, where each range is an exon or intron, and
- \code{trans} is a \code{GRangesList} object, where each \code{GRanges} element is a set of exons
- representing a transcript.
+list containing elements \code{intron}, \code{exon}, and
+ \code{trans}. \code{exon} and \code{intron} are \code{GRanges} objects,
+ where each range is an exon or intron, and \code{trans} is a
+ \code{GRangesList} object, where each \code{GRanges} element is a set of
+ exons representing a transcript.
 }
 \description{
 extract structure components from ballgown objects

@@ -17,6 +17,7 @@ Replace method for indexes slot in ballgown objects
 }
 \examples{
 data(bg)
-indexes(bg)$bamfiles = paste0('/path/to/bamfolder/', sampleNames(bg), '_accepted_hits.bam')
+indexes(bg)$bamfiles = paste0('/path/to/bamfolder/',
+  sampleNames(bg), '_accepted_hits.bam')
 }
 

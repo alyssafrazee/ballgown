@@ -8,41 +8,48 @@ plotLatentTranscripts(gene, gown, method = c("hclust", "kmeans"), k = NULL,
   labelTranscripts = TRUE, ...)
 }
 \arguments{
-\item{gene}{string, name of gene whose transcripts should be clustered (e.g., "XLOC_000001")}
+\item{gene}{string, name of gene whose transcripts should be clustered
+(e.g., "XLOC_000001")}
 
 \item{gown}{object of class \code{ballgown} being used for analysis}
 
-\item{method}{clustering method to use.  Currently can choose from hierarchical clustering
-(\code{hclust}) or K-means (\code{kmeans}).  More methods are in development.}
+\item{method}{clustering method to use.  Currently can choose from
+hierarchical clustering (\code{hclust}) or K-means (\code{kmeans}).  More
+methods are in development.}
 
-\item{k}{number of transcripts clusters to use.  By default, \code{k} is \code{NULL} and thus is
-chosen using a rule of thumb, but providing \code{k} overrides those rules of thumb.}
+\item{k}{number of transcripts clusters to use.  By default, \code{k} is
+\code{NULL} and thus is chosen using a rule of thumb, but providing
+\code{k} overrides those rules of thumb.}
 
-\item{choosek}{if \code{k} is not provided, how should the number of clusters be chosen?  Must be
-one of "var90" (choose a \code{k} that explains 90 percent of the observed variation) or "thumb"
-(\code{k} is set to be approximately \code{sqrt(n)}, where n is the total number of transcripts
+\item{choosek}{if \code{k} is not provided, how should the number of clusters
+be chosen?  Must be one of "var90" (choose a \code{k} that explains 90
+percent of the observed variation) or "thumb" (\code{k} is set to be
+approximately \code{sqrt(n)}, where n is the total number of transcripts
 for \code{gene})}
 
-\item{returncluster}{if TRUE (as it is by default), return the results of the call to
-\code{clusterTrancsripts} so the data is available for later use.  Nothing is returned if FALSE.}
+\item{returncluster}{if TRUE (as it is by default), return the results of the
+call to \code{clusterTrancsripts} so the data is available for later use.
+Nothing is returned if FALSE.}
 
-\item{labelTranscripts}{if TRUE (as it is by default), print transcript IDs on the y-axis}
+\item{labelTranscripts}{if TRUE (as it is by default), print transcript IDs
+on the y-axis}
 
 \item{...}{other arguments to pass to plotTranscripts}
 }
 \value{
-if \code{returncluster} is TRUE, the transcript clusters are returned as described in
-\code{\link{clusterTranscripts}}. A plot of the transcript clusters is also produced, in the
-style of \code{\link{plotTranscripts}}.
+if \code{returncluster} is TRUE, the transcript clusters are returned
+  as described in \code{\link{clusterTranscripts}}. A plot of the transcript
+  clusters is also produced, in the style of \code{\link{plotTranscripts}}.
 }
 \description{
-This is an experimental, first-pass function that clusters assembled transcripts based on
-their overlap percentage, then plots and colors the transcript clusters.
+This is an experimental, first-pass function that clusters assembled
+transcripts based on their overlap percentage, then plots and colors the
+transcript clusters.
 }
 \examples{
 \donttest{
 data(bg)
-plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2, returncluster=TRUE)
+plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2)
 }
 }
 \author{

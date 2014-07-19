@@ -1,14 +1,16 @@
 #' determine if one set of GRanges fully contains any of another set of GRanges
 #' 
-#' @param transcripts \code{GRangesList} object (assume for now that it represents transcripts)
-#' @param cds \code{GRangesList} object (assume for now that it represents sets of coding sequences)
+#' @param transcripts \code{GRangesList} object (assume for now that it
+#'    represents transcripts)
+#' @param cds \code{GRangesList} object (assume for now that it represents sets
+#'    of coding sequences)
 #' 
-#' @details If \code{gown} is a \code{ballgown} object, \code{transcripts} can be 
-#' \code{structure(gown)$trans} (or any subset). 
+#' @details If \code{gown} is a \code{ballgown} object, \code{transcripts} can
+#'    be \code{structure(gown)$trans} (or any subset). 
 #' 
-#' @return vector with length equal to \code{length(transcripts)}, where each entry is \code{TRUE} 
-#' if the corresponding transcript contains a coding sequence (i.e., is a superset of at least one 
-#' entry of \code{cds}). 
+#' @return vector with length equal to \code{length(transcripts)}, where each
+#'    entry is \code{TRUE} if the corresponding transcript contains a coding
+#'    sequence (i.e., is a superset of at least one entry of \code{cds}). 
 #' 
 #' @author Alyssa Frazee
 #' 
@@ -50,14 +52,17 @@ contains = function(transcripts, cds){
     cds_sort = cds[subjectHits(ol)]
 
     # concatenate the appropriate GRanges objects (for overlapping transcripts)
-    transcripts_overlapIDs = rep(1:length(ol), times=elementLengths(transcripts_sort))
+    transcripts_overlapIDs = rep(1:length(ol), 
+        times=elementLengths(transcripts_sort))
     cds_overlapIDs = rep(1:length(ol), times=elementLengths(cds_sort))
     all_transcripts = c(unlist(transcripts_sort), unlist(cds_sort))
-    overlapping = split(all_transcripts, c(transcripts_overlapIDs, cds_overlapIDs))
+    overlapping = split(all_transcripts, 
+        c(transcripts_overlapIDs, cds_overlapIDs))
     
     # decide on containment:
     stopifnot(all(as.numeric(names(overlapping)) == 1:length(ol)))
-    # names(overlapping) = 1:length(ol), corresponds to overlap IDs (confirmed in above check) 
+    # names(overlapping) = 1:length(ol), 
+    # corresponds to overlap IDs (confirmed in above check) 
     coverages = coverage(ranges(overlapping))
     runvals = runValue(coverages)
     runlengths = runLength(coverages)

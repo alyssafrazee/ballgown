@@ -8,9 +8,11 @@ gffRead(gffFile, nrows = -1, verbose = FALSE)
 \arguments{
 \item{gffFile}{name of GTF/GFF on disk}
 
-\item{nrows}{number of rows to read in (default -1, which means read all rows)}
+\item{nrows}{number of rows to read in (default -1, which means read all
+rows)}
 
-\item{verbose}{if TRUE, print status info at beginning and end of file read. Default FALSE.}
+\item{verbose}{if TRUE, print status info at beginning and end of file read.
+   Default FALSE.}
 }
 \value{
 data frame representing the GTF/GFF file
@@ -26,8 +28,8 @@ annot = gffRead(gtfPath)
 Kasper Hansen
 }
 \seealso{
-\code{\link{getAttributeField}} to extract data from "attributes" column;
-\url{http://useast.ensembl.org/info/website/upload/gff.html} for more information on the GTF/GFF
-file format.
+\code{\link{getAttributeField}} to extract data from "attributes"
+ column; \url{http://useast.ensembl.org/info/website/upload/gff.html} for
+  more information on the GTF/GFF file format.
 }
 

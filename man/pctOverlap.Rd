@@ -11,17 +11,20 @@ pctOverlap(tx1, tx2)
 \item{tx2}{GRanges object}
 }
 \value{
-percent overlap between \code{tx1} and \code{tx2}, as defined by the ratio of the
-  intersection of \code{tx1} and \code{tx2} to the union of \code{tx1} and \code{tx2}.
+percent overlap between \code{tx1} and \code{tx2}, as defined by the
+  ratio of the intersection of \code{tx1} and \code{tx2} to the union of
+  \code{tx1} and \code{tx2}.
 }
 \description{
 calculate percent overlap between two GRanges objects
 }
 \details{
-In the ballgown context, \code{tx1} and \code{tx2} are two transcripts, each represented
-  by GRanges objects whose ranges represent the exons comprising the transcripts.  The percent
-  overlap is the number of nucleotides falling within both transcripts divided by the number of
-  nucleotides falling within either transcript.  Useful as a measure of transcript closeness.
+In the ballgown context, \code{tx1} and \code{tx2} are two
+  transcripts, each represented by GRanges objects whose ranges represent the
+  exons comprising the transcripts.  The percent overlap is the number of
+  nucleotides falling within both transcripts divided by the number of
+  nucleotides falling within either transcript.  Useful as a measure of
+  transcript closeness (as it is essentially Jaccard distance).
 }
 \examples{
 data(bg)

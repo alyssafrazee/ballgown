@@ -13,8 +13,8 @@ expr(x)
 \item{x}{a ballgown object}
 }
 \value{
-list containing elements \code{intron}, \code{exon}, and \code{trans},
- which are feature-by-sample data frames of expression data.
+list containing elements \code{intron}, \code{exon}, and
+ \code{trans}, which are feature-by-sample data frames of expression data.
 }
 \description{
 extract expression components from ballgown objects
@@ -26,6 +26,7 @@ class(expr(bg))
 dim(expr(bg)$exon)
 }
 \seealso{
-\code{\link{texpr}}, \code{\link{gexpr}}, \code{\link{eexpr}}, \code{\link{iexpr}}
+\code{\link{texpr}}, \code{\link{gexpr}}, \code{\link{eexpr}},
+  \code{\link{iexpr}}
 }
 
