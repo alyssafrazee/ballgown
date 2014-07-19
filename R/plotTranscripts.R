@@ -34,7 +34,7 @@
 #' @seealso \code{\link{plotMeans}}, \code{\link{plotLatentTranscripts}}
 #' @author Alyssa Frazee
 #' @export
-#' @examples \dontrun{
+#' @examples \donttest{
 #' data(bg)
 #' 
 #' # plot one gene for one sample:

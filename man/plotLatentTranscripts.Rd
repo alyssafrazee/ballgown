@@ -40,7 +40,7 @@ This is an experimental, first-pass function that clusters assembled transcripts
 their overlap percentage, then plots and colors the transcript clusters.
 }
 \examples{
-\dontrun{
+\donttest{
 data(bg)
 plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2, returncluster=TRUE)
 }

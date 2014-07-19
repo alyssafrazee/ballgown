@@ -29,7 +29,7 @@
 #' @author Alyssa Frazee
 #' 
 #' @export
-#' @examples \dontrun{
+#' @examples \donttest{
 #' data(bg)
 #' plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM', colorby='transcript')
 #' }

@@ -58,7 +58,7 @@ produces a plot of the transcript structure for the specified gene in the curren
 visualize structure of assembled transcripts
 }
 \examples{
-\dontrun{
+\donttest{
 data(bg)
 
 # plot one gene for one sample:

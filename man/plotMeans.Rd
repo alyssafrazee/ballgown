@@ -46,7 +46,7 @@ graphics device, colored by study-wide or group-specific mean expression level.
 visualize transcript abundance by group
 }
 \examples{
-\dontrun{
+\donttest{
 data(bg)
 plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM', colorby='transcript')
 }

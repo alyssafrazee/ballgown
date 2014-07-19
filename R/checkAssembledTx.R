@@ -18,7 +18,7 @@
 #' @author Alyssa Frazee
 #' 
 #' @export
-#' @examples \dontrun{
+#' @examples \donttest{
 #' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
 #' annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
 #' data(bg)

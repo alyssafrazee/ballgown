@@ -31,7 +31,7 @@ Plots annotated transcripts on the bottom panel (shaded in gray) and assembled
 plot annotated and assembled transcripts together
 }
 \examples{
-\dontrun{
+\donttest{
 gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
 annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
 data(bg)

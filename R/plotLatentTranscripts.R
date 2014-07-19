@@ -27,7 +27,7 @@
 #' @author Alyssa Frazee
 #' 
 #' @export
-#' @examples \dontrun{
+#' @examples \donttest{
 #' data(bg)
 #' plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2, returncluster=TRUE)
 #' }

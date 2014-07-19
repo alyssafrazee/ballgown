@@ -14,7 +14,7 @@ writeFiles(gown, dataDir)
 create tablemaker-like files on disk from a given ballgown object
 }
 \examples{
-\dontrun{
+\donttest{
   data(bg)
   writeFiles(bg, dataDir=getwd())
 }

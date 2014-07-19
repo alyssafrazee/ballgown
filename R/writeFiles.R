@@ -4,7 +4,7 @@
 #' @param gown ballgown object
 #' @param dataDir top-level directory for sample-specific folders
 #' @export
-#' @examples \dontrun{
+#' @examples \donttest{
 #'   data(bg)
 #'   writeFiles(bg, dataDir=getwd())
 #'}
