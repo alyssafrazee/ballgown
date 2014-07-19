@@ -108,18 +108,6 @@ Data is loaded using the `ballgown` function:
 
 ```r
 library(ballgown)
-```
-
-```
-## 
-## Attaching package: 'ballgown'
-## 
-## The following object is masked from 'package:base':
-## 
-##     structure
-```
-
-```r
 data_directory = system.file('extdata', package='ballgown')
 bg = ballgown(dataDir=data_directory, samplePattern='sample', meas='all')
 ```
@@ -523,4 +511,54 @@ This example clustered only three transcripts, but we imagine clustering could b
 - Cole Trapnell, Brian A Williams, Geo Pertea, Ali Mortazavi, Gordon Kwan, Marijke J van Baren, Steven L Salzberg, Barbara J Wold, Lior Pachter,   (2010) Transcript Assembly And Quantification by Rna-Seq Reveals Unannotated Transcripts And Isoform Switching During Cell Differentiation.  *Nature Biotechnology*  **28**  511-515  [10.1038/nbt.1621](http://dx.doi.org/10.1038/nbt.1621)
 - Alyssa Frazee, Geo Pertea, Andrew Jaffe, Ben Langmead, Steven Salzberg, Jeffrey Leek,   (2014) Flexible isoform-level differential expression analysis with Ballgown.  *bioRxiv*  [http://biorxiv.org/content/early/2014/03/30/003665](http://biorxiv.org/content/early/2014/03/30/003665)
 
+# Session Information
 
+```r
+sessionInfo()
+```
+
+```
+## R version 3.1.0 (2014-04-10)
+## Platform: x86_64-apple-darwin10.8.0 (64-bit)
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] parallel  methods   stats     graphics  grDevices utils     datasets 
+## [8] base     
+## 
+## other attached packages:
+## [1] IRanges_1.99.22      S4Vectors_0.1.2      BiocGenerics_0.11.3 
+## [4] ballgown_0.99.0      knitcitations_1.0-1  knitr_1.6           
+## [7] devtools_1.5         BiocInstaller_1.15.5
+## 
+## loaded via a namespace (and not attached):
+##  [1] AnnotationDbi_1.27.8     BBmisc_1.7              
+##  [3] BatchJobs_1.3            Biobase_2.25.0          
+##  [5] BiocParallel_0.7.7       Biostrings_2.33.13      
+##  [7] DBI_0.2-7                GenomeInfoDb_1.1.13     
+##  [9] GenomicAlignments_1.1.22 GenomicRanges_1.17.25   
+## [11] Matrix_1.1-4             RColorBrewer_1.0-5      
+## [13] RCurl_1.95-4.1           RJSONIO_1.2-0.2         
+## [15] RSQLite_0.11.4           Rcpp_0.11.2             
+## [17] RefManageR_0.8.2         Rsamtools_1.17.31       
+## [19] XML_3.98-1.1             XVector_0.5.7           
+## [21] annotate_1.43.5          bibtex_0.3-6            
+## [23] bitops_1.0-6             brew_1.0-6              
+## [25] checkmate_1.1            codetools_0.2-8         
+## [27] digest_0.6.4             evaluate_0.5.5          
+## [29] fail_1.2                 foreach_1.4.2           
+## [31] formatR_0.10             genefilter_1.47.6       
+## [33] grid_3.1.0               httr_0.3                
+## [35] iterators_1.0.7          lattice_0.20-29         
+## [37] limma_3.21.10            lubridate_1.3.3         
+## [39] memoise_0.2.1            mgcv_1.8-1              
+## [41] nlme_3.1-117             plyr_1.8.1              
+## [43] rtracklayer_1.25.13      sendmailR_1.1-2         
+## [45] splines_3.1.0            stats4_3.1.0            
+## [47] stringr_0.6.2            survival_2.37-7         
+## [49] sva_3.11.3               tools_3.1.0             
+## [51] whisker_0.3-2            xtable_1.7-3            
+## [53] zlibbioc_1.11.1
+```
