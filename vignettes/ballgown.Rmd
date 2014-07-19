@@ -3,7 +3,7 @@
 %\VignetteIndexEntry{Flexible isoform-level differential expression analysis with Ballgown}
 -->
 
-```{r loadcitations, echo=FALSE, message=FALSE}
+```{r loadcitations, echo=FALSE, message=FALSE, warning=FALSE}
 library(knitcitations)
 library(methods)
 cleanbib()
@@ -102,7 +102,7 @@ extdata/
 
 Data is loaded using the `ballgown` function:
 
-```{r makebgobj}
+```{r makebgobj, message=FALSE}
 library(ballgown)
 data_directory = system.file('extdata', package='ballgown')
 bg = ballgown(dataDir=data_directory, samplePattern='sample', meas='all')
@@ -192,13 +192,17 @@ bg@meas
 Visualization of the assembled transcripts is done with the `plotTranscripts` function. Transcripts or exons can be colored by expression level. This plot colors transcripts by expression level:
 
 ```{r plotTranscripts, fig.height=8, fig.width=8, fig.cap=""}
-plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12', meas='FPKM', colorby='transcript', main='transcripts from gene XLOC_000454: sample 12, FPKM')
+plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12', 
+    meas='FPKM', colorby='transcript', 
+    main='transcripts from gene XLOC_000454: sample 12, FPKM')
 ```
 
 It is also possible to plot several samples at once:
 
 ```{r plotTranscripts2, fig.height=10, fig.width=10, fig.cap=""}
-plotTranscripts('XLOC_000454', bg, samples=c('sample01', 'sample06', 'sample12', 'sample19'), meas='FPKM', colorby='transcript')
+plotTranscripts('XLOC_000454', bg, 
+    samples=c('sample01', 'sample06', 'sample12', 'sample19'), 
+    meas='FPKM', colorby='transcript')
 ```
 
 You can also make side-by-side plots comparing mean abundances between groups (here, 0 and 1):
@@ -237,7 +241,8 @@ timecourse_results = stattest(bg, feature='transcript', meas='FPKM', covariate='
 You can adjust for any or all variables in `pData` when testing for differential expression.  Ballgown automatically adjusts for library size using the sum of all logged nonzero expression measurements below the 75th percentile of those measurements, for each sample.  If you would like to adjust for other variables, just provide those confounders as the `adjustvars` argument to `stattest`:
 
 ```{r stattest_adjust}
-group_adj_timecourse_results = stattest(bg, feature='transcript', meas='FPKM', covariate='time', timecourse=TRUE, adjustvars='group')
+group_adj_timecourse_results = stattest(bg, feature='transcript', meas='FPKM', covariate='time', 
+    timecourse=TRUE, adjustvars='group')
 ```
 
 #### defining custom models
@@ -282,7 +287,8 @@ And you can calculate aggregate cluster expression measurements for some gene us
 
 ```{r collapse}
 agg = collapseTranscripts(gene='XLOC_000454', gown=bg, k=2, method='kmeans')
-stattest(gowntable=agg$tab, pData=pData(bg), feature='transcript_cluster', covariate='group', libadjust=FALSE)
+stattest(gowntable=agg$tab, pData=pData(bg), feature='transcript_cluster', 
+    covariate='group', libadjust=FALSE)
 ```
 
 This example clustered only three transcripts, but we imagine clustering could be useful when many more than three transcripts have been assembled for a single gene.
@@ -290,6 +296,11 @@ This example clustered only three transcripts, but we imagine clustering could b
 # References
 ```{r biblio, echo=FALSE, results='asis'}
 bibliography()
+```
+
+# Session Information
+```{r sessioninfo, results='asis'}
+sessionInfo()
 ```
 
 
