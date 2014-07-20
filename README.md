@@ -251,7 +251,7 @@ The `expr` slot is a list that contains tables of expression data for the genomi
 *expr(ballgown_object_name, <EXPRESSION_MEASUREMENT>)
 ``` 
 
-where `*` is either e for exon, i for intron, t for transcript, or g for gene, and <EXPRESSION MEASUREMENT> is an expression-measurement column name from the appropriate `.ctab` file.  Gene-level measurements are calculated by aggregating the transcript-level measurements for that gene.  All of the following are valid ways to extract expression data from the `bg` ballgown object:
+where `*` is either e for exon, i for intron, t for transcript, or g for gene, and `<EXPRESSION MEASUREMENT>` is an expression-measurement column name from the appropriate `.ctab` file.  Gene-level measurements are calculated by aggregating the transcript-level measurements for that gene.  All of the following are valid ways to extract expression data from the `bg` ballgown object:
 
 
 ```r
