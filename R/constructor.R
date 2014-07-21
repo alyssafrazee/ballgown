@@ -340,12 +340,13 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
     ## Read phenotype table, if given:
     stopifnot(is.null(pData) | class(pData) == 'data.frame')
     if(!is.null(pData)){
-        if(!all(pData[,1] == samples)){
+        if(!all(pData[,1] == names(samples))){
             msg = 'Rows of pData did not seem to be in the same order as the
                 columns of the expression data. Attempting to rearrange
                 pData...'
             warning(.makepretty(msg))
-            tmp = try(pData <- pData[,match(samples, pData[,1])])
+            tmp = try(pData <- pData[,match(names(samples), pData[,1])], 
+                silent=TRUE)
             if(class(tmp) == "try-error"){
                 msg = 'first column of pData does not match the names of the
                     folders containing the ballgown data.'
