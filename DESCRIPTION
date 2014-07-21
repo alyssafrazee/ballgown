@@ -11,15 +11,15 @@ Depends:
     R (>= 3.0.0),
     methods
 Imports:
-    GenomicRanges (>= 1.16.3),
-    IRanges (>= 1.99.15),
-    S4Vectors (>= 0.1.0),
+    GenomicRanges (>= 1.17.25),
+    IRanges (>= 1.99.22),
+    S4Vectors (>= 0.1.2),
     RColorBrewer,
     splines,
     sva,
     limma,
-    rtracklayer (>= 1.24.1),
-    Biobase (>= 2.24.0)
+    rtracklayer (>= 1.25.13),
+    Biobase (>= 2.25.0)
 Suggests:
     testthat,
     knitr,
