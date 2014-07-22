@@ -1,0 +1,8 @@
+New in version 0.99.0, 22 July 2014 (updates from alpha release):
+    * "meas" argument added to constructor function
+    * unit tests added
+    * vignette updated
+    * several bug fixes in plotting functions and statistical testing function
+
+Alpha release, 30 March 2014:
+    * package announced
