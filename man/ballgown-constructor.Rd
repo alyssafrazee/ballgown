@@ -23,7 +23,7 @@ only those subdirectories).  Only used if \code{samples} is NULL.}
 each sample.  If provided, make sure to sort properly (e.g., in the same
 order as \code{samples}).  Default NULL.}
 
-\item{optional}{\code{data.frame} with rows corresponding to samples and
+\item{pData}{optional \code{data.frame} with rows corresponding to samples and
 columns corresponding to phenotypic variables.}
 
 \item{verbose}{if \code{TRUE}, print status messages and timing information

@@ -5,7 +5,8 @@
 \title{Toy ballgown object}
 \format{a \code{ballgown} object: 100 transcripts, 633 exons, 536 introns}
 \description{
-Small ballgown object created with simulated toy data, for demonstration purposes
+Small ballgown object created with simulated toy data, for
+  demonstration purposes
 }
 \examples{
 data(bg)

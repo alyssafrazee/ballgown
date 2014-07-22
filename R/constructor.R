@@ -65,7 +65,7 @@
 #' @param bamfiles optional vector of file paths to read alignment files for
 #'    each sample.  If provided, make sure to sort properly (e.g., in the same
 #'    order as \code{samples}).  Default NULL.
-#' @param optional \code{data.frame} with rows corresponding to samples and 
+#' @param pData optional \code{data.frame} with rows corresponding to samples and 
 #'    columns corresponding to phenotypic variables.
 #' @param verbose if \code{TRUE}, print status messages and timing information
 #'    as the object is constructed.
