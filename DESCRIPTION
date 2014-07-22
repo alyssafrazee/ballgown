@@ -25,3 +25,4 @@ Suggests:
     knitr,
     knitcitations
 VignetteBuilder: knitr
+biocViews: RNASeq, StatisticalMethod, Preprocessing, DifferentialExpression
