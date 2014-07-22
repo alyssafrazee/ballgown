@@ -11,7 +11,8 @@ test_that('ballgown reader is not broken and data was installed properly', {
 })
 
 test_that('example annotation was installed properly', {
-    expect_that(system.file('extdata', 'annot.gtf.gz', package='ballgown'), not(equals("")))
+    expect_that(system.file('extdata', 'annot.gtf.gz', package='ballgown'), 
+        not(equals("")))
 })
 
 ## if these things fail, we should have gotten a more helpful message earlier:
@@ -35,13 +36,16 @@ test_that('gtf read function gives the right answer', {
 })
 
 test_that('splitting attribute fields works', {
-    expect_that(getAttributeField(x$attributes, 'transcript_id'), not(throws_error()))
-    expect_that(all(is.na(getAttributeField(x$seqname, 'transcript_id'))), is_true())
+    expect_that(getAttributeField(x$attributes, 'transcript_id'), 
+        not(throws_error()))
+    expect_that(all(is.na(getAttributeField(x$seqname, 'transcript_id'))), 
+        is_true())
     transcripts = getAttributeField(x$attributes, 'transcript_id')
     expect_that(transcripts, is_a('character'))
     expect_that(length(transcripts), equals(13732))
     expect_that(transcripts[192], equals('ENST00000444520'))
-    expect_that(all(is.na(getAttributeField(x$attributes, 'transcript_id', attrsep=','))), 
+    expect_that(all(is.na(getAttributeField(x$attributes, 'transcript_id', 
+        attrsep=','))), 
         is_true())
 })
 
@@ -80,7 +84,8 @@ test_that('function for annotating assemblies works', {
 })
 
 test_that('function for labeling assembled transcripts with genes works', {
-    expect_that(getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE), not(throws_error()))
+    expect_that(getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE), 
+        not(throws_error()))
     geneoverlaps = getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE)
     expect_that(geneoverlaps, is_a('CharacterList'))
     expect_that(geneoverlaps[[2]], equals('ENSG00000229027'))
@@ -96,11 +101,14 @@ test_that('contains function works', {
 
 pdf(file=NULL) #don't print plots to screen while testing
 test_that('plot of assembled/annotated transcripts works', {
-    expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, ind=4), 
+    expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, 
+        ind=4), 
         not(throws_error()))
-    expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans[1:50], ind=2), 
+    expect_that(checkAssembledTx(annotated=grl, 
+        assembled=structure(bg)$trans[1:50], ind=2), 
         gives_warning())
-    expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, ind=4, 
+    expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, 
+        ind=4, 
         main='hello!'), not(throws_error()))
 })
 dev.off()

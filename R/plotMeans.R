@@ -23,7 +23,7 @@
 #' @param labelTranscripts if \code{TRUE}, transcript ids are labeled on the 
 #'   left side of the plot. Default \code{FALSE}.
 #' 
-#' @return produces a plot of the transcript structure for the specified gene in 
+#' @return produces a plot of the transcript structure for the specified gene in
 #'   the current graphics device, colored by study-wide or group-specific mean 
 #'   expression level.
 #' 
@@ -169,7 +169,7 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
         if(legend){
             leglocs = seq(min(xax)+1, max(xax)-1, length=length(colscale)+1)
             for(i in 1:length(colscale)){
-                polygon(x=c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]), 
+                polygon(x=c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]),
                     y=c(ymax-0.3, ymax, ymax, ymax-0.3), border=NA, 
                     col=rev(heat.colors(length(colscale)))[i])
             }

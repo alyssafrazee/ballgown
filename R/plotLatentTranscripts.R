@@ -41,7 +41,7 @@
 plotLatentTranscripts = function(gene, gown, method=c("hclust", "kmeans"), 
     k=NULL, choosek=c("var90", "thumb"), returncluster=TRUE, 
     labelTranscripts=TRUE, ...){
-  
+
     ## check validity:
     method = match.arg(method)
     if(is.null(k)){

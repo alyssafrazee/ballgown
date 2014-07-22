@@ -43,7 +43,7 @@
 #' data(bg)
 #' 
 #' # plot one gene for one sample:
-#' plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12', meas='FPKM', 
+#' plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12', meas='FPKM',
 #'     colorby='transcript', 
 #'     main='transcripts from gene XLOC_000454: sample 12, FPKM')
 #' 
@@ -82,7 +82,7 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
     if(colorby=="none") legend = FALSE
     
     if(!is.null(customCol) & (colorby!="transcript")){
-      stop("Custom coloring is only available at transcript level currently")
+        stop("Custom coloring is only available at transcript level currently")
     }
 
     if(!is.null(customCol) & legend){
@@ -188,7 +188,7 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
                 if(!is.null(customCol)){
                     mycolor = customCol[txind]
                 }else{
-                    mycolor = closestColor(smalldat[,colIndex][which(t_id==tx)], 
+                    mycolor = closestColor(smalldat[,colIndex][which(t_id==tx)],
                         colscale)    
                 }
                 stopifnot(length(mycolor) > 0)
@@ -239,7 +239,7 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
         if(legend){
             leglocs = seq(min(xax)+1, max(xax)-1, length=length(colscale)+1)
             for(i in 1:length(colscale)){
-                polygon(x=c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]), 
+                polygon(x=c(leglocs[i], leglocs[i], leglocs[i+1], leglocs[i+1]),
                     y=c(ymax-0.3, ymax, ymax, ymax-0.3), border=NA, 
                     col=rev(heat.colors(length(colscale)))[i])
             }

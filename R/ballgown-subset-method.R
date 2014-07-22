@@ -60,7 +60,7 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
         grltxids = as.numeric(names(structure(x)$trans))
         transgrl = structure(x)$trans[grltxids %in% thetx]
     
-        return(new("ballgown", expr=list(intron=intron, exon=exon, trans=trans), 
+        return(new("ballgown", expr=list(intron=intron, exon=exon, trans=trans),
             indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, 
                 bamfiles=indexes(x)$bamfiles, pData=indexes(x)$pData), 
             structure=list(intron=introngr, exon=exongr, trans=transgrl), 
