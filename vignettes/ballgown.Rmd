@@ -299,7 +299,7 @@ bibliography()
 ```
 
 # Session Information
-```{r sessioninfo, results='asis'}
+```{r sessioninfo, results='markup'}
 sessionInfo()
 ```
 
