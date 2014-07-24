@@ -9,19 +9,22 @@ Before using the Ballgown R package, a few preprocessing steps are necessary:
 The Ballgown package provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly. 
 
 # Installation
-To install the release version from [Bioconductor](http://www.bioconductor.org/), start R and run:
+<!---To install the release version from [Bioconductor](http://www.bioconductor.org/), start R and run:
 
 ```r
 source("http://bioconductor.org/biocLite.R")
 biocLite("ballgown")
 ```
+-->
 
-You can also install the development version from GitHub:
+Currently only the devel version is available, and it can be installed from GitHub: 
 
 ```R
 install.packages('devtools') #if needed
 devtools::install_github('ballgown', 'alyssafrazee')
 ```
+
+You will need to use to the "devel" version of Bioconductor (until the next release), since Ballgown depends on new versions of a few Bioconductor packages. [Instructions for using the devel version are here](http://www.bioconductor.org/developers/how-to/useDevel/). Recommended practice is to either switch your entire setup to devel or maintain two R installations, one using the release version of Bioconductor and one using the devel version. 
 
 #### "alpha" version
 `ballgown` changed significantly in July 2014. For backwards compatibility with code written before July 2014, we've saved the "alpha" version of Ballgown in the `alpha` branch of this repository. You can install this version from GitHub:
