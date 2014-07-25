@@ -14,3 +14,4 @@ vignettes/ballgown.md
 vignettes/figure
 vignettes/*.bib
 test_vagrant_install.R
+make_small_hg19.R
