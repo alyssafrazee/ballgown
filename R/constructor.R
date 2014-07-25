@@ -364,7 +364,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         expr=list(intron=intron, exon=exon, trans=transcript), 
         indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles=bamfiles, pData=pData),
         structure=list(intron=introngr, exon=exongr, trans=tgrl), 
-        dirs=samples, mergedDate=date(), meas=meas)
+        dirs=samples, mergedDate=date(), meas=meas, RSEM=FALSE)
 
     if(verbose) message(date())
     return(result)

@@ -26,8 +26,13 @@ information (e.g., phenotype data and locations of read alignment files)}
 \item{\code{mergedDate}}{date the ballgown object was created}
 
 \item{\code{meas}}{which expression measurement(s) the object contains in its data
-  slot. Vector of one or more of "rcount", "ucount", "mrcount", "cov",
-  "cov_sd", "mcov", "mcov_sd", or "FPKM". See vignette for details.}
+slot. Vector of one or more of "rcount", "ucount", "mrcount", "cov",
+"cov_sd", "mcov", "mcov_sd", or "FPKM", if Tablemaker output is used, or
+one of "TPM" or "FPKM" if RSEM output is used. Can also be "all" for all
+measurements. See vignette for details.}
+
+\item{\code{RSEM}}{TRUE if object was made from RSEM output, FALSE if object was made
+  from Tablemaker/Cufflinks output.}
 }}
 \examples{
 data(bg)
@@ -38,6 +43,7 @@ data(bg)
   head(bg@dirs)
   bg@mergedDate
   bg@meas
+  bg@RSEM
 }
 \author{
 Alyssa Frazee, Leonardo Collado Torres, Jeff Leek

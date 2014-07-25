@@ -32,9 +32,14 @@
 #' data(bg)
 #' collapseTranscripts(bg, gene='XLOC_000454', meas='FPKM', method='kmeans')
 #' 
-collapseTranscripts = function(gene, gown, meas=c('cov', 'FPKM'), 
+collapseTranscripts = function(gene, gown, meas='FPKM', 
     method=c('hclust', 'kmeans'), k=NULL){
-    meas = match.arg(meas)
+
+    if(!gown@RSEM){
+        meas = match.arg(meas, c('cov', 'FPKM'))
+    }else{
+        meas = match.arg(meas, c('FPKM', 'TPM'))
+    }
     method = match.arg(method)
     if(is.null(k)){
         k = 'thumb'
