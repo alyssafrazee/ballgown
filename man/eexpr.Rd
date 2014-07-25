@@ -17,8 +17,9 @@ eexpr(x, meas = "rcount")
 }
 \value{
 exon-by-sample matrix containing exon-level expression values
-  (measured by \code{meas}). If \code{meas} is \code{"all"}, a data frame is
-  returned, containing all measurements and location information.
+  (measured by \code{meas}). If \code{meas} is \code{"all"}, or
+  \code{x@RSEM} is TRUE, a data frame is returned, containing all
+  measurements and location information.
 }
 \description{
 extract exon-level expression measurements from ballgown objects

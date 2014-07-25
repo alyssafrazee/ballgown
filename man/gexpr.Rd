@@ -13,11 +13,13 @@ gexpr(x)
 \item{x}{a ballgown object}
 }
 \value{
-gene-by-sample matrix containing per-sample gene FPKMs.
+gene-by-sample matrix containing per-sample gene measurements.
 }
 \description{
-gene-level measurements are done by appropriately combining FPKMs from the
-  transcripts comprising the gene.
+For objects created with Cufflinks/Tablemaker, gene-level measurements are
+  calculated by appropriately combining FPKMs from the transcripts comprising
+  the gene. For objects created with RSEM, gene-level measurements are
+  extracted directly from the RSEM output.
 }
 \examples{
 data(bg)

@@ -91,12 +91,14 @@
 #' shouldn't take up too much RAM when loaded, so the time and memory use in 
 #' creating the object is a one-time cost.
 #' 
-#' @return a \code{\link{ballgown}} object
+#' @return an object of class \code{ballgown}
 #' 
 #' @author Leonardo Collado Torres, Alyssa Frazee
 #' 
 #' @rdname ballgown-constructor
 #' 
+#' @seealso \code{\link{ballgownrsem}}, for loading RSEM output into a ballgown
+#'   object
 #' @export
 #' @examples
 #' bg = ballgown(dataDir=system.file('extdata', package='ballgown'), 
