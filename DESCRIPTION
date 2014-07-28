@@ -1,0 +1,18 @@
+Package: ballgown
+Maintainer: Alyssa Frazee <alyssa.frazee@gmail.com>
+Author: Alyssa Frazee, Andrew Jaffe, Leonardo Collado Torres, Jeff Leek
+Version: 0.99.1
+License: Artistic-2.0
+Title: Flexible, isoform-level differential expression analysis
+Description: Tools for statistical analysis of assembled
+        transcriptomes, including flexible differential expression
+        analysis, visualization of transcript structures, and matching
+        of assembled transcripts to annotation.
+Depends: R (>= 3.0.0), methods
+Imports: GenomicRanges (>= 1.17.25), IRanges (>= 1.99.22), S4Vectors
+        (>= 0.1.2), RColorBrewer, splines, sva, limma, rtracklayer (>=
+        1.25.13), Biobase (>= 2.25.0)
+Suggests: testthat, knitr, knitcitations
+VignetteBuilder: knitr
+biocViews: RNASeq, StatisticalMethod, Preprocessing,
+        DifferentialExpression
