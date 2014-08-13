@@ -97,13 +97,13 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
         iKeepCols = c(1:5, which(icolsamples %in% newsampnames))
         newidat = iexpr(x, 'all')[,iKeepCols]
 
-        return(new("ballgown", expr=list(intron=newidat, exon=newedat,
-            trans=newtdat), 
+        return(new("ballgown", 
+            expr=list(intron=newidat, exon=newedat, trans=newtdat), 
             indexes=list(e2t=indexes(x)$e2t, i2t=indexes(x)$i2t,
                 t2g=indexes(x)$t2g, bamfiles=newbamfiles, pData=newpd), 
             structure=list(intron=structure(x)$intron, exon=structure(x)$exon, 
                 trans=structure(x)$trans),
             dirs=dirs(x)[rowIndsToKeep], mergedDate=mergedDate(x), 
-            meas=x@meas), RSEM=x@RSEM)
+            meas=x@meas, RSEM=x@RSEM))
     }
 } )
