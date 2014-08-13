@@ -7,7 +7,7 @@ stattest(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
   mod0 = NULL, feature = c("gene", "exon", "intron", "transcript"),
   meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
   timecourse = FALSE, covariate = NULL, adjustvars = NULL, gexpr = NULL,
-  df = 4, getFC = FALSE, libadjust = TRUE, log = TRUE)
+  df = 4, getFC = FALSE, libadjust = NULL, log = TRUE)
 }
 \arguments{
 \item{gown}{name of an object of class \code{ballgown}}
@@ -67,10 +67,13 @@ natural cubic splines.  Default 4.  Only used if \code{timecourse=TRUE}.}
 library size and confounders) between populations. Only available for
 2-group comparisons at the moment. Default \code{FALSE}.}
 
-\item{libadjust}{if \code{TRUE} (default), include a library-size adjustment
-as a confounder in the fitted models. The adjustment is currently defined
-as the sum of the sample's log expression measurements below the 75th
-percentile of those measurements.}
+\item{libadjust}{library-size adjustment to use in linear models. By default,
+the adjustment is defined as the sum of the sample's log expression
+measurements below the 75th percentile of those measurements. To use
+a different library-size adjustment, provide a numeric vector of each
+sample's adjustment value. Entries of this vector correspond to samples in
+in rows of \code{pData}. If no library size adjustment is desired, set to
+FALSE.}
 
 \item{log}{if \code{TRUE}, outcome variable in linear models is
   log(expression+1), otherwise it's expression. Default TRUE.}
