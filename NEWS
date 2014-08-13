@@ -2,6 +2,7 @@ New in version 0.99.2, 13 August 2014:
     * `ballgownrsem` function added (now compatible with RSEM output)
     * RSEM slot added to ballgown S4 class
     * bug fixes in `subset` function
+    * library size adjustment in `stattest` is now CSS normalization (using *log* FPKM) by default and is more customizable
 
 Version 0.99.1 was released on Bioconductor on 28 July 2014
 

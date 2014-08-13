@@ -47,10 +47,13 @@
 #' @param getFC if \code{TRUE}, also return estimated fold changes (adjusted for
 #'   library size and confounders) between populations. Only available for 
 #'   2-group comparisons at the moment. Default \code{FALSE}.
-#' @param libadjust if \code{TRUE} (default), include a library-size adjustment 
-#'   as a confounder in the fitted models. The adjustment is currently defined 
-#'   as the sum of the sample's log expression measurements below the 75th 
-#'   percentile of those measurements.
+#' @param libadjust library-size adjustment to use in linear models. By default,
+#'   the adjustment is defined as the sum of the sample's log expression
+#'   measurements below the 75th percentile of those measurements. To use 
+#'   a different library-size adjustment, provide a numeric vector of each 
+#'   sample's adjustment value. Entries of this vector correspond to samples in
+#'   in rows of \code{pData}. If no library size adjustment is desired, set to
+#'   FALSE.
 #' @param log if \code{TRUE}, outcome variable in linear models is 
 #'   log(expression+1), otherwise it's expression. Default TRUE.
 #' 
@@ -133,7 +136,7 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
     mod0 = NULL, feature = c("gene", "exon", "intron", "transcript"), 
     meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"), 
     timecourse = FALSE, covariate = NULL, adjustvars = NULL, gexpr = NULL, 
-    df = 4, getFC = FALSE, libadjust = TRUE, log = TRUE){
+    df = 4, getFC = FALSE, libadjust = NULL, log = TRUE){
 
     if(!xor(is.null(gown), is.null(gowntable))){
         stop('must provide exactly one of gown and gowntable')
@@ -184,12 +187,15 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
     n = ncol(expr)
 
     ## library size adjustment
-    if(libadjust){
-        lib_adj = apply(expr, 2, function(x){
+    if(is.null(libadjust)){
+        libadjust = apply(expr, 2, function(x){
             lognz = log2(x[x!=0] + 1)
             q3 = quantile(lognz, 0.75)
             sum(lognz[lognz<q3])
         })
+    }else if(!identical(libadjust, FALSE)){
+            stopifnot(is.numeric(libadjust) | identical(libadjust, FALSE))
+            stopifnot(length(libadjust) == nrow(pData))
     }
 
     if(is.null(mod) & is.null(mod0)){
@@ -221,16 +227,16 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
                     " <- pData[,",column_ind,"]")))
                 variable_list = paste(variable_list, adjustvars[i], sep="+")
             }
-            if(libadjust){
-                eval(parse(text=paste0("mod0 = model.matrix(~ lib_adj", 
+            if(!identical(libadjust, FALSE)){
+                eval(parse(text=paste0("mod0 = model.matrix(~ libadjust", 
                     variable_list, ")")))
                 if(timecourse){
                     eval(parse(text=paste0(
-                        "mod = model.matrix(~ ns(x, df = ", df, ") + lib_adj", 
+                        "mod = model.matrix(~ ns(x, df = ", df, ") + libadjust", 
                         variable_list, ")")))
                 } else {
                     eval(parse(text=paste0(
-                        "mod = model.matrix(~ as.factor(x) + lib_adj", 
+                        "mod = model.matrix(~ as.factor(x) + libadjust", 
                         variable_list, ")")))
                 }
             } else {
@@ -249,20 +255,20 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
                 }                
             }
         } else {
-            if(libadjust){
-                mod0 = model.matrix(~ lib_adj)
+            if(!identical(libadjust, FALSE)){
+                mod0 = model.matrix(~ libadjust)
             } else{
                 mod0 = matrix(1, nrow=length(x), ncol=1)
             }
             if(timecourse){
-                if(libadjust){
-                    mod = model.matrix(~ ns(x, df = df) + lib_adj)
+                if(!identical(libadjust, FALSE)){
+                    mod = model.matrix(~ ns(x, df = df) + libadjust)
                 } else {
                     mod = model.matrix(~ ns(x, df = df))
                 }
             } else {
-                if(libadjust){
-                    mod = model.matrix(~ as.factor(x) + lib_adj)
+                if(!identical(libadjust, FALSE)){
+                    mod = model.matrix(~ as.factor(x) + libadjust)
                 } else {
                     mod = model.matrix(~ as.factor(x))
                 }
