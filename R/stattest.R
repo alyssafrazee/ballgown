@@ -7,7 +7,9 @@
 #' @param gowntable matrix or matrix-like object with \code{rownames} 
 #'   representing feature IDs and columns representing samples, with expression
 #'   estimates in the cells. Provide the feature name with \code{feature}. You
-#'   must provide exactly one of \code{gown} or \code{gowntable}.
+#'   must provide exactly one of \code{gown} or \code{gowntable}. NB: gowntable
+#'   is log-transformed within \code{stattest} if \code{log} is \code{TRUE}, so
+#'   provide un-logged expression values in \code{gowntable}.
 #' @param pData Required if \code{gowntable} is provided: data frame giving
 #'   phenotype data for the samples in the columns of \code{gowntable}. (Rows of
 #'   \code{pData} correspond to columns of \code{gowntable}). If \code{gown} is

@@ -1,0 +1,17 @@
+*.rda
+*~
+*.pdf
+*.pptx
+*.RData
+*.Rout
+.Rhistory
+make_example_dataset.R
+.vagrant
+Vagrantfile
+set_environment.sh
+vignettes/ballgown.html
+vignettes/ballgown.md
+vignettes/figure
+vignettes/*.bib
+test_vagrant_install.R
+make_small_hg19.R
