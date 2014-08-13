@@ -9,8 +9,9 @@
 #' @param meas type of measurement to extract. Can be "rcount", "ucount", 
 #'   "mrcount", "cov", "mcov", or "all". Default "rcount".
 #' @return exon-by-sample matrix containing exon-level expression values
-#'   (measured by \code{meas}). If \code{meas} is \code{"all"}, a data frame is
-#'   returned, containing all measurements and location information.
+#'   (measured by \code{meas}). If \code{meas} is \code{"all"}, or 
+#'   \code{x@@RSEM} is TRUE, a data frame is returned, containing all
+#'   measurements and location information.
 #' 
 #' @examples 
 #' data(bg)
@@ -18,6 +19,9 @@
 #' exon_ucount_matrix = eexpr(bg, 'ucount')
 #' exon_data_frame = eexpr(bg, 'all')
 setMethod('eexpr', 'ballgown', function(x, meas='rcount'){
+    if(x@RSEM){
+        return(expr(x)$exon)
+    }
     emeas = c('all', 'rcount', 'ucount', 'mrcount', 'cov', 'mcov', 'cov_sd', 
         'mcov_sd')
     meas = match.arg(meas, emeas)
@@ -68,11 +72,15 @@ setMethod('eexpr', 'ballgown', function(x, meas='rcount'){
 #' transcript_fpkm_matrix = texpr(bg)
 #' transcript_data_frame = texpr(bg, 'all')
 setMethod('texpr', 'ballgown', function(x, meas='FPKM'){
-    meas = match.arg(meas, c('cov', 'FPKM', 'all'))
+    if(x@RSEM){
+        meas = match.arg(meas, c('TPM', 'FPKM', 'all'))
+    }else{
+        meas = match.arg(meas, c('cov', 'FPKM', 'all'))
+    }
     if(meas!='all'){
         if(!identical(x@meas, 'all')){
             if(!(meas %in% x@meas)){
-                meas_avail = paste(c(intersect(x@meas, c('cov', 'FPKM')), 
+                meas_avail = paste(c(intersect(x@meas, c('cov', 'FPKM', 'TPM')),
                     'all'), collapse=', ')
                 msg = paste(meas, 'measurements were not included when this
                     ballgown object was created. Instead, you can use texpr with
@@ -86,7 +94,8 @@ setMethod('texpr', 'ballgown', function(x, meas='FPKM'){
         rownames(mat) = expr(x)$trans$t_id
         mat = as.matrix(mat)
     }else{
-        if(!any(c('cov', 'FPKM') %in% x@meas) & !identical(x@meas, 'all')){
+        if(!any(c('cov', 'FPKM', 'TPM') %in% x@meas) & 
+                !identical(x@meas, 'all')){
             msg = 'No transcript-level expression measurements are included in
             this ballgown object. Returning data frame of transcript structure
             information.'
@@ -117,6 +126,9 @@ setMethod('texpr', 'ballgown', function(x, meas='FPKM'){
 #' intron_rcount_matrix = iexpr(bg)
 #' intron_data_frame = iexpr(bg, 'all')
 setMethod('iexpr', 'ballgown', function(x, meas='rcount'){
+    if(x@RSEM){
+        return(expr(x)$intron)
+    }
     meas = match.arg(meas, c('rcount', 'ucount', 'mrcount', 'all'))
     if(meas!='all'){
         if(!identical(x@meas, 'all')){
@@ -149,8 +161,10 @@ setMethod('iexpr', 'ballgown', function(x, meas='rcount'){
 
 #' extract gene-level expression measurements from ballgown objects
 #' 
-#' gene-level measurements are done by appropriately combining FPKMs from the
-#'   transcripts comprising the gene. 
+#' For objects created with Cufflinks/Tablemaker, gene-level measurements are 
+#'   calculated by appropriately combining FPKMs from the transcripts comprising
+#'   the gene. For objects created with RSEM, gene-level measurements are
+#'   extracted directly from the RSEM output.
 #'
 #' @name gexpr
 #' @exportMethod gexpr
@@ -158,31 +172,35 @@ setMethod('iexpr', 'ballgown', function(x, meas='rcount'){
 #' @rdname gexpr
 #' @aliases gexpr,ballgown-method
 #' @param x a ballgown object
-#' @return gene-by-sample matrix containing per-sample gene FPKMs.
+#' @return gene-by-sample matrix containing per-sample gene measurements.
 #' 
 #' @examples
 #' data(bg)
 #' gene_matrix = gexpr(bg)
 setMethod('gexpr', 'ballgown', function(x){
-    if(!('FPKM' %in% x@meas) & !identical(x@meas, 'all')){
-        msg = 'gene expression measurements can only be calculated for ballgown
-        objects including transcript-level FPKM values.' 
-        stop(.makepretty(msg))
+    if(x@RSEM){
+        return(expr(x)$gm)
+    }else{
+        if(!('FPKM' %in% x@meas) & !identical(x@meas, 'all')){
+            msg = 'gene expression measurements can only be calculated for
+            ballgown objects including transcript-level FPKM values.' 
+            stop(.makepretty(msg))
+        }
+        gnames = as.character(indexes(x)$t2g$g_id)
+        inds_by_gene = split(seq(along=gnames), gnames)
+        tmeas = texpr(x, "FPKM")
+        gid_by_exon = lapply(1:nrow(tmeas), function(i){
+            rep(texpr(x, 'all')$gene_id[i], texpr(x, 'all')$num_exons[i])})
+        ulstruct = unlist(structure(x)$trans)
+        glist = split(ulstruct, unlist(gid_by_exon))
+        glengths = sapply(width(reduce(glist)), sum)
+        tlengths = sapply(width(structure(x)$trans), sum)
+        tfrags = tlengths * tmeas
+        mat = t(sapply(1:length(inds_by_gene), function(i){
+            colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
+        rownames(mat) = names(inds_by_gene)
+        return(mat)
     }
-    gnames = as.character(indexes(x)$t2g$g_id)
-    inds_by_gene = split(seq(along=gnames), gnames)
-    tmeas = texpr(x, "FPKM")
-    gid_by_exon = lapply(1:nrow(tmeas), function(i){
-        rep(texpr(x, 'all')$gene_id[i], texpr(x, 'all')$num_exons[i])})
-    ulstruct = unlist(structure(x)$trans)
-    glist = split(ulstruct, unlist(gid_by_exon))
-    glengths = sapply(width(reduce(glist)), sum)
-    tlengths = sapply(width(structure(x)$trans), sum)
-    tfrags = tlengths * tmeas
-    mat = t(sapply(1:length(inds_by_gene), function(i){
-        colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
-    rownames(mat) = names(inds_by_gene)
-    return(mat)
 })
 
 

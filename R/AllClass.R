@@ -16,7 +16,11 @@
 #' @slot mergedDate date the ballgown object was created
 #' @slot meas which expression measurement(s) the object contains in its data 
 #'   slot. Vector of one or more of "rcount", "ucount", "mrcount", "cov", 
-#'   "cov_sd", "mcov", "mcov_sd", or "FPKM". See vignette for details.
+#'   "cov_sd", "mcov", "mcov_sd", or "FPKM", if Tablemaker output is used, or 
+#'   one of "TPM" or "FPKM" if RSEM output is used. Can also be "all" for all 
+#'   measurements. See vignette for details.
+#' @slot RSEM TRUE if object was made from RSEM output, FALSE if object was made
+#'   from Tablemaker/Cufflinks output.
 #' 
 #' @name ballgown-class
 #' 
@@ -34,6 +38,7 @@
 #'   head(bg@@dirs)
 #'   bg@@mergedDate
 #'   bg@@meas
+#'   bg@@RSEM
 setClass("ballgown", 
     representation(
         expr = "list",             # coverage data
@@ -41,6 +46,7 @@ setClass("ballgown",
         structure = "list",        # assembly information
         dirs = "character",        # directories where ballgown data is stored
         mergedDate = "character",  # date the object was created
-        meas = "character"         # what measurements are in the object
+        meas = "character",        # what measurements are in the object
+        RSEM = "logical"           # TRUE if made from RSEM output
     )
 )

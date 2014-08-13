@@ -59,6 +59,15 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
 
     if(class(gown)!="ballgown") stop("gown must be a ballgown object")
 
+    if(gown@RSEM & colorby=='exon'){
+        stop(.makepretty('RSEM objects do not yet have exon-level measurements,
+            so must color by transcript.'))
+    }
+
+    if(!gown@RSEM & meas=='TPM'){
+        stop('only RSEM objects have TPM measurements.')
+    }
+
     if(is.null(samples)){
         samples = sampleNames(gown)[1]
         if(colorby!='none') message(paste('defaulting to sample', samples))
@@ -67,7 +76,7 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
     stopifnot(colorby %in% c('transcript', 'exon', 'none'))
 
     if(colorby == 'transcript'){
-        stopifnot(meas %in% c('cov', 'FPKM'))
+        stopifnot(meas %in% c('cov', 'FPKM', 'TPM'))
     }
     if(colorby == 'exon'){
         emeas = c('rcount', 'ucount', 'mrcount', 'cov', 'cov_sd', 

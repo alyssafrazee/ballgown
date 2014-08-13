@@ -91,12 +91,14 @@
 #' shouldn't take up too much RAM when loaded, so the time and memory use in 
 #' creating the object is a one-time cost.
 #' 
-#' @return a \code{\link{ballgown}} object
+#' @return an object of class \code{ballgown}
 #' 
 #' @author Leonardo Collado Torres, Alyssa Frazee
 #' 
 #' @rdname ballgown-constructor
 #' 
+#' @seealso \code{\link{ballgownrsem}}, for loading RSEM output into a ballgown
+#'   object
 #' @export
 #' @examples
 #' bg = ballgown(dataDir=system.file('extdata', package='ballgown'), 
@@ -362,7 +364,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         expr=list(intron=intron, exon=exon, trans=transcript), 
         indexes=list(e2t=e2t, i2t=i2t, t2g=t2g, bamfiles=bamfiles, pData=pData),
         structure=list(intron=introngr, exon=exongr, trans=tgrl), 
-        dirs=samples, mergedDate=date(), meas=meas)
+        dirs=samples, mergedDate=date(), meas=meas, RSEM=FALSE)
 
     if(verbose) message(date())
     return(result)

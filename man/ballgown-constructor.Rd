@@ -37,7 +37,7 @@ as the object is constructed.}
   creates the full object.}
 }
 \value{
-a \code{\link{ballgown}} object
+an object of class \code{ballgown}
 }
 \description{
 constructor function for ballgown objects
@@ -65,5 +65,9 @@ pData(bg) = data.frame(id=sampleNames(bg), group=rep(c(1,0), each=10))
 }
 \author{
 Leonardo Collado Torres, Alyssa Frazee
+}
+\seealso{
+\code{\link{ballgownrsem}}, for loading RSEM output into a ballgown
+  object
 }
 
