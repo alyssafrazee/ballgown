@@ -1,3 +1,10 @@
+New in version 0.99.2, 13 August 2014:
+    * `ballgownrsem` function added (now compatible with RSEM output)
+    * RSEM slot added to ballgown S4 class
+    * bug fixes in `subset` function
+
+Version 0.99.1 was released on Bioconductor on 28 July 2014
+
 New in version 0.99.0, 22 July 2014 (updates from alpha release):
     * "meas" argument added to constructor function
     * unit tests added
