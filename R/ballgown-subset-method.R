@@ -83,7 +83,7 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
         }
 
         ## transcript data
-        txcolsamples = ss(names(texpr(bg, 'all')), pattern='\\.', slot=2)
+        txcolsamples = ss(names(texpr(x, 'all')), pattern='\\.', slot=2)
         txKeepCols = c(1:10, which(txcolsamples %in% newsampnames))
         newtdat = texpr(x, 'all')[,txKeepCols]
 
