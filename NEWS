@@ -1,3 +1,6 @@
+New in version 0.99.3, 18 August 2014:
+    * `exprfilter` function added
+
 New in version 0.99.2, 13 August 2014:
     * `ballgownrsem` function added (now compatible with RSEM output)
     * RSEM slot added to ballgown S4 class
