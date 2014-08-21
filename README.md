@@ -48,7 +48,7 @@ Users need to run _Tablemaker_ to organize assembly output into a format that Ba
 * [OSX binary](http://figshare.com/articles/Tablemaker_OS_X_Binary/1053136)
 * [Linux binary](http://figshare.com/articles/Tablemaker_Linux_Binary/1053137)
 
-Tablemaker can also be built from source from [this repository](https://github.com/alyssafrazee/ballgown/tree/master/tablemaker/tablemaker-2.1.1) by following [Cufflinks' instructions](http://cufflinks.cbcb.umd.edu/tutorial.html). 
+Tablemaker can also be built from source from [this repository](https://github.com/alyssafrazee/tablemaker) by following [Cufflinks' instructions](http://cufflinks.cbcb.umd.edu/tutorial.html). 
 
 Tablemaker needs to be run on each RNA-seq sample in your experiment.  It requires one transcripome assembly, in [GTF format](http://www.ensembl.org/info/website/upload/gff.html), and read alignments for each sample, in BAM format. From the command line, _Tablemaker_ is run as follows:
 
