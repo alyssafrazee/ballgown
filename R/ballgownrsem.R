@@ -36,7 +36,7 @@ match.data.frame = function(x1, x2, ...){
 #'   expression measurement for the transcripts. "all" 
 #'   creates the full object.
 #' @export
-#' @seealso \code{link{ballgown}} for reading Cufflinks/Tablemaker output
+#' @seealso \code{\link{ballgown}} for reading Cufflinks/Tablemaker output
 #' @return a ballgown object with the specified expression measurements and
 #'   structure specified by GTF.
 #' @examples 
