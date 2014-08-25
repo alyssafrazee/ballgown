@@ -66,6 +66,6 @@ rsemobj = ballgownrsem(dir=dataDir, samples=c('tiny', 'tiny2'), gtf=gtf,
 rsemobj
 }
 \seealso{
-\code{link{ballgown}} for reading Cufflinks/Tablemaker output
+\code{\link{ballgown}} for reading Cufflinks/Tablemaker output
 }
 
