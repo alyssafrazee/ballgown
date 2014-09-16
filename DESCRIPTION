@@ -1,7 +1,7 @@
 Package: ballgown
 Maintainer: Alyssa Frazee <alyssa.frazee@gmail.com>
 Author: Alyssa Frazee, Andrew Jaffe, Leonardo Collado Torres, Jeff Leek
-Version: 0.99.4
+Version: 0.99.5
 License: Artistic-2.0
 Title: Flexible, isoform-level differential expression analysis
 Description: Tools for statistical analysis of assembled transcriptomes,
