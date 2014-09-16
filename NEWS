@@ -1,3 +1,9 @@
+New in version 0.99.5, 16 September 2014:
+    * "subset" function now behaves appropriately if sampleNames contain  "dot" characters
+
+New in version 0.99.4, 21 August 2014:
+    * Tablemaker source code moved out of Ballgown repository (both GitHub and BioC svn repos)
+
 New in version 0.99.3, 18 August 2014:
     * `exprfilter` function added
 

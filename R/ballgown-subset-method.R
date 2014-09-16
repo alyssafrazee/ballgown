@@ -1,3 +1,8 @@
+## function that returns 2nd half of expression column names
+## (regardless of whether they have '.' in them)
+half2 = function(x) paste(x[-1], collapse='.')
+
+
 #' subset ballgown objects to specific samples or genomic locations
 #' 
 #' @name subset
@@ -83,17 +88,17 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
         }
 
         ## transcript data
-        txcolsamples = ss(names(texpr(x, 'all')), pattern='\\.', slot=2)
+        txcolsamples = sapply(strsplit(names(texpr(x, 'all')), '\\.'), half2)
         txKeepCols = c(1:10, which(txcolsamples %in% newsampnames))
         newtdat = texpr(x, 'all')[,txKeepCols]
 
         ## exon data
-        excolsamples = ss(names(eexpr(x, 'all')), pattern='\\.', slot=2)
+        excolsamples = sapply(strsplit(names(eexpr(x, 'all')), '\\.'), half2)
         exKeepCols = c(1:5, which(excolsamples %in% newsampnames))
         newedat = eexpr(x, 'all')[,exKeepCols]
 
         ## intron data
-        icolsamples = ss(names(iexpr(x, 'all')), pattern='\\.', slot=2)
+        icolsamples = sapply(strsplit(names(iexpr(x, 'all')), '\\.'), half2)
         iKeepCols = c(1:5, which(icolsamples %in% newsampnames))
         newidat = iexpr(x, 'all')[,iKeepCols]
 
