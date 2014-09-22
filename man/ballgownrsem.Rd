@@ -45,6 +45,9 @@ data loading.}
 "TPM". The resulting ballgown object will only contain the specified
 expression measurement for the transcripts. "all"
 creates the full object.}
+
+\item{zipped}{set to TRUE if all RSEM results files have been gzipped (end)
+in ".gz").}
 }
 \value{
 a ballgown object with the specified expression measurements and
@@ -62,7 +65,7 @@ Currently exon- and intron-level measurements are not available for
 dataDir = system.file('extdata', package='ballgown')
 gtf = file.path(dataDir, 'hg19_genes_small.gtf.gz')
 rsemobj = ballgownrsem(dir=dataDir, samples=c('tiny', 'tiny2'), gtf=gtf,
-    bamout='none')
+    bamout='none', zipped=TRUE)
 rsemobj
 }
 \seealso{

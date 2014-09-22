@@ -6,6 +6,8 @@
 \title{Replacement method for expr slot in ballgown objects}
 \usage{
 expr(x) <- value
+
+\S4method{expr}{ballgown}(x) <- value
 }
 \arguments{
 \item{x}{a ballgown object}

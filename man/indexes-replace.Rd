@@ -6,6 +6,8 @@
 \title{Replace method for indexes slot in ballgown objects}
 \usage{
 indexes(x) <- value
+
+\S4method{indexes}{ballgown}(x) <- value
 }
 \arguments{
 \item{x}{a ballgown object}

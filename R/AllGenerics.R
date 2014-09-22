@@ -53,6 +53,7 @@ setGeneric("expr<-", function(x, value) standardGeneric("expr<-"))
 #' @export
 #' @docType methods
 #' @rdname subset
+#' @param ... further arguments to generic subset
 setGeneric("subset", function(x, ...) standardGeneric("subset"))
 
 #' @name pData
