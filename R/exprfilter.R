@@ -20,6 +20,7 @@
 #'
 #'}
 exprfilter = function(gown, cutoff, meas='FPKM'){
+    e_id = t_id = i_id = NULL #prep for use in subset function / R CMD CHECK
     meas = match.arg(meas, c('FPKM', 'cov'))
 
     stopifnot(gown@meas == 'all' | meas %in% gown@meas)
