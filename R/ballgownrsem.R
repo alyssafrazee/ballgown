@@ -35,6 +35,8 @@ match.data.frame = function(x1, x2, ...){
 #'   "TPM". The resulting ballgown object will only contain the specified
 #'   expression measurement for the transcripts. "all" 
 #'   creates the full object.
+#' @param zipped set to TRUE if all RSEM results files have been gzipped (end)
+#'   in ".gz").
 #' @export
 #' @seealso \code{\link{ballgown}} for reading Cufflinks/Tablemaker output
 #' @return a ballgown object with the specified expression measurements and
@@ -43,13 +45,14 @@ match.data.frame = function(x1, x2, ...){
 #' dataDir = system.file('extdata', package='ballgown')
 #' gtf = file.path(dataDir, 'hg19_genes_small.gtf.gz')
 #' rsemobj = ballgownrsem(dir=dataDir, samples=c('tiny', 'tiny2'), gtf=gtf,
-#'     bamout='none')
+#'     bamout='none', zipped=TRUE)
 #' rsemobj
 #'
 #' @details Currently exon- and intron-level measurements are not available for
 #'   RSEM-generated ballgown objects, but development is ongoing.
 ballgownrsem = function(dir="", samples, gtf, UCSC=TRUE, tfield='transcript_id',
-    attrsep='; ', bamout='transcript', pData=NULL, verbose=TRUE, meas='all'){
+    attrsep='; ', bamout='transcript', pData=NULL, verbose=TRUE, meas='all',
+    zipped=FALSE){
 
     bamout = match.arg(bamout, c('transcript', 'genome', 'none'))
     meas = match.arg(meas, c('all', 'TPM', 'FPKM'))
@@ -63,8 +66,12 @@ ballgownrsem = function(dir="", samples, gtf, UCSC=TRUE, tfield='transcript_id',
     }
 
     # transcript/gene correspondence (t2g):
-    t2g = read.table(paste0(dir, '/', samples[1], '.isoforms.results'), 
-        header=TRUE, colClasses=c('character', 'character', rep("NULL", 6)))
+    f = paste0(dir, '/', samples[1], '.isoforms.results')
+    if(zipped){
+        f = paste0(f, '.gz')
+    }
+    t2g = read.table(f, header=TRUE, 
+        colClasses=c('character', 'character', rep("NULL", 6)))
     names(t2g) = c('t_id', 'g_id')
 
 
@@ -78,7 +85,7 @@ ballgownrsem = function(dir="", samples, gtf, UCSC=TRUE, tfield='transcript_id',
         # strip off extra quotes
         tgtf$t_name = substr(tgtf$t_name, 2, nchar(tgtf$t_name)-1)
     }
-    tgtf = subset(tgtf, feature=="exon")
+    tgtf = tgtf[tgtf$feature == "exon",]
     if(verbose){
         message(paste0(date(), ': handling exons'))
     }
@@ -153,6 +160,9 @@ ballgownrsem = function(dir="", samples, gtf, UCSC=TRUE, tfield='transcript_id',
         message(paste0(date(), ': handling transcripts'))
     }
     isofiles = paste0(dir, '/', samples, '.isoforms.results')
+    if(zipped){
+        isofiles = paste0(isofiles, '.gz')
+    }
     isodata = lapply(isofiles, function(x){
         read.table(x, header=TRUE)
     })
@@ -209,6 +219,9 @@ ballgownrsem = function(dir="", samples, gtf, UCSC=TRUE, tfield='transcript_id',
 
     # handle gexpr (get it directly with RSEM)
     genefiles = paste0(dir, '/', samples, '.genes.results')
+    if(zipped){
+        genefiles = paste0(genefiles, '.gz')
+    }
     genedata = lapply(genefiles, function(x){
         read.table(x, header=TRUE)
     })
