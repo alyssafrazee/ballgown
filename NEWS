@@ -1,3 +1,7 @@
+New in version 0.99.6, 22 September 2014:
+    * ballgownrsem can now handle gzipped input files
+    * small fixes to eliminate warnings/errors on R CMD CHECK
+
 New in version 0.99.5, 16 September 2014:
     * "subset" function now behaves appropriately if sampleNames contain  "dot" characters
 
