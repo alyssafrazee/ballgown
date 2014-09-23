@@ -462,7 +462,7 @@ head(adjusted_results)
 ```
 
 # Using alternative statistical methods
-Ballgown's statistical methods for differential expression testing are straightforward and accurate (<a href="http://biorxiv.org/content/early/2014/03/30/003665">Frazee et al. (2014)</a>), but users may wish to use one of the many existing packages for differential expression. Ballgown's data structures make it easy to use table-based packages like limma (<a href="">Smyth (2005)</a>), limma Voom (<a href="http://dx.doi.org/10.1186/gb-2014-15-2-r29">Law et al. (2014)</a>), DESeq (<a href="http://dx.doi.org/10.1186/gb-2010-11-10-r106">Anders & Huber (2010)</a>), DEXSeq (<a href="http://dx.doi.org/10.1101/gr.133744.111">Anders et al. (2012)</a>), or EdgeR (<a href="http://dx.doi.org/10.1186/gb-2010-11-10-r106">Anders & Huber (2010)</a>) for differential expression analysis.  A feature-by-sample expression table can be easily created with a `*expr` function and used directly as input to these or other differential expression packages. 
+Ballgown's statistical methods for differential expression testing are straightforward and accurate (<a href="http://biorxiv.org/content/early/2014/03/30/003665">Frazee et al. (2014)</a>), but users may wish to use one of the many existing packages for differential expression. Ballgown's data structures make it easy to use table-based packages like limma (<a href="">Smyth (2005)</a>), limma Voom (<a href="http://dx.doi.org/10.1186/gb-2014-15-2-r29">Law et al. (2014)</a>), DESeq (<a href="http://dx.doi.org/10.1186/gb-2010-11-10-r106">Anders & Huber (2010)</a>), DEXSeq (<a href="http://dx.doi.org/10.1101/gr.133744.111">Anders et al. (2012)</a>), or EdgeR (<a href="http://dx.doi.org/10.1093/bioinformatics/btp616">Robinson et al. (2010)</a>) for differential expression analysis.  A feature-by-sample expression table can be easily created with a `*expr` function and used directly as input to these or other differential expression packages. 
 
 # Simple transcript clustering
 Sometimes several very similar transcripts are assembled for the same gene, which might cause expression estimates for those transcripts to be unreliable: statistically, it can very difficult or impossible to tell which of two very similar transcript a read came from. This means differential expression results might also be unreliable. 
@@ -514,14 +514,17 @@ This example clustered only three transcripts, but we imagine clustering could b
 
 # References
 
-- Simon Anders, Wolfgang Huber,   (2010) Differential Expression Analysis For Sequence Count Data.  *Genome Biology*  **11**  R106-NA  [10.1186/gb-2010-11-10-r106](http://dx.doi.org/10.1186/gb-2010-11-10-r106)
-- S. Anders, A. Reyes, W. Huber,   (2012) Detecting Differential Usage of Exons From Rna-Seq Data.  *Genome Research*  **22**  2008-2017  [10.1101/gr.133744.111](http://dx.doi.org/10.1101/gr.133744.111)
-- Charity W Law, Yunshun Chen, Wei Shi, Gordon K Smyth,   (2014) Voom: Precision Weights Unlock Linear Model Analysis Tools For Rna-Seq Read Counts.  *Genome Biology*  **15**  R29-NA  [10.1186/gb-2014-15-2-r29](http://dx.doi.org/10.1186/gb-2014-15-2-r29)
+- Simon Anders, Wolfgang Huber, (2010) Differential Expression Analysis For Sequence Count Data.  *Genome Biology*  **11**  R106-NA  [10.1186/gb-2010-11-10-r106](http://dx.doi.org/10.1186/gb-2010-11-10-r106)
+- S. Anders, A. Reyes, W. Huber, (2012) Detecting Differential Usage of Exons From RNA-Seq Data.  *Genome Research*  **22**  2008-2017  [10.1101/gr.133744.111](http://dx.doi.org/10.1101/gr.133744.111)
+- Charity W Law, Yunshun Chen, Wei Shi, Gordon K Smyth,   (2014) Voom: Precision Weights Unlock Linear Model Analysis Tools For RNA-Seq Read Counts.  *Genome Biology*  **15**  R29-NA  [10.1186/gb-2014-15-2-r29](http://dx.doi.org/10.1186/gb-2014-15-2-r29)
 - Michael Lawrence, Wolfgang Huber, Herv<U+00E9> Pag<U+00E8>s, Patrick Aboyoun, Marc Carlson, Robert Gentleman, Martin T. Morgan, Vincent J. Carey, Andreas Prlic,   (2013) Software For Computing And Annotating Genomic Ranges.  *Plos Computational Biology*  **9**  e1003118-NA  [10.1371/journal.pcbi.1003118](http://dx.doi.org/10.1371/journal.pcbi.1003118)
+- M. D. Robinson, D. J. McCarthy and G. K. Smyth (2009) "edgeR: a
+Bioconductor package for differential expression analysis of
+digital gene expression data". *Bioinformatics* **26.1** pp. 139-140. [10.1093/bioinformatics/btp616](http://dx.doi.org/10.1093/bioinformatics/btp616.)
 - Gordon Smyth,   (2005) Limma: linear models for microarray data.  397-420
 - J. D. Storey, R. Tibshirani,   (2003) Statistical Significance For Genomewide Studies.  *Proceedings of The National Academy of Sciences*  **100**  9440-9445  [10.1073/pnas.1530509100](http://dx.doi.org/10.1073/pnas.1530509100)
-- Cole Trapnell, Brian A Williams, Geo Pertea, Ali Mortazavi, Gordon Kwan, Marijke J van Baren, Steven L Salzberg, Barbara J Wold, Lior Pachter,   (2010) Transcript Assembly And Quantification by Rna-Seq Reveals Unannotated Transcripts And Isoform Switching During Cell Differentiation.  *Nature Biotechnology*  **28**  511-515  [10.1038/nbt.1621](http://dx.doi.org/10.1038/nbt.1621)
-- Alyssa Frazee, Geo Pertea, Andrew Jaffe, Ben Langmead, Steven Salzberg, Jeffrey Leek,   (2014) Flexible isoform-level differential expression analysis with Ballgown.  *bioRxiv*  [http://biorxiv.org/content/early/2014/03/30/003665](http://biorxiv.org/content/early/2014/03/30/003665)
+- Cole Trapnell, Brian A Williams, Geo Pertea, Ali Mortazavi, Gordon Kwan, Marijke J van Baren, Steven L Salzberg, Barbara J Wold, Lior Pachter, (2010) Transcript Assembly And Quantification by Rna-Seq Reveals Unannotated Transcripts And Isoform Switching During Cell Differentiation.  *Nature Biotechnology*  **28**  511-515  [10.1038/nbt.1621](http://dx.doi.org/10.1038/nbt.1621)
+- Alyssa Frazee, Geo Pertea, Andrew Jaffe, Ben Langmead, Steven Salzberg, Jeffrey Leek, (2014) Flexible isoform-level differential expression analysis with Ballgown.  *bioRxiv*  [http://biorxiv.org/content/early/2014/03/30/003665](http://biorxiv.org/content/early/2014/03/30/003665)
 
 # Session Information
 
