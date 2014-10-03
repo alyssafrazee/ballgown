@@ -24,13 +24,9 @@ Create a new ballgown object containing only transcripts passing
   a mean expression filter
 }
 \examples{
-\dontrun{
-  data(bg)
-  # make a ballgown objects containing only transcripts with mean FPKM > 100:
+data(bg)
+  # make a ballgown object containing only transcripts with mean FPKM > 100:
   over100 = exprfilter(bg, cutoff=100)
-
-
-}
 }
 \seealso{
 \code{\link{subset}}
