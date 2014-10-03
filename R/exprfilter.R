@@ -12,13 +12,11 @@
 #' @return A new ballgown object derived from \code{gown}, but only containing 
 #'   transcripts (and associated exons/introns) with mean \code{meas} greater
 #'   than \code{cutoff} across all samples.
-#' @examples \dontrun{
+#' @examples
 #'   data(bg)
-#'   # make a ballgown objects containing only transcripts with mean FPKM > 100:
+#'   # make a ballgown object containing only transcripts with mean FPKM > 100:
 #'   over100 = exprfilter(bg, cutoff=100)  
 #'
-#'
-#'}
 exprfilter = function(gown, cutoff, meas='FPKM'){
     e_id = t_id = i_id = NULL #prep for use in subset function / R CMD CHECK
     meas = match.arg(meas, c('FPKM', 'cov'))
