@@ -94,6 +94,36 @@ setGeneric("iexpr", function(x, meas='rcount') standardGeneric("iexpr"))
 #' @rdname gexpr
 setGeneric("gexpr", function(x) standardGeneric("gexpr"))
 
+#' @name seqnames
+#' @export
+#' @docType methods
+#' @rdname seqnames
+#' @importFrom GenomeInfoDb seqnames
+setGeneric("seqnames")
+
+#' @name transcriptIDs
+#' @export
+#' @docType methods
+#' @rdname transcriptIDs
+setGeneric('transcriptIDs', function(x) standardGeneric('transcriptIDs'))
+
+#' @name transcriptNames
+#' @export
+#' @docType methods
+#' @rdname transcriptNames
+setGeneric('transcriptNames', function(x) standardGeneric('transcriptNames'))
+
+#' @name geneIDs
+#' @export
+#' @docType methods
+#' @rdname geneIDs
+setGeneric('geneIDs', function(x) standardGeneric('geneIDs'))
+
+#' @name geneNames
+#' @export
+#' @docType methods
+#' @rdname geneNames
+setGeneric('geneNames', function(x) standardGeneric('geneNames'))
 
 
 
