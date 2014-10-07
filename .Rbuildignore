@@ -8,3 +8,4 @@ set_environment.sh
 figure
 make_small_hg19.R
 ^\.travis\.yml$
+inst/doc/ballgown.html
