@@ -9,7 +9,6 @@ make_example_dataset.R
 .vagrant
 Vagrantfile
 set_environment.sh
-vignettes/ballgown.html
 vignettes/ballgown.md
 vignettes/figure
 vignettes/*.bib
