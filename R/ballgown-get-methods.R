@@ -126,3 +126,124 @@ setMethod("sampleNames", "ballgown", function(object){
     return(names(object@dirs))
 })
 
+#' get numeric transcript IDs from a ballgown object
+#'
+#' @name transcriptIDs
+#' @exportMethod transcriptIDs
+#' @docType methods
+#' @rdname transcriptIDs
+#' @aliases transcriptIDs,ballgown-method
+#' @param object a ballgown object
+#' @return vector of numeric transcript IDs included in the ballgown object
+#' 
+#' @examples
+#' data(bg)
+#' transcriptIDs(bg)
+setMethod("transcriptIDs", "ballgown", function(x){
+    return(texpr(x, 'all')$t_id)
+})
+
+#' get transcript names from a ballgown object
+#'
+#' @name transcriptNames
+#' @exportMethod transcriptNames
+#' @docType methods
+#' @rdname transcriptNames
+#' @aliases transcriptNames,ballgown-method
+#' @param object a ballgown object
+#' @return vector of transcript names included in the ballgown object. If object
+#' was created using Cufflinks/Tablemaker, these transcript names will be of the
+#' form "TCONS_*". Return vector is named and ordered by corresponding numeric
+#' transcript ID.
+#' 
+#' @examples
+#' data(bg)
+#' transcriptNames(bg)
+setMethod("transcriptNames", "ballgown", function(x){
+    ret = texpr(x, 'all')$t_name
+    names(ret) = texpr(x, 'all')$t_id
+    ret
+})
+
+#' get gene IDs from a ballgown object
+#'
+#' @name geneIDs
+#' @exportMethod geneIDs
+#' @docType methods
+#' @rdname geneIDs
+#' @aliases geneIDs,ballgown-method
+#' @param object a ballgown object
+#' @return named vector of gene IDs included in the ballgown object. If object 
+#' was created using Tablemaker, these gene IDs will be of the form "XLOC_*".
+#' Vector is named and ordered by corresponding numeric transcript ID.
+#'
+#' @details
+#' This vector differs from that produced by geneNames in that geneIDs produces
+#' names of loci created during the assembly process, not necessarily
+#' annotated genes. 
+#' @seealso \code{\link{geneNames}}
+#' @examples
+#' data(bg)
+#' geneIDs(bg)
+setMethod("geneIDs", "ballgown", function(x){
+    ret = texpr(x, 'all')$gene_id
+    names(ret) = texpr(x, 'all')$t_id
+    ret
+})
+
+#' get gene names from a ballgown object
+#'
+#' @name geneNames
+#' @exportMethod geneNames
+#' @docType methods
+#' @rdname geneNames
+#' @aliases geneNames,ballgown-method
+#' @param object a ballgown object
+#' @return named vector of gene names included in the ballgown object, named
+#' and ordered by corresponding numeric transcript ID. 
+#'
+#' @details
+#' This vector differs from that produced by geneIDs in that geneNames produces
+#' *annotated* gene names that correspond to assembled transcripts. The
+#' return will be empty/blank/NA if the transcriptome assembly is de novo 
+#' (i.e., was not compared to an annotation before the ballgown object was
+#' created). See \code{\link{getGenes}} for matching transcripts to gene names.
+#' Some entries of this vector will be empty/blank/NA if the corresponding 
+#' transcript did not overlap any annotated genes. 
+#' 
+#' @examples
+#' data(bg)
+#' # this is a de novo assembly, so it does not contain gene info as it stands
+#' # but we can add it:
+#' annot = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+#' gnames = getGenes(annot, structure(bg)$trans, UCSC=FALSE)
+#' gnames_first = lapply(gnames, function(x) x[1]) #just take 1 overlapping gene
+#' texpr(bg, 'all')$gene_name = gnames_first
+#' 
+#' # now we can extract these gene names:
+#' geneNames(bg)
+#' 
+#' @seealso \code{\link{geneIDs}}
+setMethod("geneNames", "ballgown", function(x){
+    ret = texpr(x, 'all')$gene_name
+    names(ret) = texpr(x, 'all')$t_id
+    ret
+})
+
+#' get sequence (chromosome) names from ballgown object
+#'
+#' @name seqnames
+#' @exportMethod seqnames
+#' @docType methods
+#' @rdname seqnames
+#' @aliases seqnames,ballgown-method
+#' @param object a ballgown object
+#' @return vector of sequence (i.e., chromosome) names included in the 
+#' ballgown object
+#' 
+#' @examples
+#' data(bg)
+#' seqnames(bg)
+setMethod("seqnames", "ballgown", function(x){
+    return(unique(texpr(x,'all')$chr))
+})
