@@ -10,7 +10,7 @@ geneIDs(x)
 \S4method{geneIDs}{ballgown}(x)
 }
 \arguments{
-\item{object}{a ballgown object}
+\item{x}{a ballgown object}
 }
 \value{
 named vector of gene IDs included in the ballgown object. If object

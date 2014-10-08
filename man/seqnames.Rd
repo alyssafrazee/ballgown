@@ -10,7 +10,7 @@ seqnames(x)
 \S4method{seqnames}{ballgown}(x)
 }
 \arguments{
-\item{object}{a ballgown object}
+\item{x}{a ballgown object}
 }
 \value{
 vector of sequence (i.e., chromosome) names included in the
