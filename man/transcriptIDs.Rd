@@ -10,7 +10,7 @@ transcriptIDs(x)
 \S4method{transcriptIDs}{ballgown}(x)
 }
 \arguments{
-\item{object}{a ballgown object}
+\item{x}{a ballgown object}
 }
 \value{
 vector of numeric transcript IDs included in the ballgown object

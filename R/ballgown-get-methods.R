@@ -133,7 +133,7 @@ setMethod("sampleNames", "ballgown", function(object){
 #' @docType methods
 #' @rdname transcriptIDs
 #' @aliases transcriptIDs,ballgown-method
-#' @param object a ballgown object
+#' @param x a ballgown object
 #' @return vector of numeric transcript IDs included in the ballgown object
 #' 
 #' @examples
@@ -150,7 +150,7 @@ setMethod("transcriptIDs", "ballgown", function(x){
 #' @docType methods
 #' @rdname transcriptNames
 #' @aliases transcriptNames,ballgown-method
-#' @param object a ballgown object
+#' @param x a ballgown object
 #' @return vector of transcript names included in the ballgown object. If object
 #' was created using Cufflinks/Tablemaker, these transcript names will be of the
 #' form "TCONS_*". Return vector is named and ordered by corresponding numeric
@@ -172,7 +172,7 @@ setMethod("transcriptNames", "ballgown", function(x){
 #' @docType methods
 #' @rdname geneIDs
 #' @aliases geneIDs,ballgown-method
-#' @param object a ballgown object
+#' @param x a ballgown object
 #' @return named vector of gene IDs included in the ballgown object. If object 
 #' was created using Tablemaker, these gene IDs will be of the form "XLOC_*".
 #' Vector is named and ordered by corresponding numeric transcript ID.
@@ -198,7 +198,7 @@ setMethod("geneIDs", "ballgown", function(x){
 #' @docType methods
 #' @rdname geneNames
 #' @aliases geneNames,ballgown-method
-#' @param object a ballgown object
+#' @param x a ballgown object
 #' @return named vector of gene names included in the ballgown object, named
 #' and ordered by corresponding numeric transcript ID. 
 #'
@@ -218,7 +218,7 @@ setMethod("geneIDs", "ballgown", function(x){
 #' annot = system.file('extdata', 'annot.gtf.gz', package='ballgown')
 #' gnames = getGenes(annot, structure(bg)$trans, UCSC=FALSE)
 #' gnames_first = lapply(gnames, function(x) x[1]) #just take 1 overlapping gene
-#' texpr(bg, 'all')$gene_name = gnames_first
+#' expr(bg)$trans$gene_name = gnames_first
 #' 
 #' # now we can extract these gene names:
 #' geneNames(bg)
@@ -237,7 +237,7 @@ setMethod("geneNames", "ballgown", function(x){
 #' @docType methods
 #' @rdname seqnames
 #' @aliases seqnames,ballgown-method
-#' @param object a ballgown object
+#' @param x a ballgown object
 #' @return vector of sequence (i.e., chromosome) names included in the 
 #' ballgown object
 #' 

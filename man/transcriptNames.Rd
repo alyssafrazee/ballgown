@@ -10,7 +10,7 @@ transcriptNames(x)
 \S4method{transcriptNames}{ballgown}(x)
 }
 \arguments{
-\item{object}{a ballgown object}
+\item{x}{a ballgown object}
 }
 \value{
 vector of transcript names included in the ballgown object. If object
