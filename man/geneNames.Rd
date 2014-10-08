@@ -10,7 +10,7 @@ geneNames(x)
 \S4method{geneNames}{ballgown}(x)
 }
 \arguments{
-\item{object}{a ballgown object}
+\item{x}{a ballgown object}
 }
 \value{
 named vector of gene names included in the ballgown object, named
@@ -35,7 +35,7 @@ data(bg)
 annot = system.file('extdata', 'annot.gtf.gz', package='ballgown')
 gnames = getGenes(annot, structure(bg)$trans, UCSC=FALSE)
 gnames_first = lapply(gnames, function(x) x[1]) #just take 1 overlapping gene
-texpr(bg, 'all')$gene_name = gnames_first
+expr(bg)$trans$gene_name = gnames_first
 
 # now we can extract these gene names:
 geneNames(bg)
