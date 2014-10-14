@@ -28,7 +28,7 @@
 #' 
 #' @exportClass ballgown
 #' 
-#' @author Alyssa Frazee, Leonardo Collado Torres, Jeff Leek
+#' @author Alyssa Frazee, Leonardo Collado-Torres, Jeff Leek
 #' @examples
 #'   data(bg)
 #'   class(bg) #"ballgown"
