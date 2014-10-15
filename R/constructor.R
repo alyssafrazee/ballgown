@@ -93,7 +93,7 @@
 #' 
 #' @return an object of class \code{ballgown}
 #' 
-#' @author Leonardo Collado Torres, Alyssa Frazee
+#' @author Leonardo Collado-Torres, Alyssa Frazee
 #' 
 #' @rdname ballgown-constructor
 #' 
