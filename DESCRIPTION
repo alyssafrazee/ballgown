@@ -1,14 +1,19 @@
 Package: ballgown
 Maintainer: Alyssa Frazee <alyssa.frazee@gmail.com>
-Author: Alyssa Frazee, Andrew Jaffe, Leonardo Collado Torres, Jeff Leek
-Version: 1.1.0
+Authors@R: c(person(c("Alyssa", "C."), "Frazee", role=c("aut", "cre"),
+    email="alyssa.frazee@gmail.com"), person("Leonardo", "Collado-Torres",
+    role=c("aut"), email="lcollado@jhu.edu"), person(c("Andrew", "E."),
+    "Jaffe", role=c("aut")), person(c("Jeffrey", "T."), "Leek", role=c("aut",
+    "ths"), email="jtleek@gmail.com"))
+Version: 1.1.1
+Date: 2014-10-13
 License: Artistic-2.0
 Title: Flexible, isoform-level differential expression analysis
 Description: Tools for statistical analysis of assembled transcriptomes,
     including flexible differential expression analysis, visualization of
     transcript structures, and matching of assembled transcripts to annotation.
 Depends:
-    R (>= 3.0.0),
+    R (>= 3.1.1),
     methods
 Imports:
     GenomicRanges (>= 1.17.25),
@@ -26,4 +31,5 @@ Suggests:
     knitr,
     knitcitations
 VignetteBuilder: knitr
+BugReports: https://github.com/alyssafrazee/ballgown/issues
 biocViews: RNASeq, StatisticalMethod, Preprocessing, DifferentialExpression

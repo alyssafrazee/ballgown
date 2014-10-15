@@ -46,6 +46,6 @@ data(bg)
   bg@RSEM
 }
 \author{
-Alyssa Frazee, Leonardo Collado Torres, Jeff Leek
+Alyssa Frazee, Leonardo Collado-Torres, Jeff Leek
 }
 

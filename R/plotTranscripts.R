@@ -182,7 +182,7 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
         
         colName = paste(meas, samples[s], sep='.')
         if(colorby != 'none'){
-            colIndex = which(colnames(smalldat) == colName)
+            colIndex = which(names(smalldat) == colName)
         }
 
         # draw transcripts
