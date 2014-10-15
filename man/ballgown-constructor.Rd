@@ -64,7 +64,7 @@ bg = ballgown(dataDir=system.file('extdata', package='ballgown'),
 pData(bg) = data.frame(id=sampleNames(bg), group=rep(c(1,0), each=10))
 }
 \author{
-Leonardo Collado Torres, Alyssa Frazee
+Leonardo Collado-Torres, Alyssa Frazee
 }
 \seealso{
 \code{\link{ballgownrsem}}, for loading RSEM output into a ballgown
