@@ -183,6 +183,7 @@ bg@mergedDate
 ```
 
 And the `meas` slot gives the expression measurements present in the object:
+
 ```{r meas}
 bg@meas
 ``` 
