@@ -20,15 +20,6 @@ To install, start R and run:
 source("http://bioconductor.org/biocLite.R")
 biocLite("ballgown")
 ```
-
-Please note that in order to use Ballgown, you will need to be running the ["devel" version of Bioconductor](http://www.bioconductor.org/developers/how-to/useDevel/) until the next release (~October 2014). You can switch to the devel version of Bioconductor and update your current packages as follows:
-
-```r
-library(BiocInstaller)
-useDevel()
-biocLite("ballgown")
-## select "all" when prompted to update packages
-```
 <!--- Currently only the devel version is available, and it can be installed from GitHub: 
 
 ```R
