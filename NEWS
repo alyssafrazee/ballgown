@@ -1,3 +1,9 @@
+New in version 1.99.2, 27 October 2014:
+    * bug fix: "ballgown" function now handles case when input feature names include quotes (').
+
+New in version 1.99.1, 14 October 2014:
+    * Bioconductor 3.0 release. Version 0.99.7 is released as version 1.0.0.
+
 New in version 0.99.7, 7 October 2014:
     * new methods for accessing gene and transcript names and IDs
     * development package (on GitHub) now has Travis CI integration, so the package's is built/tested with every new push and a status image is visible on the package README
