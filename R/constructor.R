@@ -8,7 +8,7 @@
         dummy = c(rep(meas[1], 5), 'rcount', 'ucount', 'mrcount')
         cc[which(!(dummy %in% meas))] = 'NULL'
     }
-    intron = read.table(file, header=TRUE, sep="\t", colClasses=cc)
+    intron = read.table(file, header=TRUE, sep="\t", colClasses=cc, quote="")
     intron = intron[order(intron$i_id), ]
     rownames(intron) = 1:nrow(intron)
     return(intron)
@@ -22,7 +22,7 @@
             'cov_sd', 'mcov', 'mcov_sd')
         cc[which(!(dummy %in% meas))] = 'NULL'
     }
-    exon = read.table(file, header=TRUE, sep="\t", colClasses=cc)
+    exon = read.table(file, header=TRUE, sep="\t", colClasses=cc, quote="")
     exon = exon[order(exon$e_id), ]
     rownames(exon) = 1:nrow(exon)
     return(exon)
@@ -36,7 +36,8 @@
         if(!('cov' %in% meas)) cc[11] = 'NULL'
         if(!('FPKM' %in% meas)) cc[12] = 'NULL'
     }
-    transcript = read.table(file, header=TRUE, sep="\t", colClasses=cc)
+    transcript = read.table(file, header=TRUE, sep="\t", 
+        colClasses=cc, quote="")
     transcript = transcript[order(transcript$t_id), ]
     rownames(transcript) = 1:nrow(transcript)
     return(transcript)
