@@ -27,8 +27,7 @@ Imports:
     GenomeInfoDb
 Suggests:
     testthat,
-    knitr,
-    knitcitations
+    knitr
 VignetteBuilder: knitr
 BugReports: https://github.com/alyssafrazee/ballgown/issues
 biocViews: RNASeq, StatisticalMethod, Preprocessing, DifferentialExpression
