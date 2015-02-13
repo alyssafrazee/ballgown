@@ -1,6 +1,13 @@
 [![Build Status](https://travis-ci.org/alyssafrazee/ballgown.svg?branch=master)](https://travis-ci.org/alyssafrazee/ballgown)
 
 
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Flexible isoform-level differential expression analysis with Ballgown}
+-->
+
+
+
 # Introduction
 Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data. 
 
@@ -12,28 +19,12 @@ Before using the Ballgown R package, a few preprocessing steps are necessary:
 The Ballgown package provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly. 
 
 # Installation
-Ballgown is [available via Bioconductor](http://bioconductor.org/packages/devel/bioc/html/ballgown.html).  
+Start R and run:
 
-To install, start R and run:
 
 ```r
 source("http://bioconductor.org/biocLite.R")
 biocLite("ballgown")
-```
-<!--- Currently only the devel version is available, and it can be installed from GitHub: 
-
-```R
-install.packages('devtools') #if needed
-devtools::install_github('ballgown', 'alyssafrazee')
-```
--->
-
-#### "alpha" version
-`ballgown` changed significantly in July 2014. For backwards compatibility with code written before July 2014, we've saved the original version of Ballgown in the `alpha` branch of this repository. You can install this version from GitHub:
-
-```r
-install.packages("devtools") #if needed
-devtools::install_github('ballgown', 'alyssafrazee', ref='alpha')
 ```
 
 # Running Tablemaker
@@ -109,39 +100,73 @@ extdata/
         t_data.ctab
 ```
 
-Data is loaded using the `ballgown` function:
+Data is loaded using the `ballgown` function. 
+
+If your data is stored in directories matching the above structure (one root folder, subfolders named by sample, and `.ctab` files in the subfolders), you can use the `dataDir` and `samplePattern` arguments to load the data. `samplePattern` takes a regular expressions specifying the subfolders that should be included in the ballgown object:
 
 
 ```r
 library(ballgown)
-data_directory = system.file('extdata', package='ballgown')
-bg = ballgown(dataDir=data_directory, samplePattern='sample', meas='all')
 ```
 
 ```
-## Thu Jul 10 15:40:27 2014
-## Thu Jul 10 15:40:27 2014: Reading linking tables
-## Thu Jul 10 15:40:27 2014: Reading intron data files
-## Thu Jul 10 15:40:27 2014: Merging intron data
-## Thu Jul 10 15:40:28 2014: Reading exon data files
-## Thu Jul 10 15:40:28 2014: Merging exon data
-## Thu Jul 10 15:40:28 2014: Reading transcript data files
-## Thu Jul 10 15:40:28 2014: Merging transcript data
-## Wrapping up the results
-## Thu Jul 10 15:40:28 2014
+## Warning: package 'ballgown' was built under R version 3.1.2
 ```
 
 ```r
+data_directory = system.file('extdata', package='ballgown') # automatically finds ballgown's installation directory
+# examine data_directory:
+data_directory
+```
+
+```
+## [1] "/Library/Frameworks/R.framework/Versions/3.1/Resources/library/ballgown/extdata"
+```
+
+```r
+# make the ballgown object:
+bg = ballgown(dataDir=data_directory, samplePattern='sample', meas='all')
 bg
 ```
 
 ```
-## ballgown instance with 100 assembled transcripts and 20 samples
+## ballgown instance with 100 transcripts and 20 samples
 ```
 
-`bg` is an object of class `ballgown`.
+If your data is stored in a directory structure other than the one specified above, you can use the `samples` argument in the `ballgown` function: `samples` should be a vector (1-d array) with one entry per sample, where the entry gives the path to the folder containing that sample's `.ctab` files. If you choose the `samples` option, you will also need to provide a vector called `sampleNames` that corresponds to `samples` and gives each sample a unique ID. Some example code to do this is:
 
-For large experiments, meaning experiments with many samples or experiments run on large genomes, loading the data might require a lot of time and memory. In these cases, it's often useful to do the data loading as a non-interactive batch job and to save the result as an R object (e.g. an `rda` file). The R object is compressed and is usually only a few Gb on disk, even for large experiments, and can usually be handled interactively with a reasonable amount of memory. It is also possible to load only a subset of all the expression measurements by changing the `meas` argument to the `ballgown` function. For example, to only load transcript-level FPKMs, set `meas = 'FPKM'` and to load average coverage values and read counts, set `meas=c('cov', 'rcount').`
+```R
+sample_IDs = c('oneSample', 'anotherSample', 'aThirdSample')
+sample_paths = paste0('/home/', sample_IDs, '/ballgown')
+sample_paths
+
+## [1] "/home/oneSample/ballgown"
+## [2] "/home/anotherSample/ballgown"
+## [3] "/home/aThirdSample/ballgown"
+
+bg = ballgown(samples=sample_paths, sampleNames=sample_IDs, meas='all')
+```
+
+The result from either of these approaches is an object of class `ballgown` (named `bg` in these examples).
+
+In the rest of this document, we use `bg` to refer to the first example, where samples are named `sample01` through `sample20`.
+
+A note for large experiments (with many samples or with large genomes): loading the data might require a lot of time and memory. In these cases, it's often useful to do the data loading in non-interactive mode. More specifically, you could create a script called `load.R` that contains these lines:
+
+```R
+library(ballgown)
+data_directory = system.file('extdata', package='ballgown') 
+bg = ballgown(dataDir=data_directory, samplePattern='sample', meas='all')
+save(bg, file='bg.rda')
+```
+
+You could then run this script non-interactively using `R CMD BATCH`: from the command line, run:
+
+```
+R CMD BATCH load.R
+```
+
+This may take some time, but when it finishes, the file `bg.rda` will be saved in the current directory, and you can read it back into R using the `load()` function.
 
 See `?ballgown` for detailed information on creating Ballgown objects.
 
@@ -159,7 +184,7 @@ structure(bg)$exon
 ```
 
 ```
-## GRanges with 633 ranges and 2 metadata columns:
+## GRanges object with 633 ranges and 2 metadata columns:
 ##         seqnames               ranges strand   |        id transcripts
 ##            <Rle>            <IRanges>  <Rle>   | <integer> <character>
 ##     [1]       18 [24412069, 24412331]      *   |        12          10
@@ -173,10 +198,8 @@ structure(bg)$exon
 ##   [631]       22 [51221929, 51222162]      -   |      3783        1297
 ##   [632]       22 [51221929, 51222168]      -   |      3784        1301
 ##   [633]        6 [31248149, 31248334]      *   |      3794        1312
-##   ---
-##   seqlengths:
-##    18 22  6
-##    NA NA NA
+##   -------
+##   seqinfo: 3 sequences from an unspecified genome; no seqlengths
 ```
 
 ```r
@@ -184,7 +207,7 @@ structure(bg)$intron
 ```
 
 ```
-## GRanges with 536 ranges and 2 metadata columns:
+## GRanges object with 536 ranges and 2 metadata columns:
 ##         seqnames               ranges strand   |        id
 ##            <Rle>            <IRanges>  <Rle>   | <integer>
 ##     [1]       22 [17308951, 17309431]      +   |        33
@@ -211,10 +234,8 @@ structure(bg)$intron
 ##   [534]                1297
 ##   [535]                1297
 ##   [536]                1301
-##   ---
-##   seqlengths:
-##    22
-##    NA
+##   -------
+##   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 ```
 
 ```r
@@ -222,21 +243,21 @@ structure(bg)$trans
 ```
 
 ```
-## GRangesList of length 100:
+## GRangesList object of length 100:
 ## $10 
-## GRanges with 1 range and 2 metadata columns:
+## GRanges object with 1 range and 2 metadata columns:
 ##       seqnames               ranges strand |        id transcripts
 ##          <Rle>            <IRanges>  <Rle> | <integer> <character>
 ##   [1]       18 [24412069, 24412331]      * |        12          10
 ## 
 ## $25 
-## GRanges with 2 ranges and 2 metadata columns:
+## GRanges object with 2 ranges and 2 metadata columns:
 ##       seqnames               ranges strand | id transcripts
 ##   [1]       22 [17308271, 17308950]      + | 55          25
 ##   [2]       22 [17309432, 17310226]      + | 56          25
 ## 
 ## $35 
-## GRanges with 4 ranges and 2 metadata columns:
+## GRanges object with 4 ranges and 2 metadata columns:
 ##       seqnames               ranges strand | id transcripts
 ##   [1]       22 [18121428, 18121652]      + | 88          35
 ##   [2]       22 [18138428, 18138598]      + | 89          35
@@ -245,10 +266,8 @@ structure(bg)$trans
 ## 
 ## ...
 ## <97 more elements>
-## ---
-## seqlengths:
-##  18 22  6
-##  NA NA NA
+## -------
+## seqinfo: 3 sequences from an unspecified genome; no seqlengths
 ```
 #### expr
 The `expr` slot is a list that contains tables of expression data for the genomic features.  These tables are very similar to the `*_data.ctab` _Tablemaker_ output files. Ballgown implements the following syntax to access components of the `expr` slot:
@@ -257,7 +276,7 @@ The `expr` slot is a list that contains tables of expression data for the genomi
 *expr(ballgown_object_name, <EXPRESSION_MEASUREMENT>)
 ``` 
 
-where `*` is either e for exon, i for intron, t for transcript, or g for gene, and `<EXPRESSION MEASUREMENT>` is an expression-measurement column name from the appropriate `.ctab` file.  Gene-level measurements are calculated by aggregating the transcript-level measurements for that gene.  All of the following are valid ways to extract expression data from the `bg` ballgown object:
+where `*` is either e for exon, i for intron, t for transcript, or g for gene, and <EXPRESSION MEASUREMENT> is an expression-measurement column name from the appropriate `.ctab` file.  Gene-level measurements are calculated by aggregating the transcript-level measurements for that gene.  All of the following are valid ways to extract expression data from the `bg` ballgown object:
 
 
 ```r
@@ -276,7 +295,7 @@ The `*expr` functions return matrices unless `meas = 'all'`, in which case some 
 #### indexes
 The `indexes` slot of a ballgown object connects the pieces of the assembly and provides other experimental information. `indexes(bg)` is a list with several components that can be extracted with the `$` operator.
 
-Perhaps most importantly, there is a component called `pData` that should hold a data frame of phenotype information for the samples in the experiment. This must be created manually.  It is **very important** that the rows of pData are in the correct order. Each row corresponds to a sample, and the rows of pData should be ordered the same as the tables in the `expr` slot. You can check that order by running `sampleNames(bg)`. The `pData` component can be added during construction (you can pass a data frame to the `ballgown` function, which does its best to make sure the rows are in the right order), or you can add it later:
+Perhaps most importantly, there is a component called `pData` that should hold a data frame of phenotype information for the samples in the experiment. This must be created manually.  It is **very important** that the rows of pData are in the correct order. Each row corresponds to a sample, and the rows of pData should be ordered teh same as the tables in the `expr` slot. You can check that order by running `sampleNames(bg)`. The `pData` component can be added during construction (you can pass a data frame to the `ballgown` function), or you can add it later:
 
 
 ```r
@@ -338,10 +357,11 @@ bg@mergedDate
 ```
 
 ```
-## [1] "Thu Jul 10 15:40:28 2014"
+## [1] "Fri Feb 13 16:51:18 2015"
 ```
 
 And the `meas` slot gives the expression measurements present in the object:
+
 
 ```r
 bg@meas
@@ -357,19 +377,23 @@ Visualization of the assembled transcripts is done with the `plotTranscripts` fu
 
 
 ```r
-plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12', meas='FPKM', colorby='transcript', main='transcripts from gene XLOC_000454: sample 12, FPKM')
+plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12', 
+    meas='FPKM', colorby='transcript', 
+    main='transcripts from gene XLOC_000454: sample 12, FPKM')
 ```
 
-![](figure/plotTranscripts.png) 
+![](figure/plotTranscripts-1.png) 
 
 It is also possible to plot several samples at once:
 
 
 ```r
-plotTranscripts('XLOC_000454', bg, samples=c('sample01', 'sample06', 'sample12', 'sample19'), meas='FPKM', colorby='transcript')
+plotTranscripts('XLOC_000454', bg, 
+    samples=c('sample01', 'sample06', 'sample12', 'sample19'), 
+    meas='FPKM', colorby='transcript')
 ```
 
-![](figure/plotTranscripts2.png) 
+![](figure/plotTranscripts2-1.png) 
 
 You can also make side-by-side plots comparing mean abundances between groups (here, 0 and 1):
 
@@ -378,13 +402,13 @@ You can also make side-by-side plots comparing mean abundances between groups (h
 plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM', colorby='transcript')
 ```
 
-![](figure/plotMeans.png) 
+![](figure/plotMeans-1.png) 
 
 # Differential expression analysis
 
 Ballgown provides a wide selection of simple, fast statistical methods for testing whether transcripts are differentially expressed between experimental conditions or across a continuous covariate (such as time). 
 
-The default statistical test in ballgown is a parametric F-test comparing nested linear models; details are available in the Ballgown manuscript (<a href="http://biorxiv.org/content/early/2014/03/30/003665">Frazee et al. (2014)</a>). These models are conceptually simialar to the models used by <a href="">Smyth (2005)</a> in the `limma` package. In `limma`, more sophisticated empirical Bayes shrinkage methods are used, and generally a single linear model is fit per feature instead of doing a nested model comparison, but the flavor is similar (and in fact, `limma` can easily be run on any of the data matrices in a `ballgown` object).
+The default statistical test in ballgown is a parametric F-test comparing nested linear models; details are available in the Ballgown manuscript (<a href="http://biorxiv.org/content/early/2014/03/30/003665">Frazee et al. (2014)</a>). These models are conceptually simialar to the models used by <a href="http://link.springer.com/chapter/10.1007%2F0-387-29362-0_23">Smyth (2005)</a> in the `limma` package. In `limma`, more sophisticated empirical Bayes shrinkage methods are used, and generally a single linear model is fit per feature instead of doing a nested model comparison, but the flavor is similar (and in fact, `limma` can easily be run on any of the data matrices in a `ballgown` object).
 
 Ballgown's statistical models are implemented with the `stattest` function. Two models are fit to each feature, using expression as the outcome: one including the covariate of interest (e.g., case/control status or time) and one not including that covariate. An F statistic and p-value are calculated using the fits of the two models. A significant p-value means the model including the covariate of interest fits significantly better than the model without that covariate, indicating differential expression. We adjust for multiple testing by reporting q-values (<a href="http://dx.doi.org/10.1073/pnas.1530509100">Storey & Tibshirani (2003)</a>) for each transcript in addition to p-values: reporting features with, say, q < 0.05 means the false discovery rate should be controlled at about 5%. 
 
@@ -399,13 +423,13 @@ head(stat_results)
 ```
 
 ```
-##      feature id    pval    qval
-## 1 transcript 10 0.01382 0.10521
-## 2 transcript 25 0.26774 0.79115
-## 3 transcript 35 0.01085 0.08952
-## 4 transcript 41 0.47108 0.90254
-## 5 transcript 45 0.08403 0.48935
-## 6 transcript 67 0.27317 0.79115
+##      feature id       pval       qval
+## 1 transcript 10 0.01381576 0.10521233
+## 2 transcript 25 0.26773622 0.79114975
+## 3 transcript 35 0.01085070 0.08951825
+## 4 transcript 41 0.47108019 0.90253747
+## 5 transcript 45 0.08402948 0.48934813
+## 6 transcript 67 0.27317385 0.79114975
 ```
 The result is a data frame containing the feature tested, feature ids, and corresponding p- and q-values. See `?stattest` for further usage details.
 
@@ -423,7 +447,8 @@ You can adjust for any or all variables in `pData` when testing for differential
 
 
 ```r
-group_adj_timecourse_results = stattest(bg, feature='transcript', meas='FPKM', covariate='time', timecourse=TRUE, adjustvars='group')
+group_adj_timecourse_results = stattest(bg, feature='transcript', meas='FPKM', covariate='time', 
+    timecourse=TRUE, adjustvars='group')
 ```
 
 #### defining custom models
@@ -446,13 +471,13 @@ head(adjusted_results)
 ```
 
 ```
-##      feature id   pval   qval
-## 1 transcript 10 0.8243 0.9756
-## 2 transcript 25 0.1985 0.9726
-## 3 transcript 35 0.8114 0.9756
-## 4 transcript 41 0.7647 0.9756
-## 5 transcript 45 0.6498 0.9756
-## 6 transcript 67 0.9775 0.9875
+##      feature id      pval      qval
+## 1 transcript 10 0.8242859 0.9755925
+## 2 transcript 25 0.1985488 0.9725569
+## 3 transcript 35 0.8114314 0.9755925
+## 4 transcript 41 0.7647284 0.9755925
+## 5 transcript 45 0.6497589 0.9755925
+## 6 transcript 67 0.9775119 0.9874866
 ```
 
 # Using alternative statistical methods
@@ -478,7 +503,7 @@ clusterTranscripts(gene='XLOC_000454', gown=bg, k=2, method='kmeans')
 ## 3       2 1301
 ## 
 ## $pctvar
-## [1] 0.9118
+## [1] 0.9117737
 ```
 
 You can also visualize the transcript clusters:
@@ -488,37 +513,37 @@ You can also visualize the transcript clusters:
 plotLatentTranscripts(gene='XLOC_000454', gown=bg, k=2, method='kmeans', returncluster=FALSE)
 ```
 
-![](figure/clusterviz.png) 
+![](figure/clusterviz-1.png) 
 
 And you can calculate aggregate cluster expression measurements for some gene using `collapseTranscripts`. The `tab` result of `collapseTranscripts` can be passed to `stattest` as the `gowntable` argument, for differential expression analysis of the clusters:
 
 
 ```r
 agg = collapseTranscripts(gene='XLOC_000454', gown=bg, k=2, method='kmeans')
-stattest(gowntable=agg$tab, pData=pData(bg), feature='transcript_cluster', covariate='group', libadjust=FALSE)
+stattest(gowntable=agg$tab, pData=pData(bg), feature='transcript_cluster', 
+    covariate='group', libadjust=FALSE)
 ```
 
 ```
-##              feature id   pval   qval
-## 1 transcript_cluster  1 0.3332 0.6664
-## 2 transcript_cluster  2 0.6953 0.6953
+##              feature id      pval      qval
+## 1 transcript_cluster  1 0.3332238 0.6664477
+## 2 transcript_cluster  2 0.6882119 0.6882119
 ```
 
 This example clustered only three transcripts, but we imagine clustering could be useful when many more than three transcripts have been assembled for a single gene.
 
 # References
-
-- Simon Anders, Wolfgang Huber, (2010) Differential Expression Analysis For Sequence Count Data.  *Genome Biology*  **11**  R106-NA  [10.1186/gb-2010-11-10-r106](http://dx.doi.org/10.1186/gb-2010-11-10-r106)
-- S. Anders, A. Reyes, W. Huber, (2012) Detecting Differential Usage of Exons From RNA-Seq Data.  *Genome Research*  **22**  2008-2017  [10.1101/gr.133744.111](http://dx.doi.org/10.1101/gr.133744.111)
+- Simon Anders, Wolfgang Huber (2010). Differential Expression Analysis For Sequence Count Data.  *Genome Biology*  **11**  R106-NA  [10.1186/gb-2010-11-10-r106](http://dx.doi.org/10.1186/gb-2010-11-10-r106)
+- Simon Anders, Alejandro Reyes, Wolfgang Huber (2012). Detecting Differential Usage of Exons From RNA-Seq Data.  *Genome Research*  **22**  2008-2017  [10.1101/gr.133744.111](http://dx.doi.org/10.1101/gr.133744.111)
+- Alyssa C. Frazee, Geo Pertea, Andrew E. Jaffe, Ben Langmead, Steven L. Salzberg, Jeffrey T. Leek (2014). Flexible isoform-level differential expression analysis with Ballgown.  *bioRxiv*  [http://biorxiv.org/content/early/2014/03/30/003665](http://biorxiv.org/content/early/2014/03/30/003665)
 - Charity W Law, Yunshun Chen, Wei Shi, Gordon K Smyth,   (2014) Voom: Precision Weights Unlock Linear Model Analysis Tools For RNA-Seq Read Counts.  *Genome Biology*  **15**  R29-NA  [10.1186/gb-2014-15-2-r29](http://dx.doi.org/10.1186/gb-2014-15-2-r29)
-- Michael Lawrence, Wolfgang Huber, Herv<U+00E9> Pag<U+00E8>s, Patrick Aboyoun, Marc Carlson, Robert Gentleman, Martin T. Morgan, Vincent J. Carey, Andreas Prlic,   (2013) Software For Computing And Annotating Genomic Ranges.  *Plos Computational Biology*  **9**  e1003118-NA  [10.1371/journal.pcbi.1003118](http://dx.doi.org/10.1371/journal.pcbi.1003118)
-- M. D. Robinson, D. J. McCarthy and G. K. Smyth (2009) "edgeR: a
+- Michael Lawrence, Wolfgang Huber, Herve Pages, Patrick Aboyoun, Marc Carlson, Robert Gentleman, Martin T. Morgan, Vincent J. Carey, Andreas Prlic (2013). Software For Computing And Annotating Genomic Ranges.  *Plos Computational Biology*  **9**  e1003118-NA  [10.1371/journal.pcbi.1003118](http://dx.doi.org/10.1371/journal.pcbi.1003118)
+- Mark D. Robinson, Davis J. McCarthy and Gordon K. Smyth (2009) "edgeR: a
 Bioconductor package for differential expression analysis of
 digital gene expression data". *Bioinformatics* **26.1** pp. 139-140. [10.1093/bioinformatics/btp616](http://dx.doi.org/10.1093/bioinformatics/btp616.)
-- Gordon Smyth,   (2005) Limma: linear models for microarray data.  397-420
-- J. D. Storey, R. Tibshirani,   (2003) Statistical Significance For Genomewide Studies.  *Proceedings of The National Academy of Sciences*  **100**  9440-9445  [10.1073/pnas.1530509100](http://dx.doi.org/10.1073/pnas.1530509100)
+- Gordon Smyth, (2005) Limma: linear models for microarray data.  397-420
+- John D. Storey, Robert Tibshirani (2003). Statistical Significance For Genomewide Studies.  *Proceedings of The National Academy of Sciences*  **100**  9440-9445  [10.1073/pnas.1530509100](http://dx.doi.org/10.1073/pnas.1530509100)
 - Cole Trapnell, Brian A Williams, Geo Pertea, Ali Mortazavi, Gordon Kwan, Marijke J van Baren, Steven L Salzberg, Barbara J Wold, Lior Pachter, (2010) Transcript Assembly And Quantification by Rna-Seq Reveals Unannotated Transcripts And Isoform Switching During Cell Differentiation.  *Nature Biotechnology*  **28**  511-515  [10.1038/nbt.1621](http://dx.doi.org/10.1038/nbt.1621)
-- Alyssa Frazee, Geo Pertea, Andrew Jaffe, Ben Langmead, Steven Salzberg, Jeffrey Leek, (2014) Flexible isoform-level differential expression analysis with Ballgown.  *bioRxiv*  [http://biorxiv.org/content/early/2014/03/30/003665](http://biorxiv.org/content/early/2014/03/30/003665)
 
 # Session Information
 
@@ -527,47 +552,44 @@ sessionInfo()
 ```
 
 ```
-## R version 3.1.0 (2014-04-10)
-## Platform: x86_64-apple-darwin10.8.0 (64-bit)
+## R version 3.1.1 (2014-07-10)
+## Platform: x86_64-apple-darwin13.1.0 (64-bit)
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] parallel  methods   stats     graphics  grDevices utils     datasets 
-## [8] base     
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] IRanges_1.99.22      S4Vectors_0.1.2      BiocGenerics_0.11.3 
-## [4] ballgown_0.99.0      knitcitations_1.0-1  knitr_1.6           
-## [7] devtools_1.5         BiocInstaller_1.15.5
+## [1] ballgown_1.0.1 knitr_1.8.2    colorout_1.0-3 devtools_1.6.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] AnnotationDbi_1.27.8     BBmisc_1.7              
-##  [3] BatchJobs_1.3            Biobase_2.25.0          
-##  [5] BiocParallel_0.7.7       Biostrings_2.33.13      
-##  [7] DBI_0.2-7                GenomeInfoDb_1.1.13     
-##  [9] GenomicAlignments_1.1.22 GenomicRanges_1.17.25   
-## [11] Matrix_1.1-4             RColorBrewer_1.0-5      
-## [13] RCurl_1.95-4.1           RJSONIO_1.2-0.2         
-## [15] RSQLite_0.11.4           Rcpp_0.11.2             
-## [17] RefManageR_0.8.2         Rsamtools_1.17.31       
-## [19] XML_3.98-1.1             XVector_0.5.7           
-## [21] annotate_1.43.5          bibtex_0.3-6            
-## [23] bitops_1.0-6             brew_1.0-6              
-## [25] checkmate_1.1            codetools_0.2-8         
-## [27] digest_0.6.4             evaluate_0.5.5          
-## [29] fail_1.2                 foreach_1.4.2           
-## [31] formatR_0.10             genefilter_1.47.6       
-## [33] grid_3.1.0               httr_0.3                
-## [35] iterators_1.0.7          lattice_0.20-29         
-## [37] limma_3.21.10            lubridate_1.3.3         
-## [39] memoise_0.2.1            mgcv_1.8-1              
-## [41] nlme_3.1-117             plyr_1.8.1              
-## [43] rtracklayer_1.25.13      sendmailR_1.1-2         
-## [45] splines_3.1.0            stats4_3.1.0            
-## [47] stringr_0.6.2            survival_2.37-7         
-## [49] sva_3.11.3               tools_3.1.0             
-## [51] whisker_0.3-2            xtable_1.7-3            
-## [53] zlibbioc_1.11.1
+##  [1] annotate_1.44.0         AnnotationDbi_1.28.1   
+##  [3] base64enc_0.1-2         BatchJobs_1.5          
+##  [5] BBmisc_1.8              Biobase_2.26.0         
+##  [7] BiocGenerics_0.12.1     BiocParallel_1.0.0     
+##  [9] Biostrings_2.34.0       bitops_1.0-6           
+## [11] brew_1.0-6              checkmate_1.5.0        
+## [13] codetools_0.2-9         DBI_0.3.1              
+## [15] digest_0.6.4            evaluate_0.5.5         
+## [17] fail_1.2                foreach_1.4.2          
+## [19] formatR_1.0             genefilter_1.48.1      
+## [21] GenomeInfoDb_1.2.3      GenomicAlignments_1.2.1
+## [23] GenomicRanges_1.18.3    grid_3.1.1             
+## [25] IRanges_2.0.0           iterators_1.0.7        
+## [27] lattice_0.20-29         limma_3.22.1           
+## [29] Matrix_1.1-4            mgcv_1.8-4             
+## [31] nlme_3.1-118            parallel_3.1.1         
+## [33] RColorBrewer_1.1-2      RCurl_1.95-4.5         
+## [35] Rsamtools_1.18.2        RSQLite_1.0.0          
+## [37] rtracklayer_1.26.2      S4Vectors_0.4.0        
+## [39] sendmailR_1.2-1         splines_3.1.1          
+## [41] stats4_3.1.1            stringr_0.6.2          
+## [43] survival_2.37-7         sva_3.12.0             
+## [45] tools_3.1.1             XML_3.98-1.1           
+## [47] xtable_1.7-4            XVector_0.6.0          
+## [49] zlibbioc_1.12.0
 ```
+
+
