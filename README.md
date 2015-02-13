@@ -107,13 +107,6 @@ If your data is stored in directories matching the above structure (one root fol
 
 ```r
 library(ballgown)
-```
-
-```
-## Warning: package 'ballgown' was built under R version 3.1.2
-```
-
-```r
 data_directory = system.file('extdata', package='ballgown') # automatically finds ballgown's installation directory
 # examine data_directory:
 data_directory
@@ -382,7 +375,7 @@ plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12',
     main='transcripts from gene XLOC_000454: sample 12, FPKM')
 ```
 
-![](figure/plotTranscripts-1.png) 
+![](figure/plotTranscripts.png) 
 
 It is also possible to plot several samples at once:
 
@@ -393,7 +386,7 @@ plotTranscripts('XLOC_000454', bg,
     meas='FPKM', colorby='transcript')
 ```
 
-![](figure/plotTranscripts2-1.png) 
+![](figure/plotTranscripts2.png) 
 
 You can also make side-by-side plots comparing mean abundances between groups (here, 0 and 1):
 
@@ -402,7 +395,7 @@ You can also make side-by-side plots comparing mean abundances between groups (h
 plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM', colorby='transcript')
 ```
 
-![](figure/plotMeans-1.png) 
+![](figure/plotMeans.png) 
 
 # Differential expression analysis
 
@@ -513,7 +506,7 @@ You can also visualize the transcript clusters:
 plotLatentTranscripts(gene='XLOC_000454', gown=bg, k=2, method='kmeans', returncluster=FALSE)
 ```
 
-![](figure/clusterviz-1.png) 
+![](figure/clusterviz.png) 
 
 And you can calculate aggregate cluster expression measurements for some gene using `collapseTranscripts`. The `tab` result of `collapseTranscripts` can be passed to `stattest` as the `gowntable` argument, for differential expression analysis of the clusters:
 
