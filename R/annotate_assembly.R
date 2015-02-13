@@ -46,6 +46,7 @@ annotate_assembly = function(assembled, annotated){
 
     # find the overlaps:
     ol = findOverlaps(assembled, annotated)
+    ol = ol[order(queryHits(ol), subjectHits(ol))]
 
     # get lists of corresponding assembled/annotated transcripts:
     assembled_sort = assembled[queryHits(ol)]
