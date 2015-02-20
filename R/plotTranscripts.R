@@ -73,6 +73,11 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
         if(colorby!='none') message(paste('defaulting to sample', samples))
     }
     
+    if(!all(samples %in% sampleNames(gown))){
+        stop(.makepretty('all entries of "samples" must be part of "gown". Use
+            sampleNames(gown) to check.'))
+    }
+
     stopifnot(colorby %in% c('transcript', 'exon', 'none'))
 
     if(colorby == 'transcript'){
