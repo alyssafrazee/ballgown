@@ -157,7 +157,7 @@ plotTranscripts = function(gene, gown, samples=NULL, colorby='transcript',
         if(numtx == 1){
             snames = names(smalldat)
             smalldat = matrix(smalldat, nrow=1)
-            names(smalldat) = snames
+            colnames(smalldat) = snames
         }
         if(log){
             smalldat = log(smalldat+1, base=logbase)
