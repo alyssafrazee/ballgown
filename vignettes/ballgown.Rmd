@@ -98,18 +98,55 @@ extdata/
         t_data.ctab
 ```
 
-Data is loaded using the `ballgown` function:
+Data is loaded using the `ballgown` function. 
+
+If your data is stored in directories matching the above structure (one root folder, subfolders named by sample, and `.ctab` files in the subfolders), you can use the `dataDir` and `samplePattern` arguments to load the data. `samplePattern` takes a regular expressions specifying the subfolders that should be included in the ballgown object:
 
 ```{r makebgobj, message=FALSE}
 library(ballgown)
-data_directory = system.file('extdata', package='ballgown')
+data_directory = system.file('extdata', package='ballgown') # automatically finds ballgown's installation directory
+# examine data_directory:
+data_directory
+
+# make the ballgown object:
 bg = ballgown(dataDir=data_directory, samplePattern='sample', meas='all')
 bg
 ```
 
-`bg` is an object of class `ballgown`.
+If your data is stored in a directory structure other than the one specified above, you can use the `samples` argument in the `ballgown` function: `samples` should be a vector (1-d array) with one entry per sample, where the entry gives the path to the folder containing that sample's `.ctab` files. If you choose the `samples` option, you will also need to provide a vector called `sampleNames` that corresponds to `samples` and gives each sample a unique ID. Some example code to do this is:
 
-For large experiments, meaning experiments with many samples or experiments run on large genomes, loading the data might require a lot of time and memory. In these cases, it's often useful to do the data loading as a non-interactive batch job and to save the result as an R object (e.g. an `rda` file). The R object is compressed and is usually only a few Gb on disk, even for large experiments, and can usually be handled interactively with a reasonable amount of memory. It is also possible to load only a subset of all the expression measurements by changing the `meas` argument to the `ballgown` function. For example, to only load transcript-level FPKMs, set `meas = 'FPKM'` and to load average coverage values and read counts, set `meas=c('cov', 'rcount').`
+```R
+sample_IDs = c('oneSample', 'anotherSample', 'aThirdSample')
+sample_paths = paste0('/home/', sample_IDs, '/ballgown')
+sample_paths
+
+## [1] "/home/oneSample/ballgown"
+## [2] "/home/anotherSample/ballgown"
+## [3] "/home/aThirdSample/ballgown"
+
+bg = ballgown(samples=sample_paths, sampleNames=sample_IDs, meas='all')
+```
+
+The result from either of these approaches is an object of class `ballgown` (named `bg` in these examples).
+
+In the rest of this document, we use `bg` to refer to the first example, where samples are named `sample01` through `sample20`.
+
+A note for large experiments (with many samples or with large genomes): loading the data might require a lot of time and memory. In these cases, it's often useful to do the data loading in non-interactive mode. More specifically, you could create a script called `load.R` that contains these lines:
+
+```R
+library(ballgown)
+data_directory = system.file('extdata', package='ballgown') 
+bg = ballgown(dataDir=data_directory, samplePattern='sample', meas='all')
+save(bg, file='bg.rda')
+```
+
+You could then run this script non-interactively using `R CMD BATCH`: from the command line, run:
+
+```
+R CMD BATCH load.R
+```
+
+This may take some time, but when it finishes, the file `bg.rda` will be saved in the current directory, and you can read it back into R using the `load()` function. Rda files are usually only a few Gb on disk, even for large experiments. It is also possible to load only a subset of all the expression measurements by changing the `meas` argument to the `ballgown` function. For example, to only load transcript-level FPKMs, set `meas = 'FPKM'` and to load average coverage values and read counts, set `meas=c('cov', 'rcount').`
 
 See `?ballgown` for detailed information on creating Ballgown objects.
 
