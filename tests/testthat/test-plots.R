@@ -7,6 +7,7 @@ pData(bg) = data.frame(id=sampleNames(bg), group=rep(c(1,0), each=10))
 pdf(file=NULL) # don't print plots to screen while testing
 
 test_that('plotTranscripts does not throw errors', {
+    # multi-transcript gene:
     expect_that(plotTranscripts('XLOC_000454', bg), not(throws_error()))
     expect_that(plotTranscripts('XLOC_000454', bg, samples='sample06'), 
         not(throws_error()))
@@ -19,6 +20,9 @@ test_that('plotTranscripts does not throw errors', {
     expect_that(plotTranscripts('XLOC_000454', bg, colorby='transcript',
         customCol=c('red', 'blue', 'green'), legend=FALSE), 
     not(throws_error()))
+
+    # single-transcript gene:
+    expect_that(plotTranscripts('XLOC_000010', bg), not(throws_error()))
 })
 
 test_that('plotMeans does not throw errors', {
