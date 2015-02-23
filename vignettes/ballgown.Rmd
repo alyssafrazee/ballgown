@@ -266,12 +266,14 @@ head(stat_results)
 The result is a data frame containing the feature tested, feature ids, and corresponding p- and q-values. See `?stattest` for further usage details.
 
 #### timecourse experiments
-For timecourse experiments, a smooth curve is fit to time (or the continuous covariate) using [natural splines](http://en.wikipedia.org/wiki/Spline_interpolation). The model for expression including these spline terms is compared to a model without any spline terms for the F-test. The results indicate which features' expression levels change significantly over time. For our example, we can define a "time" covariate and then demonstrate a typical call to `stattest` for a timecourse experiment:
+For timecourse experiments, a smooth curve is fit to time (or the continuous covariate) using [natural splines](http://en.wikipedia.org/wiki/Spline_interpolation). The default degrees of freedom used for the spline model is 4, but this can be adjusted with the `df` option. The model for expression including these spline terms is compared to a model without any spline terms for the F-test. The results indicate which features' expression levels change significantly over time. For our example, we can define a "time" covariate and then demonstrate a typical call to `stattest` for a timecourse experiment:
 
 ```{r stattest_time}
 pData(bg) = data.frame(pData(bg), time=rep(1:10, 2)) #dummy time covariate
 timecourse_results = stattest(bg, feature='transcript', meas='FPKM', covariate='time', timecourse=TRUE)
 ```
+
+The timecourse option assumes that "time" in your study is truly continuous, i.e., that it takes several values along a time scale. If you have very few timepoints (e.g., fewer than 5), we recommend treating time as a categorical variable, since having very few values does not give much granularity for fitting a smooth curve using splines. You can do this by setting covariate equal to 'time' (or whatever your time variable is named) and simply leaving timecourse as FALSE, its default. If you don't have more timepoints than degrees of freedom in the spline model, a warning will be printed and time will be coerced to categorical.
 
 #### adjusting for confounders
 You can adjust for any or all variables in `pData` when testing for differential expression.  Ballgown automatically adjusts for library size using the sum of all logged nonzero expression measurements below the 75th percentile of those measurements, for each sample.  If you would like to adjust for other variables, just provide those confounders as the `adjustvars` argument to `stattest`:
