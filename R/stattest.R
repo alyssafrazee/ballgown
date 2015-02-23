@@ -31,7 +31,11 @@
 #'   provided.
 #' @param timecourse if \code{TRUE}, tests whether or not the expression 
 #'   profiles of genomic features vary over time (or another continuous 
-#'   covariate) in the study.  Default \code{FALSE}.
+#'   covariate) in the study.  Default \code{FALSE}.  Natural splines are used
+#'   to fit time profiles, so you must have more timepoints than degrees of 
+#'   freedom used to fit the splines. The default df is 4.
+#' @param df degrees of freedom used for modeling expression over time with 
+#'   natural cubic splines.  Default 4.  Only used if \code{timecourse=TRUE}.
 #' @param covariate string representing the name of the covariate of interest 
 #'   for the differential expression tests.  Must correspond to the name of a 
 #'   column of \code{pData(gown)}. If \code{timecourse=TRUE}, this should be the
@@ -42,8 +46,6 @@
 #' @param gexpr optional data frame that is the result of calling 
 #'   \code{gexpr(gown))}.  (You can speed this function up by pre-creating 
 #'   \code{gexpr(gown)}.)
-#' @param df degrees of freedom used for modeling expression over time with 
-#'   natural cubic splines.  Default 4.  Only used if \code{timecourse=TRUE}.
 #' @param getFC if \code{TRUE}, also return estimated fold changes (adjusted for
 #'   library size and confounders) between populations. Only available for 
 #'   2-group comparisons at the moment. Default \code{FALSE}.
@@ -206,7 +208,7 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
         ## extract the covariate
         x = pData[,colind]
                 
-        # make sure there are at least 2 reps per group:
+        ## make sure there are at least 2 reps per group:
         if(any(table(x) < 2) & !timecourse){
             stop(.makepretty('There must be at least two replicates per group.
                 Make sure covariate is categorical; if continuous, consider the
@@ -214,6 +216,19 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
                 mod0.'))
         }
 
+        ## make sure time variable is truly continuous:
+        ## (if not, continue using it just as "important")
+        if(timecourse){
+            n_unique_times = length(table(x))
+            if(n_unique_times <= df){
+                warning(paste0('Not enough timepoints (or values of', 
+                    ' covariate) to fit a spline model with ', df, ' degrees ',
+                    'of freedom. Statistical tests will be run treating time',
+                    ' as categorical. You can also re-run the analysis with ',
+                    'decreased df.'))
+                timecourse = FALSE
+            }
+        }
 
         ## create model matrices
         if(!is.null(adjustvars)){
