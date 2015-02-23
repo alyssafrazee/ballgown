@@ -1,3 +1,13 @@
+New in version 1.99.5, 23 February 2015:
+    * clarification of docs/warning messages when "time" variable has too few timepoints to fit natural splines
+    * bug fix in subset function: factor levels that don't appear in subset pData are now dropped
+
+New in version 1.99.4, 20 February 2015:
+    * bug fix in plotting of single-transcript genes
+
+New in version 1.99.3, 9 December 2014:
+    * unit test update due to changes in findOverlaps
+
 New in version 1.99.2, 27 October 2014:
     * bug fix: "ballgown" function now handles case when input feature names include quotes (').
 
