@@ -1,13 +1,6 @@
 [![Build Status](https://travis-ci.org/alyssafrazee/ballgown.svg?branch=master)](https://travis-ci.org/alyssafrazee/ballgown)
 
 
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{Flexible isoform-level differential expression analysis with Ballgown}
--->
-
-
-
 # Introduction
 Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data. 
 
@@ -159,7 +152,7 @@ You could then run this script non-interactively using `R CMD BATCH`: from the c
 R CMD BATCH load.R
 ```
 
-This may take some time, but when it finishes, the file `bg.rda` will be saved in the current directory, and you can read it back into R using the `load()` function.
+This may take some time, but when it finishes, the file `bg.rda` will be saved in the current directory, and you can read it back into R using the `load()` function. Rda files are usually only a few Gb on disk, even for large experiments. It is also possible to load only a subset of all the expression measurements by changing the `meas` argument to the `ballgown` function. For example, to only load transcript-level FPKMs, set `meas = 'FPKM'` and to load average coverage values and read counts, set `meas=c('cov', 'rcount').`
 
 See `?ballgown` for detailed information on creating Ballgown objects.
 
@@ -350,7 +343,7 @@ bg@mergedDate
 ```
 
 ```
-## [1] "Fri Feb 13 16:51:18 2015"
+## [1] "Fri Feb 20 12:04:22 2015"
 ```
 
 And the `meas` slot gives the expression measurements present in the object:
@@ -375,7 +368,7 @@ plotTranscripts(gene='XLOC_000454', gown=bg, samples='sample12',
     main='transcripts from gene XLOC_000454: sample 12, FPKM')
 ```
 
-![](figure/plotTranscripts.png) 
+![](figure/plotTranscripts-1.png) 
 
 It is also possible to plot several samples at once:
 
@@ -386,7 +379,7 @@ plotTranscripts('XLOC_000454', bg,
     meas='FPKM', colorby='transcript')
 ```
 
-![](figure/plotTranscripts2.png) 
+![](figure/plotTranscripts2-1.png) 
 
 You can also make side-by-side plots comparing mean abundances between groups (here, 0 and 1):
 
@@ -395,7 +388,7 @@ You can also make side-by-side plots comparing mean abundances between groups (h
 plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM', colorby='transcript')
 ```
 
-![](figure/plotMeans.png) 
+![](figure/plotMeans-1.png) 
 
 # Differential expression analysis
 
@@ -506,7 +499,7 @@ You can also visualize the transcript clusters:
 plotLatentTranscripts(gene='XLOC_000454', gown=bg, k=2, method='kmeans', returncluster=FALSE)
 ```
 
-![](figure/clusterviz.png) 
+![](figure/clusterviz-1.png) 
 
 And you can calculate aggregate cluster expression measurements for some gene using `collapseTranscripts`. The `tab` result of `collapseTranscripts` can be passed to `stattest` as the `gowntable` argument, for differential expression analysis of the clusters:
 

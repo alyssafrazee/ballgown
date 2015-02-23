@@ -10,7 +10,9 @@ make_example_dataset.R
 Vagrantfile
 set_environment.sh
 vignettes/ballgown.md
+vignettes/ballgown.html
 vignettes/figure
 vignettes/*.bib
 test_vagrant_install.R
 make_small_hg19.R
+figure/*-1*

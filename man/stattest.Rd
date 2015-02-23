@@ -45,7 +45,9 @@ provided.}
 
 \item{timecourse}{if \code{TRUE}, tests whether or not the expression
 profiles of genomic features vary over time (or another continuous
-covariate) in the study.  Default \code{FALSE}.}
+covariate) in the study.  Default \code{FALSE}.  Natural splines are used
+to fit time profiles, so you must have more timepoints than degrees of
+freedom used to fit the splines. The default df is 4.}
 
 \item{covariate}{string representing the name of the covariate of interest
 for the differential expression tests.  Must correspond to the name of a
