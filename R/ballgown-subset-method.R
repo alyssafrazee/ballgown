@@ -77,6 +77,7 @@ setMethod("subset", "ballgown", function(x, cond, genomesubset=TRUE){
         
         ## pData
         newpd = subset(pData(x), eval(parse(text=cond)))
+        newpd = droplevels(newpd)
         
         ## bamfiles
         newsampnames = newpd[,1]
