@@ -182,6 +182,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         ## Merge the intron results
         if(verbose) message(paste0(date(), ": Merging intron data"))
         #[ensure ctab files all contain same introns]
+        if(length(intronAll) > 1){
         sumdiff = sapply(intronAll, function(x){
             sum(x$i_id != intronAll[[1]]$i_id) 
         })
@@ -191,10 +192,9 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
             stop(.makepretty(msg))
         }
 
-        idataOnly = lapply(intronAll[2:length(intronAll)], function(x){
-            x[,-c(1:5)]
-        })
-        intron = data.frame(intronAll[[1]], as.data.frame(idataOnly))
+        idataOnly = lapply(intronAll, function(x){x[,-c(1:5)]})
+
+        intron = data.frame(intronAll[[1]][,1:5], as.data.frame(idataOnly))
         if(identical(meas, 'all')){
             colnames(intron) = c('i_id', 'chr', 'strand', 'start', 'end', 
                 paste(c('rcount', 'ucount', 'mrcount'), 
@@ -254,8 +254,8 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
                 sample.'))
         }
 
-        edataOnly = lapply(exonAll[2:length(exonAll)], function(x) x[,-c(1:5)])
-        exon = data.frame(exonAll[[1]], as.data.frame(edataOnly))
+        edataOnly = lapply(exonAll, function(x) x[,-c(1:5)])
+        exon = data.frame(exonAll[[1]][,1:5], as.data.frame(edataOnly))
         if(identical(meas, 'all')){
             colnames(exon) = c('e_id', 'chr', 'strand', 'start', 'end', 
                 paste(emeas[-1], rep(names(samples), each=7), sep="."))
@@ -309,8 +309,8 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
             stop(.makepretty(msg))
         }
 
-        tdataOnly = lapply(tAll[2:length(tAll)], function(x) x[,-c(1:10)])
-        transcript = data.frame(tAll[[1]], as.data.frame(tdataOnly))
+        tdataOnly = lapply(tAll, function(x) x[,-c(1:10)])
+        transcript = data.frame(tAll[[1]][,1:10], as.data.frame(tdataOnly))
         if(identical(meas, 'all')){
             colnames(transcript) = c('t_id', 'chr', 'strand', 'start', 'end', 
                 't_name', 'num_exons', 'length', 'gene_id', 'gene_name', 
