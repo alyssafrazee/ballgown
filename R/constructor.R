@@ -182,7 +182,6 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
         ## Merge the intron results
         if(verbose) message(paste0(date(), ": Merging intron data"))
         #[ensure ctab files all contain same introns]
-        if(length(intronAll) > 1){
         sumdiff = sapply(intronAll, function(x){
             sum(x$i_id != intronAll[[1]]$i_id) 
         })
@@ -192,7 +191,7 @@ ballgown = function(samples=NULL, dataDir=NULL, samplePattern=NULL,
             stop(.makepretty(msg))
         }
 
-        idataOnly = lapply(intronAll, function(x){x[,-c(1:5)]})
+        idataOnly = lapply(intronAll, function(x) x[,-c(1:5)] )
 
         intron = data.frame(intronAll[[1]][,1:5], as.data.frame(idataOnly))
         if(identical(meas, 'all')){
