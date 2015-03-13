@@ -1,3 +1,6 @@
+New in version 1.99.6, 13 March 2015:
+    * bug fix in constructor: objects are now constructed correctly when only one sample is included in the object.
+
 New in version 1.99.5, 23 February 2015:
     * clarification of docs/warning messages when "time" variable has too few timepoints to fit natural splines
     * bug fix in subset function: factor levels that don't appear in subset pData are now dropped
