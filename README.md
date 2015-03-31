@@ -120,7 +120,9 @@ bg
 ## ballgown instance with 100 transcripts and 20 samples
 ```
 
-If your data is stored in a directory structure other than the one specified above, you can use the `samples` argument in the `ballgown` function: `samples` should be a vector (1-d array) with one entry per sample, where the entry gives the path to the folder containing that sample's `.ctab` files. If you choose the `samples` option, you will also need to provide a vector called `sampleNames` that corresponds to `samples` and gives each sample a unique ID. Some example code to do this is:
+If your data is stored in a directory structure other than the one specified above, you can use the `samples` argument in the `ballgown` function: `samples` should be a vector (1-d array) with one entry per sample, where the entry gives the path to the folder containing that sample's `.ctab` files. 
+
+<!-- If you choose the `samples` option, you will also need to provide a vector called `sampleNames` that corresponds to `samples` and gives each sample a unique ID. Some example code to do this is:
 
 ```R
 sample_IDs = c('oneSample', 'anotherSample', 'aThirdSample')
@@ -133,6 +135,7 @@ sample_paths
 
 bg = ballgown(samples=sample_paths, sampleNames=sample_IDs, meas='all')
 ```
+-->
 
 The result from either of these approaches is an object of class `ballgown` (named `bg` in these examples).
 
