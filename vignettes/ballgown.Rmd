@@ -113,19 +113,7 @@ bg = ballgown(dataDir=data_directory, samplePattern='sample', meas='all')
 bg
 ```
 
-If your data is stored in a directory structure other than the one specified above, you can use the `samples` argument in the `ballgown` function: `samples` should be a vector (1-d array) with one entry per sample, where the entry gives the path to the folder containing that sample's `.ctab` files. If you choose the `samples` option, you will also need to provide a vector called `sampleNames` that corresponds to `samples` and gives each sample a unique ID. Some example code to do this is:
-
-```R
-sample_IDs = c('oneSample', 'anotherSample', 'aThirdSample')
-sample_paths = paste0('/home/', sample_IDs, '/ballgown')
-sample_paths
-
-## [1] "/home/oneSample/ballgown"
-## [2] "/home/anotherSample/ballgown"
-## [3] "/home/aThirdSample/ballgown"
-
-bg = ballgown(samples=sample_paths, sampleNames=sample_IDs, meas='all')
-```
+If your data is stored in a directory structure other than the one specified above, you can use the `samples` argument in the `ballgown` function: `samples` should be a vector (1-d array) with one entry per sample, where the entry gives the path to the folder containing that sample's `.ctab` files. 
 
 The result from either of these approaches is an object of class `ballgown` (named `bg` in these examples).
 
