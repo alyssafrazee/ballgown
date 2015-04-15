@@ -1,40 +1,40 @@
-New in version 1.99.6, 13 March 2015:
+changes in version 1.99.6
     * bug fix in constructor: objects are now constructed correctly when only one sample is included in the object.
 
-New in version 1.99.5, 23 February 2015:
+changes in version 1.99.5
     * clarification of docs/warning messages when "time" variable has too few timepoints to fit natural splines
     * bug fix in subset function: factor levels that don't appear in subset pData are now dropped
 
-New in version 1.99.4, 20 February 2015:
+changes in version 1.99.4
     * bug fix in plotting of single-transcript genes
 
-New in version 1.99.3, 9 December 2014:
+changes in version 1.99.3
     * unit test update due to changes in findOverlaps
 
-New in version 1.99.2, 27 October 2014:
+changes in version 1.99.2
     * bug fix: "ballgown" function now handles case when input feature names include quotes (').
 
-New in version 1.99.1, 14 October 2014:
+changes in version 1.99.1
     * Bioconductor 3.0 release. Version 0.99.7 is released as version 1.0.0.
 
-New in version 0.99.7, 7 October 2014:
+changes in version 0.99.7
     * new methods for accessing gene and transcript names and IDs
     * development package (on GitHub) now has Travis CI integration, so the package's is built/tested with every new push and a status image is visible on the package README
 
-New in version 0.99.6, 22 September 2014:
+changes in version 0.99.6
     * ballgownrsem can now handle gzipped input files
     * small fixes to eliminate warnings/errors on R CMD CHECK
 
-New in version 0.99.5, 16 September 2014:
+changes in version 0.99.5
     * "subset" function now behaves appropriately if sampleNames contain  "dot" characters
 
-New in version 0.99.4, 21 August 2014:
+changes in version 0.99.4
     * Tablemaker source code moved out of Ballgown repository (both GitHub and BioC svn repos)
 
-New in version 0.99.3, 18 August 2014:
+changes in version 0.99.3
     * `exprfilter` function added
 
-New in version 0.99.2, 13 August 2014:
+changes in version 0.99.2
     * `ballgownrsem` function added (now compatible with RSEM output)
     * RSEM slot added to ballgown S4 class
     * bug fixes in `subset` function
@@ -42,7 +42,7 @@ New in version 0.99.2, 13 August 2014:
 
 Version 0.99.1 was released on Bioconductor on 28 July 2014
 
-New in version 0.99.0, 22 July 2014 (updates from alpha release):
+changes in version 0.99.0
     * "meas" argument added to constructor function
     * unit tests added
     * vignette updated
