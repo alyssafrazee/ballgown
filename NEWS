@@ -1,3 +1,9 @@
+changes in version 2.1.1
+    * bug fix in texpr, eexpr, and iexpr methods: when only one column was the result of a call to one of these methods, a vector was returned instead of a matrix, causing an error when setting rownames. This has been fixed.
+    * Small documentation clarifications
+
+Version 1.99.6 released in Bioconductor 3.1 as Version 2.1.0.
+
 changes in version 1.99.6
     * bug fix in constructor: objects are now constructed correctly when only one sample is included in the object.
 

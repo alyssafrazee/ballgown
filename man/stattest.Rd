@@ -121,7 +121,9 @@ At minimum, you need to provide a ballgown object or count table,
   \code{timecourse}, \code{adjustvars}, and \code{df} are ignored, so make
   sure your covariate of interest and all appropriate confounder
   adjustments, including library size, are specified in \code{mod} and
-  \code{mod0}.
+  \code{mod0}. By default, the library-size adjustment is the sum of all
+  counts below the 75th percentile of nonzero counts, on the log scale
+  (log2 + 1).
 
   Full model details are described in the supplement of
   \url{http://biorxiv.org/content/early/2014/03/30/003665}.
