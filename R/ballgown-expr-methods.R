@@ -193,8 +193,9 @@ setMethod('gexpr', 'ballgown', function(x){
         glengths = sapply(width(reduce(glist)), sum)
         tlengths = sapply(width(structure(x)$trans), sum)
         tfrags = tlengths * tmeas
-        mat = t(sapply(1:length(inds_by_gene), function(i){
-            colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
+        mat = lapply(1:length(inds_by_gene), function(i){
+            colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]})
+        mat = do.call(rbind, mat)
         rownames(mat) = names(inds_by_gene)
         return(mat)
     }
