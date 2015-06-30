@@ -37,8 +37,7 @@ setMethod('eexpr', 'ballgown', function(x, meas='rcount'){
             }
         }
         mat = expr(x)$exon[,-c(1:5)]
-        mat = mat[,sapply(colnames(mat), function(y){ 
-            strsplit(y, split="\\.")[[1]][1]==meas })]
+        mat = subset(mat, select=paste(meas, sampleNames(x), sep='.'))
         rownames(mat) = expr(x)$exon$e_id
         mat = as.matrix(mat)
     }else{
@@ -89,8 +88,7 @@ setMethod('texpr', 'ballgown', function(x, meas='FPKM'){
             }
         }
         mat = expr(x)$trans[,-c(1:10)]
-        mat = mat[,sapply(colnames(mat), function(y){
-            strsplit(y, split="\\.")[[1]][1]==meas })]
+        mat = subset(mat, select=paste(meas, sampleNames(x), sep='.'))
         rownames(mat) = expr(x)$trans$t_id
         mat = as.matrix(mat)
     }else{
@@ -142,8 +140,7 @@ setMethod('iexpr', 'ballgown', function(x, meas='rcount'){
             }
         }
         mat = expr(x)$intron[,-c(1:5)]
-        mat = mat[,sapply(colnames(mat), function(y){ 
-            strsplit(y, split="\\.")[[1]][1]==meas })]
+        mat = subset(mat, select=paste(meas, sampleNames(x), sep='.'))
         rownames(mat) = expr(x)$intron$i_id
         mat = as.matrix(mat)
     }else{
@@ -196,8 +193,9 @@ setMethod('gexpr', 'ballgown', function(x){
         glengths = sapply(width(reduce(glist)), sum)
         tlengths = sapply(width(structure(x)$trans), sum)
         tfrags = tlengths * tmeas
-        mat = t(sapply(1:length(inds_by_gene), function(i){
-            colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]}))
+        mat = lapply(1:length(inds_by_gene), function(i){
+            colSums(tfrags[inds_by_gene[[i]],,drop=FALSE]) / glengths[i]})
+        mat = do.call(rbind, mat)
         rownames(mat) = names(inds_by_gene)
         return(mat)
     }

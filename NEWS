@@ -1,3 +1,9 @@
+changes in version 2.1.1
+    * bug fix in texpr, eexpr, iexpr, and gexpr methods; they no longer crash with single-replicate objects
+    * Small documentation clarifications
+
+Version 1.99.6 released in Bioconductor 3.1 as Version 2.1.0.
+
 changes in version 1.99.6
     * bug fix in constructor: objects are now constructed correctly when only one sample is included in the object.
 

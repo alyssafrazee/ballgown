@@ -272,7 +272,7 @@ group_adj_timecourse_results = stattest(bg, feature='transcript', meas='FPKM', c
 ```
 
 #### defining custom models
-It is also possible to explicitly provide the design matrices for the models to be compared. For example, suppose we had sex and age information available, in addition to group and time, and we wanted to compare a model including all information (sex, age, group, time) to a model including only group and time. Code to do this with `ballgown` is:
+It is also possible to explicitly provide the design matrices for the models to be compared. You can provide any two models for `mod` and `mod0`, provided that `mod0` is nested in `mod`, i.e., that all covariates used in `mod0` also appear in `mod`. For example, suppose we had sex and age information available, in addition to group and time, and we wanted to compare a model (`mod`) including all information (sex, age, group, time) to a model including only group and time (`mod`). Code to do this with `ballgown` is:
 
 ```{r customMod}
 # create example data:
