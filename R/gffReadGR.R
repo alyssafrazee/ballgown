@@ -37,13 +37,11 @@
 #' 
 gffReadGR = function(gtf, splitByTranscript=FALSE, identifier='transcript_id', 
     sep='; '){
-    con = file(gtf)
-    ret = import(con, format='GFF')
+    ret = import(gtf, format='GFF', version='1')
     if(splitByTranscript){
         ret = ret[ret$type == 'exon', ]
         transcript = getAttributeField(as.character(ret$group), identifier, sep)
         ret = split(ret, transcript)
     }
-    on.exit(suppressWarnings(close(con)))
     return(ret)
 }
