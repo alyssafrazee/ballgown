@@ -1,6 +1,7 @@
 Package: ballgown
-Maintainer: Alyssa Frazee <alyssa.frazee@gmail.com>
-Authors@R: c(person(c("Alyssa", "C."), "Frazee", role=c("aut", "cre"),
+Maintainer: Jack Fu <jmfu@jhsph.edu>
+Authors@R: c(person("Jack", "Fu", role=c("aut"), email="jmfu@jhsph.edu"), 
+    person(c("Alyssa", "C."), "Frazee", role=c("aut", "cre"),
     email="alyssa.frazee@gmail.com"), person("Leonardo", "Collado-Torres",
     role=c("aut"), email="lcollado@jhu.edu"), person(c("Andrew", "E."),
     "Jaffe", role=c("aut")), person(c("Jeffrey", "T."), "Leek", role=c("aut",
