@@ -6,9 +6,9 @@
 Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data. 
 
 Before using the Ballgown R package, a few preprocessing steps are necessary:
-1. RNA-seq reads should be aligned to a reference genome. Any junction-aware aligner is appropriate.
-2. A transcriptome should be assembled, or a reference transcriptome should be downloaded. Any assembler or download that produces a GTF file denoting the transcriptome's structure is appropriate.
-3. Expression for the features in the transcriptome should be estimated. 
+1.RNA-seq reads should be aligned to a reference genome. Any junction-aware aligner is appropriate.
+2.A transcriptome should be assembled, or a reference transcriptome should be downloaded. Any assembler or download that produces a GTF file denoting the transcriptome's structure is appropriate.
+3.Expression for the features in the transcriptome should be estimated. 
 + Stringtie
 + _Tablemaker_ can also do this estimation. Tablemaker calls _Cufflinks_ version 2.1.1 (<a href="http://dx.doi.org/10.1038/nbt.1621">Trapnell et al. (2010)</a>) to estimate transcript-level FPKMs, and provides several alternative expression measurements (e.g. average per-base coverage, number of mapped reads, etc.) for other features. Expression is estimated for each transcript, exon, and intron (junction) in the assembly. 
 
