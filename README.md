@@ -14,10 +14,8 @@ Before using the Ballgown R package, a few preprocessing steps are necessary:
 Two sample pipelines for preprocessing are as follows:
 
 1. **Pipeline 1:** _TopHat2_ (1) + _Stringtie_ (2,3)
-  1. _TopHat2_ [<a href="http://bioinformatics.oxfordjournals.org/content/25/9/1105.abstract">Trapnell et al. (2009)</a>] is built on the ultrafast short read mapping program _Bowtie_ and aligns RNA-Seq reads to a genome while identifying exonic splice junctions. Sample command:
-  + ``` tophat2  -G reference.gff -o outputDirectory -p 6 referenceIndex reads ```
-  2. _Stringtie_ [<a href="http://www.nature.com/nbt/journal/v33/n3/full/nbt.3122.html">M. Pertea et al. (2015)</a>] is a highly efficient assembler for RNA-Seq alignments using a novel network flow algorithm. It simultaneously assembles and quantifies expression levels for the features of the transcriptome in a Ballgown readable format (by using the option -B). One command to _Stringtie_ satisfies steps 2 and 3 above. Sample command:
-  + ``` stringtie -B -G reference.gff -p 6 accepted_hits.bam -o stringtie.gff ```
+  1. _TopHat2_ [<a href="http://bioinformatics.oxfordjournals.org/content/25/9/1105.abstract">Trapnell et al. (2009)</a>] is built on the ultrafast short read mapping program _Bowtie_ and aligns RNA-Seq reads to a genome while identifying exonic splice junctions. Sample command: ``` tophat2  -G reference.gff -o outputDirectory -p 6 referenceIndex reads ```
+  2. _Stringtie_ [<a href="http://www.nature.com/nbt/journal/v33/n3/full/nbt.3122.html">M. Pertea et al. (2015)</a>] is a highly efficient assembler for RNA-Seq alignments using a novel network flow algorithm. It simultaneously assembles and quantifies expression levels for the features of the transcriptome in a Ballgown readable format (by using the option -B). One command to _Stringtie_ satisfies steps 2 and 3 above. Sample command: ``` stringtie -B -G reference.gff -p 6 accepted_hits.bam -o stringtie.gff ```
 2. **Pipeline 2:** _TopHat2_ (1) + _Cufflinks_ (2) + _Tablemaker_ (3)
   1. _Tophat2_ produces alignments as noted above.
   2. _Cufflinks_ [<a href="http://dx.doi.org/10.1038/nbt.1621">Trapnell et al. (2010)</a>] also assembles transcriptomes from RNA-Seq data and quantifies their expression.
