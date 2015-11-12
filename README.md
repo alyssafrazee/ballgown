@@ -6,7 +6,9 @@
 Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data. 
 
 Before using the Ballgown R package, a few preprocessing steps are necessary:
+
 1. RNA-seq reads should be aligned to a reference genome. Any junction-aware aligner is appropriate.
+
 2. A transcriptome should be assembled, or a reference transcriptome should be downloaded. Any assembler or download that produces a GTF file denoting the transcriptome's structure is appropriate.
 3. Expression for the features in the transcriptome should be estimated. 
   1. Stringtie
