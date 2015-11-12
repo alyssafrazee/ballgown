@@ -53,11 +53,25 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 
 <p><a href="https://travis-ci.org/alyssafrazee/ballgown"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3NiIgaGVpZ2h0PSIyMCI+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4Mj0iMCIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2JiYiIgc3RvcC1vcGFjaXR5PSIuMSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1vcGFjaXR5PSIuMSIvPjwvbGluZWFyR3JhZGllbnQ+PHJlY3Qgcng9IjMiIHdpZHRoPSI3NiIgaGVpZ2h0PSIyMCIgZmlsbD0iIzU1NSIvPjxyZWN0IHJ4PSIzIiB4PSIzNyIgd2lkdGg9IjM5IiBoZWlnaHQ9IjIwIiBmaWxsPSIjOWY5ZjlmIi8+PHBhdGggZmlsbD0iIzlmOWY5ZiIgZD0iTTM3IDBoNHYyMGgtNHoiLz48cmVjdCByeD0iMyIgd2lkdGg9Ijc2IiBoZWlnaHQ9IjIwIiBmaWxsPSJ1cmwoI2EpIi8+PGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkRlamFWdSBTYW5zLFZlcmRhbmEsR2VuZXZhLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiPjx0ZXh0IHg9IjE5LjUiIHk9IjE1IiBmaWxsPSIjMDEwMTAxIiBmaWxsLW9wYWNpdHk9Ii4zIj5idWlsZDwvdGV4dD48dGV4dCB4PSIxOS41IiB5PSIxNCI+YnVpbGQ8L3RleHQ+PHRleHQgeD0iNTUuNSIgeT0iMTUiIGZpbGw9IiMwMTAxMDEiIGZpbGwtb3BhY2l0eT0iLjMiPmVycm9yPC90ZXh0Pjx0ZXh0IHg9IjU1LjUiIHk9IjE0Ij5lcnJvcjwvdGV4dD48L2c+PC9zdmc+" alt="Build Status" /></a></p>
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data.</p>
-<p>Before using the Ballgown R package, a few preprocessing steps are necessary: 1.RNA-seq reads should be aligned to a reference genome. Any junction-aware aligner is appropriate. 2.A transcriptome should be assembled, or a reference transcriptome should be downloaded. Any assembler or download that produces a GTF file denoting the transcriptome’s structure is appropriate. 3.Expression for the features in the transcriptome should be estimated. + Stringtie + <em>Tablemaker</em> can also do this estimation. Tablemaker calls <em>Cufflinks</em> version 2.1.1 (<a href="http://dx.doi.org/10.1038/nbt.1621">Trapnell et al. (2010)</a>) to estimate transcript-level FPKMs, and provides several alternative expression measurements (e.g. average per-base coverage, number of mapped reads, etc.) for other features. Expression is estimated for each transcript, exon, and intron (junction) in the assembly.</p>
-<p>The Ballgown package provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly.</p>
+<div id="introduction-and-preprocessing" class="section level1">
+<h1>Introduction and Preprocessing</h1>
+<p>Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data. It also provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly.</p>
+<p>Before using the Ballgown R package, a few preprocessing steps are necessary:</p>
+<ol style="list-style-type: decimal">
+<li>RNA-seq reads should be aligned to a reference genome.</li>
+<li>A transcriptome should be assembled, or a reference transcriptome should be downloaded.</li>
+<li>Expression for the features (transcript, exon, and intron junfctions) in the transcriptome should be estimated in a Ballgown readable format.</li>
+</ol>
+<p>Two sample pipelines for preprocessing are as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Pipeline 1: <em>TopHat2</em> (1) + <em>Stringtie</em> (2,3)</li>
+<li><em>TopHat</em> [<a href="http://bioinformatics.oxfordjournals.org/content/25/9/1105.abstract">Trapnell et al. (2008)</a>] is built on the ultrafast short read mapping program <em>Bowtie</em> and aligns RNAseq reads to a genome while identifying exonic splice junctions.</li>
+<li><em>Stringtie</em> [<a href="http://www.nature.com/nbt/journal/v33/n3/full/nbt.3122.html">M. Pertea et al. (2015)</a>] is a highly efficient assembler for RNAseq alignments using a novel network flow algorithm. It simultaneously assembles and quantifies expression levels for the features of the transcriptome in a Ballgown readable format (by using the option -B). One command to <em>Stringtie</em> satisfies steps 2 and 3 above.</li>
+<li>Pipeline 2: <em>TopHat2</em> (1) + <em>Cufflinks</em> (2) + <em>Tablemaker</em> (3)</li>
+<li><em>Tophat2</em> produces alignments as noted above</li>
+<li><em>Cufflinks</em> [<a href="http://dx.doi.org/10.1038/nbt.1621">Trapnell et al. (2010)</a>] also assembles transcriptomes from RNA-Seq data and quantifies their expression.</li>
+<li><em>Tablemaker</em> calls <em>Cufflinks</em> to estimate feature expressions in a Ballgown readable format.</li>
+</ol>
 </div>
 <div id="installation" class="section level1">
 <h1>Installation</h1>

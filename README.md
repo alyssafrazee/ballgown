@@ -2,23 +2,27 @@
 
 
 
-# Introduction
-Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data. 
+# Introduction and Preprocessing
+Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data. It also provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly. 
 
 Before using the Ballgown R package, a few preprocessing steps are necessary:
 
-1. RNA-seq reads should be aligned to a reference genome. Any junction-aware aligner is appropriate.
+1. RNA-seq reads should be aligned to a reference genome.
+2. A transcriptome should be assembled, or a reference transcriptome should be downloaded.
+3. Expression for the features (transcript, exon, and intron junfctions) in the transcriptome should be estimated in a Ballgown readable format.
 
-2. A transcriptome should be assembled, or a reference transcriptome should be downloaded. Any assembler or download that produces a GTF file denoting the transcriptome's structure is appropriate.
-3. Expression for the features in the transcriptome should be estimated. 
-  1. Stringtie
-  2. _Tablemaker_ can also do this estimation. Tablemaker calls _Cufflinks_ version 2.1.1 (<a href="http://dx.doi.org/10.1038/nbt.1621">Trapnell et al. (2010)</a>) to estimate transcript-level FPKMs, and provides several alternative expression measurements (e.g. average per-base coverage, number of mapped reads, etc.) for other features. Expression is estimated for each transcript, exon, and intron (junction) in the assembly. 
+Two sample pipelines for preprocessing are as follows:
 
-The Ballgown package provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly. 
+1. Pipeline 1: _TopHat2_ (1) + _Stringtie_ (2,3)
+  1. _TopHat_ [<a href="http://bioinformatics.oxfordjournals.org/content/25/9/1105.abstract">Trapnell et al. (2008)</a>] is built on the ultrafast short read mapping program _Bowtie_ and aligns RNAseq reads to a genome while identifying exonic splice junctions.
+  2. _Stringtie_ [<a href="http://www.nature.com/nbt/journal/v33/n3/full/nbt.3122.html">M. Pertea et al. (2015)</a>] is a highly efficient assembler for RNAseq alignments using a novel network flow algorithm. It simultaneously assembles and quantifies expression levels for the features of the transcriptome in a Ballgown readable format (by using the option -B). One command to _Stringtie_ satisfies steps 2 and 3 above.
+2. Pipeline 2: _TopHat2_ (1) + _Cufflinks_ (2) + _Tablemaker_ (3)
+  1. _Tophat2_ produces alignments as noted above
+  2. _Cufflinks_ [<a href="http://dx.doi.org/10.1038/nbt.1621">Trapnell et al. (2010)</a>] also assembles transcriptomes from RNA-Seq data and quantifies their expression.
+  3. _Tablemaker_ calls _Cufflinks_ to estimate feature expressions in a Ballgown readable format.
 
 # Installation
 Start R and run:
-
 
 ```r
 source("http://bioconductor.org/biocLite.R")
