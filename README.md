@@ -9,7 +9,7 @@ Before using the Ballgown R package, a few preprocessing steps are necessary:
 
 1. RNA-Seq reads should be aligned to a reference genome.
 2. A transcriptome should be assembled, or a reference transcriptome should be downloaded.
-3. Expression for the features (transcript, exon, and intron junfctions) in the transcriptome should be estimated in a Ballgown readable format.
+3. Expression for the features (transcript, exon, and intron junctions) in the transcriptome should be estimated in a Ballgown readable format.
 
 Two sample pipelines for preprocessing are as follows:
 
@@ -28,27 +28,8 @@ Start R and run:
 source("http://bioconductor.org/biocLite.R")
 biocLite("ballgown")
 ```
-
-# Running Tablemaker
-Users need to run _Tablemaker_ to organize assembly output into a format that Ballgown can load. Tablemaker can be downloaded from figshare:
-
-* [OSX binary](http://figshare.com/articles/Tablemaker_OS_X_Binary/1053136)
-* [Linux binary](http://figshare.com/articles/Tablemaker_Linux_Binary/1053137)
-
-Tablemaker can also be built from source from [this repository](https://github.com/alyssafrazee/tablemaker) by following [Cufflinks' instructions](http://cufflinks.cbcb.umd.edu/tutorial.html). 
-
-Tablemaker needs to be run on each RNA-seq sample in your experiment.  It requires one transcripome assembly, in [GTF format](http://www.ensembl.org/info/website/upload/gff.html), and read alignments for each sample, in BAM format. From the command line, _Tablemaker_ is run as follows:
-
-`tablemaker -p 4 -q -W -G merged.gtf -o sample01_output read_alignments.bam`
-
-where:
-* `-p` denotes how many threads to use (the program can take a few hours to run, but can be parallelized)
-* The `-q` can be removed for more verbose output messages  
-* `-W` and `-G merged.gtf` are required.  The `-W` tells the program to run in tablemaker mode (rather than Cufflinks mode), and the `-G` argument points to the assembly GTF file, which gives the assembled transcripts' structures. For Cufflinks users, often this is the `merged.gtf` output from Cuffmerge.
-* The argument to `-o` is the desired output directory for the sample (each sample should have its own output directory)
-* The read alignment file is the last argument.  If reads were aligned with TopHat, this is usually some variant of `accepted_hits.bam`
-
-The output is 5 files, written to the specified output directory:
+# Ballgown readable expression output
+The files that _Stringtie_ and _Tablemaker_ produce for Ballgown to load is as follows:
 
 * `e_data.ctab`: exon-level expression measurements.  One row per exon.  Columns are `e_id` (numeric exon id), `chr`, `strand`, `start`, `end` (genomic location of the exon), and the following expression measurements for each sample:
     * `rcount`:  reads overlapping the exon 
@@ -77,7 +58,7 @@ The output is 5 files, written to the specified output directory:
 
 
 # Loading data into R
-At this point, _Tablemaker_ should have been run on all samples in the experiment. For this example, assume each sample's _Tablemaker_ output directory is a subfolder of the same root directory. The Ballgown package's `extdata` folder provides an example of such a directory, where the folder structure looks like:
+The default directory structure produced by _Stringtie_ and _Tablemaker_ should mirror the `extdata` folder in the Ballgown pacakge:
 
 ```
 extdata/
