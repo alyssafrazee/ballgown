@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/alyssafrazee/ballgown.svg?branch=master)](https://travis-ci.org/alyssafrazee/ballgown)
 
-
-
 # Introduction and Preprocessing
 Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-Seq data. It also provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly. 
 
@@ -22,6 +20,7 @@ Two sample pipelines for preprocessing are as follows:
   2. _Cufflinks_ [<a href="http://dx.doi.org/10.1038/nbt.1621">Trapnell et al. (2010)</a>] also assembles transcriptomes from RNA-Seq data and quantifies their expression. Sample command: 
   ` cufflinks -g reference.gff -o outputDirectory accepted_hits.bam `
   3. _Tablemaker_ calls _Cufflinks_ to estimate feature expressions in a Ballgown readable format. _Tablemaker_ access and instructions can be found [here](https://github.com/leekgroup/tablemaker).  
+
 
 # Installation
 Start R and run:
