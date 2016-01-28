@@ -53,8 +53,8 @@ contains = function(transcripts, cds){
 
     # concatenate the appropriate GRanges objects (for overlapping transcripts)
     transcripts_overlapIDs = rep(1:length(ol), 
-        times=elementLengths(transcripts_sort))
-    cds_overlapIDs = rep(1:length(ol), times=elementLengths(cds_sort))
+        times=elementNROWS(transcripts_sort))
+    cds_overlapIDs = rep(1:length(ol), times=elementNROWS(cds_sort))
     all_transcripts = c(unlist(transcripts_sort), unlist(cds_sort))
     overlapping = split(all_transcripts, 
         c(transcripts_overlapIDs, cds_overlapIDs))
