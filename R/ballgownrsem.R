@@ -127,7 +127,7 @@ ballgownrsem = function(dir="", samples, gtf, UCSC=TRUE, tfield='transcript_id',
 
     # intron GRanges setup:
     unltrans = unlist(tgrl)
-    transcriptIDs = rep(names(tgrl), times=elementLengths(tgrl))
+    transcriptIDs = rep(names(tgrl), times=elementNROWS(tgrl))
     notLast = rev(duplicated(rev(transcriptIDs)))
     introngr = GRanges(seqnames=seqnames(unltrans)[notLast], 
         ranges=IRanges(start=end(unltrans)[notLast]+1, 
@@ -171,7 +171,7 @@ ballgownrsem = function(dir="", samples, gtf, UCSC=TRUE, tfield='transcript_id',
         chr=unlist(runValue(seqnames(tgrl))),
         strand=unlist(runValue(strand(tgrl))),
         start=sapply(start(tgrl), min), end=sapply(end(tgrl), max),
-        t_name=names(tgrl), num_exons=elementLengths(tgrl),
+        t_name=names(tgrl), num_exons=elementNROWS(tgrl),
         length=sapply(width(tgrl), sum), gene_id=gene, gene_name=gene)
 
     for(i in seq_along(isodata)){
