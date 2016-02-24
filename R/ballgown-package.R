@@ -6,10 +6,10 @@
 #' @import GenomicRanges
 #' @import IRanges
 #' @import RColorBrewer
+#' @import S4Vectors
 #' @import splines
 #' @importFrom sva f.pvalue
 #' @importFrom rtracklayer import 
 #' @importFrom limma lmFit
 #' @import methods
-#' @importFrom S4Vectors runValue Rle
 NULL
