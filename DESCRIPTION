@@ -17,7 +17,7 @@ Depends:
 Imports:
     GenomicRanges (>= 1.17.25),
     IRanges (>= 1.99.22),
-    S4Vectors (>= 0.9.25),
+    S4Vectors (>= 0.9.39),
     RColorBrewer,
     splines,
     sva,
