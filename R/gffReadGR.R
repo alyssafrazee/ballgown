@@ -39,9 +39,9 @@ gffReadGR = function(gtf, splitByTranscript=FALSE, identifier='transcript_id',
     sep='; '){
     ret = import(gtf, format='GFF', version='1')
     if(splitByTranscript){
-        ret = ret[ret$type == 'exon', ]
-        transcript = getAttributeField(as.character(ret$group), identifier, sep)
-        ret = split(ret, transcript)
+        split_col_i = which(names(mcols(ret)) == identifier)
+        exons = ret[ret$type == 'exon',]
+        ret = split(exons, mcols(exons)[,split_col_i]) 
     }
     return(ret)
 }

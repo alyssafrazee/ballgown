@@ -85,9 +85,7 @@ checkAssembledTx = function(assembled, annotated, ind=1,
                 call.=FALSE)
         }
     }
-    if(!is.null(customCol)){
-        colorind = 0
-    }
+    colorind = 0
     txind = txind+0.5
     abline(h=txind+0.25)
 
@@ -122,9 +120,7 @@ checkAssembledTx = function(assembled, annotated, ind=1,
             warning(paste("overlapping exons in assembled transcript",tx), 
                 call.=FALSE)
         }
-        if(!is.null(customCol)){
-            colorind = colorind+1
-        }
+        colorind = colorind+1
     }
     title(main)
     axis(side=2, at=c(median(1:length(unique(annot.df$group_name))), 
