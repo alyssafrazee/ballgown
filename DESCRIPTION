@@ -32,3 +32,4 @@ Suggests:
 VignetteBuilder: knitr
 BugReports: https://github.com/alyssafrazee/ballgown/issues
 biocViews: RNASeq, StatisticalMethod, Preprocessing, DifferentialExpression
+RoxygenNote: 5.0.1
