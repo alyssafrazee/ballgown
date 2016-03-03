@@ -23,12 +23,13 @@
 #' data(bg)
 #' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
 #' geneoverlaps = getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE)
+
 getGenes = function(gtf, assembled, UCSC=TRUE, attribute = "gene_id"){
     # read in annotation and split by gene:
     annot = gffReadGR(gtf)
     annotEx = annot[mcols(annot)$type=="exon"]
-    annotEx$gene_id = getAttributeField(as.character(mcols(annotEx)$group), 
-        attribute)
+    col_index = which(names(mcols(annotEx)) == attribute)
+    annotEx$gene_id = mcols(annotEx)[,col_index]
     if(UCSC){
         # strip quotes off of gene names
         annotEx$gene_id = substr(annotEx$gene_id, 2, nchar(annotEx$gene_id)-1)

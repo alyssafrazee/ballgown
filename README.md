@@ -1,46 +1,36 @@
 [![Build Status](https://travis-ci.org/alyssafrazee/ballgown.svg?branch=master)](https://travis-ci.org/alyssafrazee/ballgown)
 
-
-
-# Introduction
-Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-seq data. 
+# Introduction and Preprocessing
+Ballgown is a software package designed to facilitate flexible differential expression analysis of RNA-Seq data. It also provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly. 
 
 Before using the Ballgown R package, a few preprocessing steps are necessary:
-* RNA-seq reads should be aligned to a reference genome. Any junction-aware aligner is appropriate.
-* A transcriptome should be assembled, or a reference transcriptome should be downloaded. Any assembler or download that produces a GTF file denoting the transcriptome's structure is appropriate.
-* Expression for the features in the transcriptome should be estimated. We provide software called _Tablemaker_ that does this estimation. Tablemaker calls _Cufflinks_ version 2.1.1 (<a href="http://dx.doi.org/10.1038/nbt.1621">Trapnell et al. (2010)</a>) to estimate transcript-level FPKMs, and provides several alternative expression measurements (e.g. average per-base coverage, number of mapped reads, etc.) for other features. Expression is estimated for each transcript, exon, and intron (junction) in the assembly. 
 
-The Ballgown package provides functions to organize, visualize, and analyze the expression measurements for your transcriptome assembly. 
+1. RNA-Seq reads should be aligned to a reference genome.
+2. A transcriptome should be assembled, or a reference transcriptome should be downloaded.
+3. Expression for the features (transcript, exon, and intron junctions) in the transcriptome should be estimated in a Ballgown readable format.
+
+Two sample pipelines for preprocessing are as follows:
+
+1. **Pipeline 1:** _TopHat2_ (1) + _Stringtie_ (2,3)
+  1. _TopHat2_ [<a href="http://bioinformatics.oxfordjournals.org/content/25/9/1105.abstract">Trapnell et al. (2009)</a>] is built on the ultrafast short read mapping program _Bowtie_ and aligns RNA-Seq reads to a genome while identifying exonic splice junctions. Sample command: 
+  ` tophat2  -G reference.gff -o outputDirectory -p 6 referenceIndex reads `
+  2. _Stringtie_ [<a href="http://www.nature.com/nbt/journal/v33/n3/full/nbt.3122.html">M. Pertea et al. (2015)</a>] is a highly efficient assembler for RNA-Seq alignments using a novel network flow algorithm. It simultaneously assembles and quantifies expression levels for the features of the transcriptome in a Ballgown readable format (by using the option -B). One command to _Stringtie_ satisfies steps 2 and 3 above. Sample command: ` stringtie -B -G reference.gff -p 6 accepted_hits.bam -o stringtie.gff `
+2. **Pipeline 2:** _TopHat2_ (1) + _Cufflinks_ (2) + _Tablemaker_ (3)
+  1. _Tophat2_ produces alignments as noted above.
+  2. _Cufflinks_ [<a href="http://dx.doi.org/10.1038/nbt.1621">Trapnell et al. (2010)</a>] also assembles transcriptomes from RNA-Seq data and quantifies their expression. Sample command: 
+  ` cufflinks -g reference.gff -o outputDirectory accepted_hits.bam `
+  3. _Tablemaker_ calls _Cufflinks_ to estimate feature expressions in a Ballgown readable format. _Tablemaker_ access and instructions can be found [here](https://github.com/leekgroup/tablemaker).  
+
 
 # Installation
 Start R and run:
-
 
 ```r
 source("http://bioconductor.org/biocLite.R")
 biocLite("ballgown")
 ```
-
-# Running Tablemaker
-Users need to run _Tablemaker_ to organize assembly output into a format that Ballgown can load. Tablemaker can be downloaded from figshare:
-
-* [OSX binary](http://figshare.com/articles/Tablemaker_OS_X_Binary/1053136)
-* [Linux binary](http://figshare.com/articles/Tablemaker_Linux_Binary/1053137)
-
-Tablemaker can also be built from source from [this repository](https://github.com/alyssafrazee/tablemaker) by following [Cufflinks' instructions](http://cufflinks.cbcb.umd.edu/tutorial.html). 
-
-Tablemaker needs to be run on each RNA-seq sample in your experiment.  It requires one transcripome assembly, in [GTF format](http://www.ensembl.org/info/website/upload/gff.html), and read alignments for each sample, in BAM format. From the command line, _Tablemaker_ is run as follows:
-
-`tablemaker -p 4 -q -W -G merged.gtf -o sample01_output read_alignments.bam`
-
-where:
-* `-p` denotes how many threads to use (the program can take a few hours to run, but can be parallelized)
-* The `-q` can be removed for more verbose output messages  
-* `-W` and `-G merged.gtf` are required.  The `-W` tells the program to run in tablemaker mode (rather than Cufflinks mode), and the `-G` argument points to the assembly GTF file, which gives the assembled transcripts' structures. For Cufflinks users, often this is the `merged.gtf` output from Cuffmerge.
-* The argument to `-o` is the desired output directory for the sample (each sample should have its own output directory)
-* The read alignment file is the last argument.  If reads were aligned with TopHat, this is usually some variant of `accepted_hits.bam`
-
-The output is 5 files, written to the specified output directory:
+# Ballgown readable expression output
+The files that _Stringtie_ and _Tablemaker_ produce for Ballgown to load is as follows:
 
 * `e_data.ctab`: exon-level expression measurements.  One row per exon.  Columns are `e_id` (numeric exon id), `chr`, `strand`, `start`, `end` (genomic location of the exon), and the following expression measurements for each sample:
     * `rcount`:  reads overlapping the exon 
@@ -69,7 +59,7 @@ The output is 5 files, written to the specified output directory:
 
 
 # Loading data into R
-At this point, _Tablemaker_ should have been run on all samples in the experiment. For this example, assume each sample's _Tablemaker_ output directory is a subfolder of the same root directory. The Ballgown package's `extdata` folder provides an example of such a directory, where the folder structure looks like:
+The default directory structure produced by _Stringtie_ and _Tablemaker_ should mirror the `extdata` folder in the Ballgown pacakge:
 
 ```
 extdata/
@@ -285,7 +275,7 @@ The `*expr` functions return matrices unless `meas = 'all'`, in which case some 
 #### indexes
 The `indexes` slot of a ballgown object connects the pieces of the assembly and provides other experimental information. `indexes(bg)` is a list with several components that can be extracted with the `$` operator.
 
-Perhaps most importantly, there is a component called `pData` that should hold a data frame of phenotype information for the samples in the experiment. This must be created manually.  It is **very important** that the rows of pData are in the correct order. Each row corresponds to a sample, and the rows of pData should be ordered teh same as the tables in the `expr` slot. You can check that order by running `sampleNames(bg)`. The `pData` component can be added during construction (you can pass a data frame to the `ballgown` function), or you can add it later:
+Perhaps most importantly, there is a component called `pData` that should hold a data frame of phenotype information for the samples in the experiment. This must be created manually.  It is **very important** that the rows of pData are in the correct order. Each row corresponds to a sample, and the rows of pData should be ordered the same as the tables in the `expr` slot. You can check that order by running `sampleNames(bg)`. The `pData` component can be added during construction (you can pass a data frame to the `ballgown` function), or you can add it later:
 
 
 ```r
@@ -402,7 +392,7 @@ The default statistical test in ballgown is a parametric F-test comparing nested
 
 Ballgown's statistical models are implemented with the `stattest` function. Two models are fit to each feature, using expression as the outcome: one including the covariate of interest (e.g., case/control status or time) and one not including that covariate. An F statistic and p-value are calculated using the fits of the two models. A significant p-value means the model including the covariate of interest fits significantly better than the model without that covariate, indicating differential expression. We adjust for multiple testing by reporting q-values (<a href="http://dx.doi.org/10.1073/pnas.1530509100">Storey & Tibshirani (2003)</a>) for each transcript in addition to p-values: reporting features with, say, q < 0.05 means the false discovery rate should be controlled at about 5%. 
 
-`stattest` automatically handles two-group (e.g. case/control) comparisons, multi-group comparisons (e.g. comparison of several tissue types), and "timecourse" comparisons (with the scare quotes meaning that these comparisons are also applicable to continuous covariates that aren't time). For two- and multi-group comparisons, a significant result indicates that the feature is differentially expressed in at least one of the groups. For timecourse comparisions, significant results mean the feature has an expression profile that varies significantly over time (i.e., values of the continuous covariate) as opposed to being flat over time. 
+`stattest` automatically handles two-group (e.g. case/control) comparisons, multi-group comparisons (e.g. comparison of several tissue types), and "timecourse" comparisons (with the scare quotes meaning that these comparisons are also applicable to continuous covariates that aren't time). For two- and multi-group comparisons, a significant result indicates that the feature is differentially expressed in at least one of the groups. For timecourse comparisons, significant results mean the feature has an expression profile that varies significantly over time (i.e., values of the continuous covariate) as opposed to being flat over time. 
 
 The example dataset `bg` contains two group labels, 0 and 1. We can test each transcript for differential expression with `stattest`:
 
@@ -530,12 +520,14 @@ This example clustered only three transcripts, but we imagine clustering could b
 - Alyssa C. Frazee, Geo Pertea, Andrew E. Jaffe, Ben Langmead, Steven L. Salzberg, Jeffrey T. Leek (2014). Flexible isoform-level differential expression analysis with Ballgown.  *bioRxiv*  [http://biorxiv.org/content/early/2014/03/30/003665](http://biorxiv.org/content/early/2014/03/30/003665)
 - Charity W Law, Yunshun Chen, Wei Shi, Gordon K Smyth,   (2014) Voom: Precision Weights Unlock Linear Model Analysis Tools For RNA-Seq Read Counts.  *Genome Biology*  **15**  R29-NA  [10.1186/gb-2014-15-2-r29](http://dx.doi.org/10.1186/gb-2014-15-2-r29)
 - Michael Lawrence, Wolfgang Huber, Herve Pages, Patrick Aboyoun, Marc Carlson, Robert Gentleman, Martin T. Morgan, Vincent J. Carey, Andreas Prlic (2013). Software For Computing And Annotating Genomic Ranges.  *Plos Computational Biology*  **9**  e1003118-NA  [10.1371/journal.pcbi.1003118](http://dx.doi.org/10.1371/journal.pcbi.1003118)
+- Mihaela Pertea, Geo M Pertea, Corina M Antonescu, Tsung-Cheng Chang, Joshua T Mendell, Steven L Salzberg (2015). StringTie enables improved reconstruction of a transcriptome from RNA-seq reads.  *Nature Biotechnology* [http://www.nature.com/nbt/journal/v33/n3/full/nbt.3122.html](http://www.nature.com/nbt/journal/v33/n3/full/nbt.3122.html)
 - Mark D. Robinson, Davis J. McCarthy and Gordon K. Smyth (2009) "edgeR: a
 Bioconductor package for differential expression analysis of
 digital gene expression data". *Bioinformatics* **26.1** pp. 139-140. [10.1093/bioinformatics/btp616](http://dx.doi.org/10.1093/bioinformatics/btp616.)
 - Gordon Smyth, (2005) Limma: linear models for microarray data.  397-420
 - John D. Storey, Robert Tibshirani (2003). Statistical Significance For Genomewide Studies.  *Proceedings of The National Academy of Sciences*  **100**  9440-9445  [10.1073/pnas.1530509100](http://dx.doi.org/10.1073/pnas.1530509100)
-- Cole Trapnell, Brian A Williams, Geo Pertea, Ali Mortazavi, Gordon Kwan, Marijke J van Baren, Steven L Salzberg, Barbara J Wold, Lior Pachter, (2010) Transcript Assembly And Quantification by Rna-Seq Reveals Unannotated Transcripts And Isoform Switching During Cell Differentiation.  *Nature Biotechnology*  **28**  511-515  [10.1038/nbt.1621](http://dx.doi.org/10.1038/nbt.1621)
+- Cole Trapnell, Lior Pachter, Steven Salzberg (2009) TopHatL discovering splice junctions with RNA-Seq. *Bioinformatics*. [http://bioinformatics.oxfordjournals.org/content/25/9/1105.abstract] (http://bioinformatics.oxfordjournals.org/content/25/9/1105.abstract)
+- Cole Trapnell, Brian A Williams, Geo Pertea, Ali Mortazavi, Gordon Kwan, Marijke J van Baren, Steven L Salzberg, Barbara J Wold, Lior Pachter (2010) Transcript Assembly And Quantification by Rna-Seq Reveals Unannotated Transcripts And Isoform Switching During Cell Differentiation.  *Nature Biotechnology*  **28**  511-515  [10.1038/nbt.1621](http://dx.doi.org/10.1038/nbt.1621)
 
 # Session Information
 
