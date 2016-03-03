@@ -101,15 +101,15 @@ test_that('contains function works', {
 
 pdf(file=NULL) #don't print plots to screen while testing
 test_that('plot of assembled/annotated transcripts works', {
-    # expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, 
-    #     ind=4), 
-    #     not(throws_error()))
+    expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, 
+        ind=4), 
+        not(throws_error()))
     expect_that(checkAssembledTx(annotated=grl, 
         assembled=structure(bg)$trans[1:50], ind=2), 
         gives_warning())
-    # expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, 
-    #     ind=4, 
-    #     main='hello!'), not(throws_error()))
+    expect_that(checkAssembledTx(annotated=grl, assembled=structure(bg)$trans, 
+        ind=4, 
+        main='hello!'), not(throws_error()))
 })
 dev.off()
 
