@@ -1,5 +1,6 @@
-#' @title find the gene to which a transcript belongs
+#' @title Connect a transcript to its gene
 #'
+#' @description find the gene to which a transcript belongs
 #' @param bg ballgown object
 #' @param transcript transcript identifier
 #' @param tid set to \code{TRUE} if \code{transcript} is a numeric transcript

@@ -54,9 +54,9 @@ annotate_assembly = function(assembled, annotated){
 
     # concatenate the appropriate GRanges objects (for overlapping transcripts)
     assembled_overlapIDs = rep(1:length(ol), 
-        times=elementLengths(assembled_sort))
+        times=elementNROWS(assembled_sort))
     annotated_overlapIDs = rep(1:length(ol), 
-        times=elementLengths(annotated_sort))
+        times=elementNROWS(annotated_sort))
     all_transcripts = c(unlist(assembled_sort), unlist(annotated_sort))
     overlapping = split(all_transcripts, 
         c(assembled_overlapIDs, annotated_overlapIDs))

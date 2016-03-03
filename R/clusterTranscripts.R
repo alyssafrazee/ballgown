@@ -44,7 +44,7 @@ clusterTranscripts = function(gene, gown, k=NULL, method=c('hclust', 'kmeans')){
     matInds = as.vector(t(xg)) 
     #^ vector of transcript pairs to calculate overlaps for
     olGroup = rep(1:(length(matInds)/2), each=2)
-    olGroupSplit = rep(olGroup, times=elementLengths(tx[matInds]))
+    olGroupSplit = rep(olGroup, times=elementNROWS(tx[matInds]))
     overlapping = split(unlist(tx[matInds]), olGroupSplit)
     coverages = coverage(ranges(overlapping))
     runvals = runValue(coverages)
