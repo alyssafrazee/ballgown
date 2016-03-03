@@ -5,6 +5,7 @@
 #' @docType package
 #' @import GenomicRanges
 #' @import IRanges
+#' @import S4Vectors
 #' @import RColorBrewer
 #' @import S4Vectors
 #' @import splines
