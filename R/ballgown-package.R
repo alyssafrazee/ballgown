@@ -7,7 +7,6 @@
 #' @import IRanges
 #' @import S4Vectors
 #' @import RColorBrewer
-#' @import S4Vectors
 #' @import splines
 #' @importFrom sva f.pvalue
 #' @importFrom rtracklayer import 
