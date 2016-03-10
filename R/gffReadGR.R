@@ -37,7 +37,8 @@
 #' 
 gffReadGR = function(gtf, splitByTranscript=FALSE, identifier='transcript_id', 
     sep='; '){
-    ret = import(gtf, format='GFF', version='1')
+    con = file(gtf)
+    ret = import(con, format='GFF')
     if(splitByTranscript){
         split_col_i = which(names(mcols(ret)) == identifier)
         exons = ret[ret$type == 'exon',]
