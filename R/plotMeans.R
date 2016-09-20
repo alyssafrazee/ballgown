@@ -122,15 +122,24 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
         if(colorby == "transcript"){
             # mean transcript-level expression measurement for this group
             t_id = texpr(gown, 'all')$t_id
-            smalldat = texpr(gown, meas)[t_id %in% gtrans$tid,]
+            i = which(gtrans$tid == t_id)
+            smalldat = texpr(gown, meas)[i,]
             datacols = which(sampleNames(gown) %in% samples[[p]])
-            tmeans = rowMeans(smalldat[,datacols])
+            if(length(i) > 1) {
+                tmeans = rowMeans(smalldat[,datacols])
+            } else {
+                tmeans = mean(smalldat[datacols])
+                names(tmeans) = t_id[i]
+            }
         }
 
         if(colorby == "exon"){
             # mean exon-level expression measurement for this group
             e_id = eexpr(gown, 'all')$e_id
-            smalldat = eexpr(gown, meas)[e_id %in% gtrans$id,]
+            smalldat = as.matrix(eexpr(gown, meas)[e_id %in% gtrans$id,])
+            if(class(smalldat) != 'matrix'){
+                smalldat = t(as.matrix(smalldat))
+            }
             datacols = which(sampleNames(gown) %in% samples[[p]])
             emeans = rowMeans(smalldat[,datacols])
         }
