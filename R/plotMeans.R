@@ -122,14 +122,14 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
         if(colorby == "transcript"){
             # mean transcript-level expression measurement for this group
             t_id = texpr(gown, 'all')$t_id
-            i = which(gtrans$tid == t_id)
-            smalldat = texpr(gown, meas)[i,]
+            expr_matrix_i = which(t_id %in% gtrans$tid)
+            smalldat = texpr(gown, meas)[expr_matrix_i,]
             datacols = which(sampleNames(gown) %in% samples[[p]])
-            if(length(i) > 1) {
+            if(length(expr_matrix_i) > 1) {
                 tmeans = rowMeans(smalldat[,datacols])
             } else {
                 tmeans = mean(smalldat[datacols])
-                names(tmeans) = t_id[i]
+                names(tmeans) = texpr(gown, 'all')$t_id[expr_matrix_i]  # i has length 1
             }
         }
 
@@ -151,8 +151,7 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
         # draw the transcripts
         for(tx in unique(gtrans$tid)){
             if(colorby == "transcript") {
-                mycolor = closestColor(tmeans[which(names(tmeans)==tx)], 
-                    colscale)
+                mycolor = closestColor(tmeans[which(names(tmeans)==tx)], colscale)
             }
             txind = which(unique(gtrans$tid)==tx)
             gtsub = gtrans[gtrans$tid==tx,]
@@ -195,4 +194,3 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
         }
     }
 }
-
