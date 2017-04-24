@@ -6,7 +6,7 @@ Authors@R: c(person("Jack", "Fu", role=c("aut"), email="jmfu@jhsph.edu"),
     role=c("aut"), email="lcollado@jhu.edu"), person(c("Andrew", "E."),
     "Jaffe", role=c("aut")), person(c("Jeffrey", "T."), "Leek", role=c("aut",
     "ths"), email="jtleek@gmail.com"))
-Version: 2.7.0
+Version: 2.8.0
 License: Artistic-2.0
 Title: Flexible, isoform-level differential expression analysis
 Description: Tools for statistical analysis of assembled transcriptomes,
