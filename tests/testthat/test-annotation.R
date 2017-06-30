@@ -50,17 +50,17 @@ test_that('splitting attribute fields works', {
 })
 
 
-test_that('reading gtf directly into GRanges and GRangesList works', {
-    expect_that(gffReadGR(gtfPath), not(throws_error()))
-    gr = gffReadGR(gtfPath)
-    expect_that(length(gr), equals(13732))
-    expect_that(gffReadGR(gtfPath, splitByTranscript=TRUE), not(throws_error()))
-    grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
-    expect_that(length(grl), equals(910))
-    expect_that(names(grl), is_a('character'))
-    expect_that(sort(names(grl)), is_identical_to(
-        sort(unique(getAttributeField(x$attributes, 'transcript_id')))))
-})
+# test_that('reading gtf directly into GRanges and GRangesList works', {
+#     expect_that(gffReadGR(gtfPath), not(throws_error()))
+#     gr = gffReadGR(gtfPath)
+#     expect_that(length(gr), equals(13732))
+#     expect_that(gffReadGR(gtfPath, splitByTranscript=TRUE), not(throws_error()))
+#     grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
+#     expect_that(length(grl), equals(910))
+#     expect_that(names(grl), is_a('character'))
+#     expect_that(sort(names(grl)), is_identical_to(
+#         sort(unique(getAttributeField(x$attributes, 'transcript_id')))))
+# })
 
 grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
 
