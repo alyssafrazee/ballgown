@@ -8,4 +8,3 @@
 \description{
 The ballgown package for analysis of transcript assemblies
 }
-

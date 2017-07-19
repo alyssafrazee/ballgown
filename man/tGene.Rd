@@ -36,4 +36,3 @@ find the gene to which a transcript belongs
   tGene(bg, 10, gid=FALSE) #empty: no gene names included in bg.
 
 }
-

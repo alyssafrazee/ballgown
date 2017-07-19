@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClass.R
 \docType{class}
 \name{ballgown-class}
-\alias{Ballgown}
 \alias{ballgown-class}
+\alias{Ballgown}
 \title{Ballgown}
 \description{
 S4 class for storing and manipulating expression data from assembled 
@@ -35,6 +35,7 @@ measurements. See vignette for details.}
 \item{\code{RSEM}}{TRUE if object was made from RSEM output, FALSE if object was made
 from Tablemaker/Cufflinks output.}
 }}
+
 \examples{
   data(bg)
   class(bg) #"ballgown"
@@ -49,4 +50,3 @@ from Tablemaker/Cufflinks output.}
 \author{
 Alyssa Frazee, Leonardo Collado-Torres, Jeff Leek
 }
-

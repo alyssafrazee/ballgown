@@ -159,10 +159,9 @@ mod0 = model.matrix(~ pData(bg)$group + pData(bg)$time)
 adjusted_results = stattest(bg, feature='transcript', meas='FPKM', 
   mod0=mod0, mod=mod)
 }
-\author{
-Jeff Leek, Alyssa Frazee
-}
 \references{
 \url{http://biorxiv.org/content/early/2014/03/30/003665}
 }
-
+\author{
+Jeff Leek, Alyssa Frazee
+}

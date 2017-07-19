@@ -3,6 +3,7 @@
 \docType{methods}
 \name{eexpr}
 \alias{eexpr}
+\alias{eexpr}
 \alias{eexpr,ballgown-method}
 \title{extract exon-level expression measurements from ballgown objects}
 \usage{
@@ -31,4 +32,3 @@ exon_rcount_matrix = eexpr(bg)
 exon_ucount_matrix = eexpr(bg, 'ucount')
 exon_data_frame = eexpr(bg, 'all')
 }
-

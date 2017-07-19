@@ -73,4 +73,3 @@ rsemobj
 \seealso{
 \code{\link{ballgown}} for reading Cufflinks/Tablemaker output
 }
-

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{transcriptIDs}
 \alias{transcriptIDs}
+\alias{transcriptIDs}
 \alias{transcriptIDs,ballgown-method}
 \title{get numeric transcript IDs from a ballgown object}
 \usage{
@@ -23,4 +24,3 @@ get numeric transcript IDs from a ballgown object
 data(bg)
 transcriptIDs(bg)
 }
-

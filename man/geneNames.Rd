@@ -3,6 +3,7 @@
 \docType{methods}
 \name{geneNames}
 \alias{geneNames}
+\alias{geneNames}
 \alias{geneNames,ballgown-method}
 \title{get gene names from a ballgown object}
 \usage{
@@ -45,4 +46,3 @@ geneNames(bg)
 \seealso{
 \code{\link{geneIDs}}
 }
-

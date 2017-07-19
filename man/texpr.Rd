@@ -3,6 +3,7 @@
 \docType{methods}
 \name{texpr}
 \alias{texpr}
+\alias{texpr}
 \alias{texpr,ballgown-method}
 \title{extract transcript-level expression measurements from ballgown objects}
 \usage{
@@ -29,4 +30,3 @@ data(bg)
 transcript_fpkm_matrix = texpr(bg)
 transcript_data_frame = texpr(bg, 'all')
 }
-

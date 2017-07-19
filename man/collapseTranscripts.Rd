@@ -43,11 +43,10 @@ data(bg)
 collapseTranscripts(bg, gene='XLOC_000454', meas='FPKM', method='kmeans')
 
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{hclust}}, \code{\link{kmeans}}, 
    \code{\link{clusterTranscripts}}, \code{\link{plotLatentTranscripts}}
 }
-
+\author{
+Alyssa Frazee
+}

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{structure}
 \alias{structure}
+\alias{structure}
 \alias{structure,ballgown-method}
 \title{extract structure components from ballgown objects}
 \usage{
@@ -29,4 +30,3 @@ names(structure(bg))
 class(structure(bg))
 structure(bg)$exon
 }
-

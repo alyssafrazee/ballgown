@@ -25,12 +25,11 @@ read in GTF/GFF file as a data frame
 gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
 annot = gffRead(gtfPath)
 }
-\author{
-Kasper Hansen
-}
 \seealso{
 \code{\link{getAttributeField}} to extract data from "attributes" 
  column; \url{http://useast.ensembl.org/info/website/upload/gff.html} for
   more information on the GTF/GFF file format.
 }
-
+\author{
+Kasper Hansen
+}

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{mergedDate}
 \alias{mergedDate}
+\alias{mergedDate}
 \alias{mergedDate,ballgown-method}
 \title{extract package version & creation date from ballgown object}
 \usage{
@@ -20,4 +21,3 @@ extract package version & creation date from ballgown object
 data(bg)
 mergedDate(bg)
 }
-

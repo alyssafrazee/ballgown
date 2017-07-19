@@ -53,10 +53,9 @@ data(bg)
 plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2)
 }
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{clusterTranscripts}}, \code{\link{plotTranscripts}}
 }
-
+\author{
+Alyssa Frazee
+}

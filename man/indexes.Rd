@@ -3,6 +3,7 @@
 \docType{methods}
 \name{indexes}
 \alias{indexes}
+\alias{indexes}
 \alias{indexes,ballgown-method}
 \title{extract the indexes from ballgown objects}
 \usage{
@@ -29,4 +30,3 @@ names(indexes(bg))
 class(indexes(bg))
 head(indexes(bg)$t2g)
 }
-

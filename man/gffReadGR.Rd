@@ -42,11 +42,10 @@ annotgr = gffReadGR(gtfPath)
 transcripts_grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
 
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{gffRead}} for reading in a GTF file as a data frame
    rather than a \code{GRanges}/\code{GRangesList} object.
 }
-
+\author{
+Alyssa Frazee
+}

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{gexpr}
 \alias{gexpr}
+\alias{gexpr}
 \alias{gexpr,ballgown-method}
 \title{extract gene-level expression measurements from ballgown objects}
 \usage{
@@ -26,4 +27,3 @@ For objects created with Cufflinks/Tablemaker, gene-level measurements are
 data(bg)
 gene_matrix = gexpr(bg)
 }
-

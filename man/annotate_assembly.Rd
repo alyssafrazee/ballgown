@@ -36,4 +36,3 @@ info = annotate_assembly(assembled=structure(bg)$trans, annotated=annot)
 \author{
 Alyssa Frazee
 }
-

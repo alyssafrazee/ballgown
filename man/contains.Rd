@@ -25,16 +25,6 @@ determine if one set of GRanges fully contains any of another set of GRanges
 If \code{gown} is a \code{ballgown} object, \code{transcripts} can
    be \code{structure(gown)$trans} (or any subset).
 }
-\examples{
-## pretend this annotation is coding sequence:
-gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
-annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
-data(bg)
-results = contains(structure(bg)$trans, annot)
-# results is a boolean vector
-sum(results) #61
-}
 \author{
 Alyssa Frazee
 }
-

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{expr<-}
 \alias{expr<-}
+\alias{expr<-}
 \alias{expr<-,ballgown-method}
 \title{Replacement method for expr slot in ballgown objects}
 \usage{
@@ -24,4 +25,3 @@ n = ncol(bg@expr$trans)
 #multiply all transcript expression measurements by 10:
 bg@expr$trans[,11:n] = 10*bg@expr$trans[11:n] 
 }
-

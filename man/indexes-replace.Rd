@@ -3,6 +3,7 @@
 \docType{methods}
 \name{indexes<-}
 \alias{indexes<-}
+\alias{indexes<-}
 \alias{indexes<-,ballgown-method}
 \title{Replace method for indexes slot in ballgown objects}
 \usage{
@@ -23,4 +24,3 @@ data(bg)
 indexes(bg)$bamfiles = paste0('/path/to/bamfolder/', 
   sampleNames(bg), '_accepted_hits.bam')
 }
-

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{subset}
 \alias{subset}
+\alias{subset}
 \alias{subset,ballgown-method}
 \title{subset ballgown objects to specific samples or genomic locations}
 \usage{
@@ -51,4 +52,3 @@ bg_group0
 \author{
 Alyssa Frazee
 }
-

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{iexpr}
 \alias{iexpr}
+\alias{iexpr}
 \alias{iexpr,ballgown-method}
 \title{extract transcript-level expression measurements from ballgown objects}
 \usage{
@@ -30,4 +31,3 @@ data(bg)
 intron_rcount_matrix = iexpr(bg)
 intron_data_frame = iexpr(bg, 'all')
 }
-

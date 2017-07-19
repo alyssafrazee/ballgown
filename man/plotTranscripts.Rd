@@ -79,10 +79,9 @@ plotTranscripts('XLOC_000454', bg,
 
 }
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{plotMeans}}, \code{\link{plotLatentTranscripts}}
 }
-
+\author{
+Alyssa Frazee
+}

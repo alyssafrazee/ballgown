@@ -3,6 +3,7 @@
 \docType{methods}
 \name{dirs}
 \alias{dirs}
+\alias{dirs}
 \alias{dirs,ballgown-method}
 \title{extract paths to tablemaker output}
 \usage{
@@ -20,4 +21,3 @@ extract paths to tablemaker output
 data(bg)
 dirs(bg)
 }
-

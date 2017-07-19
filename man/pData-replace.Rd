@@ -3,6 +3,7 @@
 \docType{methods}
 \name{pData<-}
 \alias{pData<-}
+\alias{pData<-}
 \alias{pData<-,ballgown,ANY-method}
 \title{Replacement method for pData slot in ballgown objects}
 \usage{
@@ -24,4 +25,3 @@ data(bg) # already contains pData
 pData(bg) = data.frame(pData(bg), timepoint=rep(1:10, 2))
 head(pData(bg))
 }
-

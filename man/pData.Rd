@@ -3,6 +3,7 @@
 \docType{methods}
 \name{pData}
 \alias{pData}
+\alias{pData}
 \alias{pData,ballgown-method}
 \title{extract phenotype data from a ballgown object}
 \usage{
@@ -23,4 +24,3 @@ extract phenotype data from a ballgown object
 data(bg)
 pData(bg)
 }
-

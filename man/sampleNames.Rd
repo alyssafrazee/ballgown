@@ -3,6 +3,7 @@
 \docType{methods}
 \name{sampleNames}
 \alias{sampleNames}
+\alias{sampleNames}
 \alias{sampleNames,ballgown-method}
 \title{get names of samples in a ballgown objects}
 \usage{
@@ -24,4 +25,3 @@ get names of samples in a ballgown objects
 data(bg)
 sampleNames(bg)
 }
-

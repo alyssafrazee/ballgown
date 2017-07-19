@@ -56,10 +56,9 @@ plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM',
   colorby='transcript')
 }
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{plotTranscripts}}
 }
-
+\author{
+Alyssa Frazee
+}

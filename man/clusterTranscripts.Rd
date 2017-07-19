@@ -33,11 +33,10 @@ data(bg)
 clusterTranscripts('XLOC_000454', bg, k=2, method='kmeans')
 # transcripts 1294 and 1301 cluster together, 91\% variation explained.
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{hclust}}, \code{\link{kmeans}}, 
   \code{\link{plotLatentTranscripts}} for visualizing the transcript clusters
 }
-
+\author{
+Alyssa Frazee
+}

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{seqnames}
 \alias{seqnames}
+\alias{seqnames}
 \alias{seqnames,ballgown-method}
 \title{get sequence (chromosome) names from ballgown object}
 \usage{
@@ -24,4 +25,3 @@ get sequence (chromosome) names from ballgown object
 data(bg)
 seqnames(bg)
 }
-

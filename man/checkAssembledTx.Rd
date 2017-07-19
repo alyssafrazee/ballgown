@@ -44,4 +44,3 @@ checkAssembledTx(annotated=annot, assembled=structure(bg)$trans, ind=4)
 \author{
 Alyssa Frazee
 }
-

@@ -17,4 +17,3 @@ bg
 \author{
 Alyssa Frazee
 }
-

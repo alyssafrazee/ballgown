@@ -33,4 +33,3 @@ Create a new ballgown object containing only transcripts passing
 \seealso{
 \code{\link{subset}}
 }
-

@@ -3,6 +3,7 @@
 \docType{methods}
 \name{expr}
 \alias{expr}
+\alias{expr}
 \alias{expr,ballgown-method}
 \title{extract expression components from ballgown objects}
 \usage{
@@ -31,4 +32,3 @@ dim(expr(bg)$exon)
 \code{\link{texpr}}, \code{\link{gexpr}}, \code{\link{eexpr}}, 
   \code{\link{iexpr}}
 }
-
