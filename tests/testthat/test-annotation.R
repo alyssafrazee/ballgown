@@ -50,17 +50,17 @@ test_that('splitting attribute fields works', {
 })
 
 
-test_that('reading gtf directly into GRanges and GRangesList works', {
-    expect_that(gffReadGR(gtfPath), not(throws_error()))
-    gr = gffReadGR(gtfPath)
-    expect_that(length(gr), equals(13732))
-    expect_that(gffReadGR(gtfPath, splitByTranscript=TRUE), not(throws_error()))
-    grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
-    expect_that(length(grl), equals(910))
-    expect_that(names(grl), is_a('character'))
-    expect_that(sort(names(grl)), is_identical_to(
-        sort(unique(getAttributeField(x$attributes, 'transcript_id')))))
-})
+# test_that('reading gtf directly into GRanges and GRangesList works', {
+#     expect_that(gffReadGR(gtfPath), not(throws_error()))
+#     gr = gffReadGR(gtfPath)
+#     expect_that(length(gr), equals(13732))
+#     expect_that(gffReadGR(gtfPath, splitByTranscript=TRUE), not(throws_error()))
+#     grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
+#     expect_that(length(grl), equals(910))
+#     expect_that(names(grl), is_a('character'))
+#     expect_that(sort(names(grl)), is_identical_to(
+#         sort(unique(getAttributeField(x$attributes, 'transcript_id')))))
+# })
 
 grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
 
@@ -83,15 +83,15 @@ test_that('function for annotating assemblies works', {
     expect_that(rel$percent[6], equals(0.8032030, tolerance=0.001))
 })
 
-test_that('function for labeling assembled transcripts with genes works', {
-    expect_that(getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE), 
-        not(throws_error()))
-    geneoverlaps = getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE)
-    expect_that(geneoverlaps, is_a('CharacterList'))
-    expect_that(geneoverlaps[[2]], equals('ENSG00000229027'))
-    expect_that(length(geneoverlaps[[4]]), equals(2))
-    expect_that(length(geneoverlaps), equals(100))
-})
+# test_that('function for labeling assembled transcripts with genes works', {
+#     expect_that(getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE), 
+#         not(throws_error()))
+#     geneoverlaps = getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE)
+#     expect_that(geneoverlaps, is_a('CharacterList'))
+#     expect_that(geneoverlaps[[2]], equals('ENSG00000229027'))
+#     expect_that(length(geneoverlaps[[4]]), equals(2))
+#     expect_that(length(geneoverlaps), equals(100))
+# })
 
 test_that('contains function works', {
     expect_that(contains(structure(bg)$trans, grl), is_a('logical'))
