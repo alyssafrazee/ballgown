@@ -25,8 +25,8 @@
 
 annotate_assembly = function(assembled, annotated){
     
-    stopifnot(class(annotated) == 'GRangesList' & 
-        class(assembled) == 'GRangesList')
+    stopifnot(is(annotated, "GRangesList"),
+              is(assembled, "GRangesList"))
 
     # things will get out of order: keep track
     names_annot = names(annotated)
