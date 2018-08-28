@@ -21,8 +21,9 @@ The Ballgown package provides functions to organize, visualize, and analyze the 
 Start R and run:
 
 ```{r installme, eval=FALSE}
-source("http://bioconductor.org/biocLite.R")
-biocLite("ballgown")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("ballgown")
 ```
 
 # Running Tablemaker

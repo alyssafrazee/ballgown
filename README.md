@@ -26,8 +26,9 @@ Two sample pipelines for preprocessing are as follows:
 Start R and run:
 
 ```r
-source("http://bioconductor.org/biocLite.R")
-biocLite("ballgown")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("ballgown")
 ```
 # Ballgown readable expression output
 The files that _Stringtie_ and _Tablemaker_ produce for Ballgown to load is as follows:
