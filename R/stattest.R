@@ -293,7 +293,7 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
         }
     } else {
         ## test whether custom models are, in fact, nested.
-        stopifnot(class(mod0) == 'matrix' & class(mod) == 'matrix')
+        stopifnot(class(mod0)[1] == 'matrix' & class(mod)[1] == 'matrix')
         if(!('assign' %in% names(attributes(mod0))) | !('assign' %in% 
                 names(attributes(mod)))){
             stop('mod and mod0 must both be model.matrix objects')
