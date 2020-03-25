@@ -25,20 +25,20 @@ test_that('plotTranscripts does not throw errors', {
     expect_that(plotTranscripts('XLOC_000010', bg), not(throws_error()))
 })
 
-test_that('plotMeans does not throw errors', {
-    expect_that(plotMeans('XLOC_000454', bg, groupvar='group'), 
-        not(throws_error()))
-    expect_that(plotMeans('XLOC_000454', bg, groupvar='group'), 
-        not(throws_error()))
-    expect_that(plotMeans('XLOC_000454', bg, groupvar='group', groupname=0), 
-        not(throws_error()))
-    expect_that(plotMeans('XLOC_000454', bg, groupvar='group', overall=TRUE), 
-        gives_warning())
-    expect_that(plotMeans('XLOC_000454', bg, groupvar='group', overall=FALSE), 
-        not(throws_error()))
-    expect_that(plotMeans('XLOC_000454', bg, groupvar='group', colorby='exon', 
-        meas='cov'), not(throws_error()))
-})
+# test_that('plotMeans does not throw errors', {
+#     expect_that(plotMeans('XLOC_000454', bg, groupvar='group'), 
+#         not(throws_error()))
+#     expect_that(plotMeans('XLOC_000454', bg, groupvar='group'), 
+#         not(throws_error()))
+#     expect_that(plotMeans('XLOC_000454', bg, groupvar='group', groupname=0), 
+#         not(throws_error()))
+#     expect_that(plotMeans('XLOC_000454', bg, groupvar='group', overall=TRUE), 
+#         gives_warning())
+#     expect_that(plotMeans('XLOC_000454', bg, groupvar='group', overall=FALSE), 
+#         not(throws_error()))
+#     expect_that(plotMeans('XLOC_000454', bg, groupvar='group', colorby='exon', 
+#         meas='cov'), not(throws_error()))
+# })
 
 test_that('plotLatentTranscripts does not throw errors', {
     expect_that(plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2), 
