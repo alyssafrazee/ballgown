@@ -4,9 +4,19 @@
 \alias{ballgownrsem}
 \title{load RSEM data into a ballgown object}
 \usage{
-ballgownrsem(dir = "", samples, gtf, UCSC = TRUE,
-  tfield = "transcript_id", attrsep = "; ", bamout = "transcript",
-  pData = NULL, verbose = TRUE, meas = "all", zipped = FALSE)
+ballgownrsem(
+  dir = "",
+  samples,
+  gtf,
+  UCSC = TRUE,
+  tfield = "transcript_id",
+  attrsep = "; ",
+  bamout = "transcript",
+  pData = NULL,
+  verbose = TRUE,
+  meas = "all",
+  zipped = FALSE
+)
 }
 \arguments{
 \item{dir}{output directory containing RSEM output for all samples (i.e. for
@@ -73,4 +83,3 @@ rsemobj
 \seealso{
 \code{\link{ballgown}} for reading Cufflinks/Tablemaker output
 }
-

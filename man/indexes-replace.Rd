@@ -23,4 +23,3 @@ data(bg)
 indexes(bg)$bamfiles = paste0('/path/to/bamfolder/', 
   sampleNames(bg), '_accepted_hits.bam')
 }
-

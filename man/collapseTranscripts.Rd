@@ -4,8 +4,13 @@
 \alias{collapseTranscripts}
 \title{cluster a gene's transcripts and calculate cluster-level expression}
 \usage{
-collapseTranscripts(gene, gown, meas = "FPKM", method = c("hclust",
-  "kmeans"), k = NULL)
+collapseTranscripts(
+  gene,
+  gown,
+  meas = "FPKM",
+  method = c("hclust", "kmeans"),
+  k = NULL
+)
 }
 \arguments{
 \item{gene}{which gene's transcripts should be clustered}
@@ -43,11 +48,10 @@ data(bg)
 collapseTranscripts(bg, gene='XLOC_000454', meas='FPKM', method='kmeans')
 
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{hclust}}, \code{\link{kmeans}}, 
    \code{\link{clusterTranscripts}}, \code{\link{plotLatentTranscripts}}
 }
-
+\author{
+Alyssa Frazee
+}

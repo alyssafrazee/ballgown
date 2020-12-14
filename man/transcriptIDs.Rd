@@ -23,4 +23,3 @@ get numeric transcript IDs from a ballgown object
 data(bg)
 transcriptIDs(bg)
 }
-

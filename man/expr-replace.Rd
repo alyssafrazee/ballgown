@@ -24,4 +24,3 @@ n = ncol(bg@expr$trans)
 #multiply all transcript expression measurements by 10:
 bg@expr$trans[,11:n] = 10*bg@expr$trans[11:n] 
 }
-

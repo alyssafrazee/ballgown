@@ -37,4 +37,3 @@ sum(results) #61
 \author{
 Alyssa Frazee
 }
-

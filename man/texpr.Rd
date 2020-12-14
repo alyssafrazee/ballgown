@@ -29,4 +29,3 @@ data(bg)
 transcript_fpkm_matrix = texpr(bg)
 transcript_data_frame = texpr(bg, 'all')
 }
-

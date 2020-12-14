@@ -40,4 +40,3 @@ geneoverlaps = getGenes(gtfPath, structure(bg)$trans, UCSC=FALSE)
 \author{
 Alyssa Frazee, Andrew Jaffe
 }
-

@@ -4,9 +4,16 @@
 \alias{plotLatentTranscripts}
 \title{cluster assembled transcripts and plot the results}
 \usage{
-plotLatentTranscripts(gene, gown, method = c("hclust", "kmeans"), k = NULL,
-  choosek = c("var90", "thumb"), returncluster = TRUE,
-  labelTranscripts = TRUE, ...)
+plotLatentTranscripts(
+  gene,
+  gown,
+  method = c("hclust", "kmeans"),
+  k = NULL,
+  choosek = c("var90", "thumb"),
+  returncluster = TRUE,
+  labelTranscripts = TRUE,
+  ...
+)
 }
 \arguments{
 \item{gene}{string, name of gene whose transcripts should be clustered 
@@ -53,10 +60,9 @@ data(bg)
 plotLatentTranscripts('XLOC_000454', bg, method='kmeans', k=2)
 }
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{clusterTranscripts}}, \code{\link{plotTranscripts}}
 }
-
+\author{
+Alyssa Frazee
+}

@@ -26,4 +26,3 @@ get transcript names from a ballgown object
 data(bg)
 transcriptNames(bg)
 }
-

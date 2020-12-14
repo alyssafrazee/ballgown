@@ -4,10 +4,21 @@
 \alias{plotTranscripts}
 \title{visualize structure of assembled transcripts}
 \usage{
-plotTranscripts(gene, gown, samples = NULL, colorby = "transcript",
-  meas = "FPKM", legend = TRUE, labelTranscripts = FALSE, main = NULL,
-  blackBorders = TRUE, log = FALSE, logbase = 2, customCol = NULL,
-  customOrder = NULL)
+plotTranscripts(
+  gene,
+  gown,
+  samples = NULL,
+  colorby = "transcript",
+  meas = "FPKM",
+  legend = TRUE,
+  labelTranscripts = FALSE,
+  main = NULL,
+  blackBorders = TRUE,
+  log = FALSE,
+  logbase = 2,
+  customCol = NULL,
+  customOrder = NULL
+)
 }
 \arguments{
 \item{gene}{name of gene whose transcripts will be plotted.  When using 
@@ -79,10 +90,9 @@ plotTranscripts('XLOC_000454', bg,
 
 }
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{plotMeans}}, \code{\link{plotLatentTranscripts}}
 }
-
+\author{
+Alyssa Frazee
+}

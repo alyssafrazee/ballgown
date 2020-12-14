@@ -25,4 +25,3 @@ last(c('h', 'e', 'l', 'l', 'o'))
 \author{
 Alyssa Frazee
 }
-

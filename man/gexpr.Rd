@@ -26,4 +26,3 @@ For objects created with Cufflinks/Tablemaker, gene-level measurements are
 data(bg)
 gene_matrix = gexpr(bg)
 }
-

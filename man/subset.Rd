@@ -51,4 +51,3 @@ bg_group0
 \author{
 Alyssa Frazee
 }
-

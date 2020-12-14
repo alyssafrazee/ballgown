@@ -4,10 +4,17 @@
 \alias{plotMeans}
 \title{visualize transcript abundance by group}
 \usage{
-plotMeans(gene, gown, overall = FALSE, groupvar, groupname = "all",
+plotMeans(
+  gene,
+  gown,
+  overall = FALSE,
+  groupvar,
+  groupname = "all",
   meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
-  colorby = c("transcript", "exon"), legend = TRUE,
-  labelTranscripts = FALSE)
+  colorby = c("transcript", "exon"),
+  legend = TRUE,
+  labelTranscripts = FALSE
+)
 }
 \arguments{
 \item{gene}{name of gene whose transcripts will be plotted.  When using 
@@ -56,10 +63,9 @@ plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM',
   colorby='transcript')
 }
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{plotTranscripts}}
 }
-
+\author{
+Alyssa Frazee
+}

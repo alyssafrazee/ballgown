@@ -31,4 +31,3 @@ dim(expr(bg)$exon)
 \code{\link{texpr}}, \code{\link{gexpr}}, \code{\link{eexpr}}, 
   \code{\link{iexpr}}
 }
-

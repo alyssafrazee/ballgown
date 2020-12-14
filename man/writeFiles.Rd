@@ -20,4 +20,3 @@ create tablemaker-like files on disk from a ballgown object
   writeFiles(bg, dataDir=getwd())
 }
 }
-

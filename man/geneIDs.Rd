@@ -33,4 +33,3 @@ geneIDs(bg)
 \seealso{
 \code{\link{geneNames}}
 }
-

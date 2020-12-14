@@ -4,8 +4,13 @@
 \alias{checkAssembledTx}
 \title{plot annotated and assembled transcripts together}
 \usage{
-checkAssembledTx(assembled, annotated, ind = 1,
-  main = "Assembled and Annotated Transcripts", customCol = NULL)
+checkAssembledTx(
+  assembled,
+  annotated,
+  ind = 1,
+  main = "Assembled and Annotated Transcripts",
+  customCol = NULL
+)
 }
 \arguments{
 \item{assembled}{a GRangesList object where the GRanges objects in the list 
@@ -44,4 +49,3 @@ checkAssembledTx(annotated=annot, assembled=structure(bg)$trans, ind=4)
 \author{
 Alyssa Frazee
 }
-

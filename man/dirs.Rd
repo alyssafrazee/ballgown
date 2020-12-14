@@ -20,4 +20,3 @@ extract paths to tablemaker output
 data(bg)
 dirs(bg)
 }
-

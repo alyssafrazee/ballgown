@@ -5,7 +5,3 @@
 \alias{ballgown-package}
 \alias{ballgownp}
 \title{The ballgown package for analysis of transcript assemblies}
-\description{
-The ballgown package for analysis of transcript assemblies
-}
-

@@ -24,4 +24,3 @@ get names of samples in a ballgown objects
 data(bg)
 sampleNames(bg)
 }
-

@@ -20,4 +20,3 @@ extract package version & creation date from ballgown object
 data(bg)
 mergedDate(bg)
 }
-

@@ -29,4 +29,3 @@ names(structure(bg))
 class(structure(bg))
 structure(bg)$exon
 }
-

@@ -4,8 +4,12 @@
 \alias{gffReadGR}
 \title{read in gtf file as GRanges object}
 \usage{
-gffReadGR(gtf, splitByTranscript = FALSE, identifier = "transcript_id",
-  sep = "; ")
+gffReadGR(
+  gtf,
+  splitByTranscript = FALSE,
+  identifier = "transcript_id",
+  sep = "; "
+)
 }
 \arguments{
 \item{gtf}{name of GTF/GFF file on disk}
@@ -42,11 +46,10 @@ annotgr = gffReadGR(gtfPath)
 transcripts_grl = gffReadGR(gtfPath, splitByTranscript=TRUE)
 
 }
-\author{
-Alyssa Frazee
-}
 \seealso{
 \code{\link{gffRead}} for reading in a GTF file as a data frame
    rather than a \code{GRanges}/\code{GRangesList} object.
 }
-
+\author{
+Alyssa Frazee
+}

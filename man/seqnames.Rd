@@ -24,4 +24,3 @@ get sequence (chromosome) names from ballgown object
 data(bg)
 seqnames(bg)
 }
-

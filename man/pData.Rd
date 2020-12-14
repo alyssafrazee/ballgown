@@ -23,4 +23,3 @@ extract phenotype data from a ballgown object
 data(bg)
 pData(bg)
 }
-

@@ -29,4 +29,3 @@ names(indexes(bg))
 class(indexes(bg))
 head(indexes(bg)$t2g)
 }
-

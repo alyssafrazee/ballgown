@@ -24,4 +24,3 @@ data(bg) # already contains pData
 pData(bg) = data.frame(pData(bg), timepoint=rep(1:10, 2))
 head(pData(bg))
 }
-

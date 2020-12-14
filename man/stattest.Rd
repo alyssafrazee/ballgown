@@ -4,11 +4,23 @@
 \alias{stattest}
 \title{statistical tests for differential expression in ballgown}
 \usage{
-stattest(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
-  mod0 = NULL, feature = c("gene", "exon", "intron", "transcript"),
+stattest(
+  gown = NULL,
+  gowntable = NULL,
+  pData = NULL,
+  mod = NULL,
+  mod0 = NULL,
+  feature = c("gene", "exon", "intron", "transcript"),
   meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
-  timecourse = FALSE, covariate = NULL, adjustvars = NULL, gexpr = NULL,
-  df = 4, getFC = FALSE, libadjust = NULL, log = TRUE)
+  timecourse = FALSE,
+  covariate = NULL,
+  adjustvars = NULL,
+  gexpr = NULL,
+  df = 4,
+  getFC = FALSE,
+  libadjust = NULL,
+  log = TRUE
+)
 }
 \arguments{
 \item{gown}{name of an object of class \code{ballgown}}
@@ -159,10 +171,9 @@ mod0 = model.matrix(~ pData(bg)$group + pData(bg)$time)
 adjusted_results = stattest(bg, feature='transcript', meas='FPKM', 
   mod0=mod0, mod=mod)
 }
-\author{
-Jeff Leek, Alyssa Frazee
-}
 \references{
 \url{http://biorxiv.org/content/early/2014/03/30/003665}
 }
-
+\author{
+Jeff Leek, Alyssa Frazee
+}

@@ -29,12 +29,11 @@ gffdata = gffRead(gtfPath)
 gffdata$transcriptID = getAttributeField(gffdata$attributes, 
   field = "transcript_id")
 }
-\author{
-Wolfgang Huber, in the \code{davidTiling} R package (LGPL license)
-}
 \seealso{
 \code{\link{gffRead}} for creating a data frame from a GTF/GFF file,
   and \url{http://useast.ensembl.org/info/website/upload/gff.html} for
   specifics of the GFF/GTF file format.
 }
-
+\author{
+Wolfgang Huber, in the \code{davidTiling} R package (LGPL license)
+}

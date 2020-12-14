@@ -30,4 +30,3 @@ data(bg)
 intron_rcount_matrix = iexpr(bg)
 intron_data_frame = iexpr(bg, 'all')
 }
-
