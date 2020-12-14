@@ -78,11 +78,11 @@
 #'   creates the full object.
 #'
 #' @details Because experimental data is recorded so variably, it is the user's
-#'   responsibility to format \code{pData} correctly.  In particular, it's 
-#'   really important that the rows of \code{pData} (corresponding to samples) 
-#'   are ordered the same way as \code{samples} or the 
-#'   \code{dataDir}/\code{samplePattern} combo. You can run 
-#'   \code{file.path(path = dataDir, pattern = samplePattern)} to see the sample
+#'   responsibility to format \code{pData} correctly.  In particular, it's
+#'   really important that the rows of \code{pData} (corresponding to samples)
+#'   are ordered the same way as \code{samples} or the
+#'   \code{dataDir}/\code{samplePattern} combo. You can run
+#'   \code{list.files(path = dataDir, pattern = samplePattern)} to see the sample
 #'   order if \code{samples} was not used.
 #'
 #' If you are creating a ballgown object for a large experiment, this function
