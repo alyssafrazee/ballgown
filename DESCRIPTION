@@ -33,4 +33,4 @@ Suggests:
 VignetteBuilder: knitr
 BugReports: https://github.com/alyssafrazee/ballgown/issues
 biocViews: ImmunoOncology, RNASeq, StatisticalMethod, Preprocessing, DifferentialExpression
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.1

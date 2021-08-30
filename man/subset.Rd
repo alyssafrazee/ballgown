@@ -3,10 +3,6 @@
 \docType{methods}
 \name{subset}
 \alias{subset}
-<<<<<<< HEAD
-\alias{subset}
-=======
->>>>>>> trunk_deprecated
 \alias{subset,ballgown-method}
 \title{subset ballgown objects to specific samples or genomic locations}
 \usage{

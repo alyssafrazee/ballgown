@@ -3,10 +3,6 @@
 \docType{methods}
 \name{indexes<-}
 \alias{indexes<-}
-<<<<<<< HEAD
-\alias{indexes<-}
-=======
->>>>>>> trunk_deprecated
 \alias{indexes<-,ballgown-method}
 \title{Replace method for indexes slot in ballgown objects}
 \usage{

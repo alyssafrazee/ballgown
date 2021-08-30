@@ -3,10 +3,6 @@
 \docType{methods}
 \name{sampleNames}
 \alias{sampleNames}
-<<<<<<< HEAD
-\alias{sampleNames}
-=======
->>>>>>> trunk_deprecated
 \alias{sampleNames,ballgown-method}
 \title{get names of samples in a ballgown objects}
 \usage{

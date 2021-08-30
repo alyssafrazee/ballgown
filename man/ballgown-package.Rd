@@ -5,9 +5,3 @@
 \alias{ballgown-package}
 \alias{ballgownp}
 \title{The ballgown package for analysis of transcript assemblies}
-<<<<<<< HEAD
-\description{
-The ballgown package for analysis of transcript assemblies
-}
-=======
->>>>>>> trunk_deprecated

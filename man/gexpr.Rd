@@ -3,10 +3,6 @@
 \docType{methods}
 \name{gexpr}
 \alias{gexpr}
-<<<<<<< HEAD
-\alias{gexpr}
-=======
->>>>>>> trunk_deprecated
 \alias{gexpr,ballgown-method}
 \title{extract gene-level expression measurements from ballgown objects}
 \usage{

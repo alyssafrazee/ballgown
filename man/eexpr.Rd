@@ -3,10 +3,6 @@
 \docType{methods}
 \name{eexpr}
 \alias{eexpr}
-<<<<<<< HEAD
-\alias{eexpr}
-=======
->>>>>>> trunk_deprecated
 \alias{eexpr,ballgown-method}
 \title{extract exon-level expression measurements from ballgown objects}
 \usage{

@@ -3,10 +3,6 @@
 \docType{methods}
 \name{geneIDs}
 \alias{geneIDs}
-<<<<<<< HEAD
-\alias{geneIDs}
-=======
->>>>>>> trunk_deprecated
 \alias{geneIDs,ballgown-method}
 \title{get gene IDs from a ballgown object}
 \usage{

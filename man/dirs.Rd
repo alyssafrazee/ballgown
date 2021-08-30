@@ -3,10 +3,6 @@
 \docType{methods}
 \name{dirs}
 \alias{dirs}
-<<<<<<< HEAD
-\alias{dirs}
-=======
->>>>>>> trunk_deprecated
 \alias{dirs,ballgown-method}
 \title{extract paths to tablemaker output}
 \usage{

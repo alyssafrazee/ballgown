@@ -3,10 +3,6 @@
 \docType{methods}
 \name{mergedDate}
 \alias{mergedDate}
-<<<<<<< HEAD
-\alias{mergedDate}
-=======
->>>>>>> trunk_deprecated
 \alias{mergedDate,ballgown-method}
 \title{extract package version & creation date from ballgown object}
 \usage{
