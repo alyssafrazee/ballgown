@@ -12,4 +12,5 @@
 #' @importFrom rtracklayer import
 #' @importFrom limma lmFit
 #' @import methods
+#' @description Super awesome transcript-level expression analysis
 NULL

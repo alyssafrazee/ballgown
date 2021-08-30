@@ -5,3 +5,6 @@
 \alias{ballgown-package}
 \alias{ballgownp}
 \title{The ballgown package for analysis of transcript assemblies}
+\description{
+Super awesome transcript-level expression analysis
+}
