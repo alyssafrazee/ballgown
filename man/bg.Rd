@@ -4,7 +4,13 @@
 \name{bg}
 \alias{bg}
 \title{Toy ballgown object}
+<<<<<<< HEAD
 \format{a \code{ballgown} object: 100 transcripts, 633 exons, 536 introns}
+=======
+\format{
+a \code{ballgown} object: 100 transcripts, 633 exons, 536 introns
+}
+>>>>>>> trunk_deprecated
 \description{
 Small ballgown object created with simulated toy data, for 
   demonstration purposes

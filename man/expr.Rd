@@ -3,7 +3,10 @@
 \docType{methods}
 \name{expr}
 \alias{expr}
+<<<<<<< HEAD
 \alias{expr}
+=======
+>>>>>>> trunk_deprecated
 \alias{expr,ballgown-method}
 \title{extract expression components from ballgown objects}
 \usage{

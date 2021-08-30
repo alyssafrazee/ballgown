@@ -4,8 +4,17 @@
 \alias{gffReadGR}
 \title{read in gtf file as GRanges object}
 \usage{
+<<<<<<< HEAD
 gffReadGR(gtf, splitByTranscript = FALSE, identifier = "transcript_id",
   sep = "; ")
+=======
+gffReadGR(
+  gtf,
+  splitByTranscript = FALSE,
+  identifier = "transcript_id",
+  sep = "; "
+)
+>>>>>>> trunk_deprecated
 }
 \arguments{
 \item{gtf}{name of GTF/GFF file on disk}

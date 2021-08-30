@@ -4,9 +4,25 @@
 \alias{ballgownrsem}
 \title{load RSEM data into a ballgown object}
 \usage{
+<<<<<<< HEAD
 ballgownrsem(dir = "", samples, gtf, UCSC = TRUE,
   tfield = "transcript_id", attrsep = "; ", bamout = "transcript",
   pData = NULL, verbose = TRUE, meas = "all", zipped = FALSE)
+=======
+ballgownrsem(
+  dir = "",
+  samples,
+  gtf,
+  UCSC = TRUE,
+  tfield = "transcript_id",
+  attrsep = "; ",
+  bamout = "transcript",
+  pData = NULL,
+  verbose = TRUE,
+  meas = "all",
+  zipped = FALSE
+)
+>>>>>>> trunk_deprecated
 }
 \arguments{
 \item{dir}{output directory containing RSEM output for all samples (i.e. for

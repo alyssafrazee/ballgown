@@ -3,7 +3,10 @@
 \docType{methods}
 \name{pData<-}
 \alias{pData<-}
+<<<<<<< HEAD
 \alias{pData<-}
+=======
+>>>>>>> trunk_deprecated
 \alias{pData<-,ballgown,ANY-method}
 \title{Replacement method for pData slot in ballgown objects}
 \usage{

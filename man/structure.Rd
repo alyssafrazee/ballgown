@@ -3,7 +3,10 @@
 \docType{methods}
 \name{structure}
 \alias{structure}
+<<<<<<< HEAD
 \alias{structure}
+=======
+>>>>>>> trunk_deprecated
 \alias{structure,ballgown-method}
 \title{extract structure components from ballgown objects}
 \usage{

@@ -3,7 +3,10 @@
 \docType{methods}
 \name{seqnames}
 \alias{seqnames}
+<<<<<<< HEAD
 \alias{seqnames}
+=======
+>>>>>>> trunk_deprecated
 \alias{seqnames,ballgown-method}
 \title{get sequence (chromosome) names from ballgown object}
 \usage{

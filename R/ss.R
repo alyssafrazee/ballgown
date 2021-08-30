@@ -1,5 +1,5 @@
 ss = function(x, pattern, slot=1, ...){
-    sapply(strsplit(x,pattern,...), "[", slot)  
+    sapply(strsplit(x,pattern,...), "[", slot)
 }
 
 strip_quotes = function(x){

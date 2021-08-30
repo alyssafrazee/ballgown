@@ -3,7 +3,10 @@
 \docType{methods}
 \name{iexpr}
 \alias{iexpr}
+<<<<<<< HEAD
 \alias{iexpr}
+=======
+>>>>>>> trunk_deprecated
 \alias{iexpr,ballgown-method}
 \title{extract transcript-level expression measurements from ballgown objects}
 \usage{

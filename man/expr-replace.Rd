@@ -3,7 +3,10 @@
 \docType{methods}
 \name{expr<-}
 \alias{expr<-}
+<<<<<<< HEAD
 \alias{expr<-}
+=======
+>>>>>>> trunk_deprecated
 \alias{expr<-,ballgown-method}
 \title{Replacement method for expr slot in ballgown objects}
 \usage{

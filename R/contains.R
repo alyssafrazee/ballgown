@@ -15,9 +15,19 @@
 #' @author Alyssa Frazee
 #' 
 #' @export
+#' 
+#' @examples
+#' ## pretend this annotation is coding sequence:
+#' gtfPath = system.file('extdata', 'annot.gtf.gz', package='ballgown')
+#' annot = gffReadGR(gtfPath, splitByTranscript=TRUE)
+#' data(bg)
+#' results = contains(structure(bg)$trans, annot)
+#' # results is a boolean vector
+#' sum(results) #61
 contains = function(transcripts, cds){
-    
+
     stopifnot(is(transcripts, "GRangesList"), is(cds, "GRangesList"))
+
 
     # things will get out of order: keep track
     names_transcripts = names(transcripts)

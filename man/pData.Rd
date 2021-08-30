@@ -3,7 +3,10 @@
 \docType{methods}
 \name{pData}
 \alias{pData}
+<<<<<<< HEAD
 \alias{pData}
+=======
+>>>>>>> trunk_deprecated
 \alias{pData,ballgown-method}
 \title{extract phenotype data from a ballgown object}
 \usage{

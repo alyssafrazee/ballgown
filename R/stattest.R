@@ -269,7 +269,7 @@ stattest = function(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
                     eval(parse(text=paste0(
                         "mod = model.matrix(~ as.factor(x) + ", variable_list, 
                         ")")))
-                }                
+                }
             }
         } else {
             if(!identical(libadjust, FALSE)){

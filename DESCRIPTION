@@ -1,12 +1,12 @@
 Package: ballgown
 Maintainer: Jack Fu <jmfu@jhsph.edu>
-Authors@R: c(person("Jack", "Fu", role=c("aut"), email="jmfu@jhsph.edu"), 
+Authors@R: c(person("Jack", "Fu", role=c("aut"), email="jmfu@jhsph.edu"),
     person(c("Alyssa", "C."), "Frazee", role=c("aut", "cre"),
     email="alyssa.frazee@gmail.com"), person("Leonardo", "Collado-Torres",
     role=c("aut"), email="lcollado@jhu.edu"), person(c("Andrew", "E."),
     "Jaffe", role=c("aut")), person(c("Jeffrey", "T."), "Leek", role=c("aut",
     "ths"), email="jtleek@gmail.com"))
-Version: 2.25.0
+Version: 2.25.1
 License: Artistic-2.0
 Title: Flexible, isoform-level differential expression analysis
 Description: Tools for statistical analysis of assembled transcriptomes,
@@ -28,7 +28,8 @@ Imports:
     GenomeInfoDb
 Suggests:
     testthat,
-    knitr
+    knitr,
+    markdown
 VignetteBuilder: knitr
 BugReports: https://github.com/alyssafrazee/ballgown/issues
 biocViews: ImmunoOncology, RNASeq, StatisticalMethod, Preprocessing, DifferentialExpression

@@ -1,47 +1,47 @@
 #' visualize transcript abundance by group
 #'
-#' @param gene name of gene whose transcripts will be plotted.  When using 
+#' @param gene name of gene whose transcripts will be plotted.  When using
 #'   Cufflinks/Tablemaker output, usually of the form \code{"XLOC_######"}
 #' @param gown ballgown object containing experimental and phenotype data
-#' @param overall if \code{TRUE}, color features by the overall 
+#' @param overall if \code{TRUE}, color features by the overall
 #'   (experiment-wide) mean rather than a group-specific mean
-#' @param groupvar string representing the name of the variable denoting which 
-#'   sample belongs to which group.  Can be \code{"none"} (if you want the 
-#'   study-wide mean), or must correspond to the name of a column of 
+#' @param groupvar string representing the name of the variable denoting which
+#'   sample belongs to which group.  Can be \code{"none"} (if you want the
+#'   study-wide mean), or must correspond to the name of a column of
 #'   \code{pData(gown)}.  Usually a categorical variable.
-#' @param groupname string representing which group's expression means you want 
-#'   to plot.  Can be \code{"none"} (if you want the study-wide mean), 
-#'   \code{"all"} (if you want a multipanel plot of each group's mean 
+#' @param groupname string representing which group's expression means you want
+#'   to plot.  Can be \code{"none"} (if you want the study-wide mean),
+#'   \code{"all"} (if you want a multipanel plot of each group's mean
 #'   expression), or any of the levels of \code{groupvar}.
-#' @param meas type of expression measurement to plot. One of "cov", "FPKM", 
-#'   "rcount", "ucount", "mrcount", or "mcov". Not all types are valid for all 
+#' @param meas type of expression measurement to plot. One of "cov", "FPKM",
+#'   "rcount", "ucount", "mrcount", or "mcov". Not all types are valid for all
 #'   features. (See description of tablemaker output for more information).
-#' @param colorby one of \code{"transcript"} or \code{"exon"}, indicating which 
-#'   feature's abundances should dictate plot coloring. 
-#' @param legend if \code{TRUE} (as it is by default), a color legend is drawn 
+#' @param colorby one of \code{"transcript"} or \code{"exon"}, indicating which
+#'   feature's abundances should dictate plot coloring.
+#' @param legend if \code{TRUE} (as it is by default), a color legend is drawn
 #'   on top of the plot indicating the scale for feature abundances.
-#' @param labelTranscripts if \code{TRUE}, transcript ids are labeled on the 
+#' @param labelTranscripts if \code{TRUE}, transcript ids are labeled on the
 #'   left side of the plot. Default \code{FALSE}.
-#' 
+#'
 #' @return produces a plot of the transcript structure for the specified gene in
-#'   the current graphics device, colored by study-wide or group-specific mean 
+#'   the current graphics device, colored by study-wide or group-specific mean
 #'   expression level.
-#' 
-#' @seealso \code{\link{plotTranscripts}} 
-#' 
+#'
+#' @seealso \code{\link{plotTranscripts}}
+#
 #' @author Alyssa Frazee
-#' 
+#'
 #' @export
 #' @examples \donttest{
 #' data(bg)
-#' plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM', 
+#' plotMeans('XLOC_000454', bg, groupvar='group', meas='FPKM',
 #'   colorby='transcript')
 #' }
 
-plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all', 
+plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
     meas=c('cov', 'FPKM', 'rcount', 'ucount', 'mrcount', 'mcov'),
     colorby=c('transcript', 'exon'), legend=TRUE, labelTranscripts=FALSE){
-    
+
     meas = match.arg(meas)
     colorby = match.arg(colorby)
 
@@ -69,20 +69,20 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
         stop("to plot means for all groups, please provide groupvar (the name
             of the group variable)")
     }
-    
+
     # some setup:
     ma = IRanges::as.data.frame(structure(gown)$trans)
     if(names(ma)[2] != 'group_name'){
         stop('IRanges::as.data.frame has changed. Please report as issue.')
     }
-    
+
     thetranscripts = indexes(gown)$t2g$t_id[indexes(gown)$t2g$g_id==gene]
     gtrans = ma[ma$group_name %in% thetranscripts,]
     gtrans$tid = gtrans$group_name
     xax = seq(min(gtrans$start), max(gtrans$end), by=1)
     numtx = length(unique(thetranscripts))
     if(groupvar != "none"){
-        pdatacol = which(names(pData(gown))==groupvar) 
+        pdatacol = which(names(pData(gown))==groupvar)
     }
     if(groupname == "all" & !overall){
         numplots = length(unique(pData(gown)[,pdatacol]))
@@ -94,7 +94,7 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
         if(overall){
             plot_titles = 'overall'
         }else{
-            plot_titles = ifelse(groupname=="none", "mean across groups", 
+            plot_titles = ifelse(groupname=="none", "mean across groups",
                 groupname)
         }
     }
@@ -103,9 +103,9 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
     }else if(groupname == "all"){
         samples = split(sampleNames(gown), pData(gown)[,pdatacol])
     }else{
-        samples = list(sampleNames(gown)[pData(gown)[,pdatacol]==groupname]) 
+        samples = list(sampleNames(gown)[pData(gown)[,pdatacol]==groupname])
     }
-    
+
     # plot base:
     westval = ifelse(labelTranscripts, 4, 2)
     par(mar=c(5, westval, 4, 2), mfrow = mf)
@@ -113,9 +113,9 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
 
     # the for-loop only has >1 iteration if groupname == "all"
     for(p in 1:numplots){
-        plot(xax, rep(0,length(xax)), ylim=c(0,ymax), 
-        type="n", xlab="genomic position", 
-        main=paste0(gene,": ",plot_titles[p]), 
+        plot(xax, rep(0,length(xax)), ylim=c(0,ymax),
+        type="n", xlab="genomic position",
+        main=paste0(gene,": ",plot_titles[p]),
         yaxt = "n", ylab="")
 
         # calculate means
@@ -143,7 +143,7 @@ plotMeans = function(gene, gown, overall=FALSE, groupvar, groupname='all',
             datacols = which(sampleNames(gown) %in% samples[[p]])
             emeans = rowMeans(smalldat[,datacols])
         }
-    
+
         # make color scale:
         maxcol = quantile(smalldat, 0.99)
         colscale = seq(0, maxcol, length.out=200)

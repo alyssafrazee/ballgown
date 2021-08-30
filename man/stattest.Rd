@@ -4,11 +4,31 @@
 \alias{stattest}
 \title{statistical tests for differential expression in ballgown}
 \usage{
+<<<<<<< HEAD
 stattest(gown = NULL, gowntable = NULL, pData = NULL, mod = NULL,
   mod0 = NULL, feature = c("gene", "exon", "intron", "transcript"),
   meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
   timecourse = FALSE, covariate = NULL, adjustvars = NULL, gexpr = NULL,
   df = 4, getFC = FALSE, libadjust = NULL, log = TRUE)
+=======
+stattest(
+  gown = NULL,
+  gowntable = NULL,
+  pData = NULL,
+  mod = NULL,
+  mod0 = NULL,
+  feature = c("gene", "exon", "intron", "transcript"),
+  meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
+  timecourse = FALSE,
+  covariate = NULL,
+  adjustvars = NULL,
+  gexpr = NULL,
+  df = 4,
+  getFC = FALSE,
+  libadjust = NULL,
+  log = TRUE
+)
+>>>>>>> trunk_deprecated
 }
 \arguments{
 \item{gown}{name of an object of class \code{ballgown}}

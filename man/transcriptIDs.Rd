@@ -3,7 +3,10 @@
 \docType{methods}
 \name{transcriptIDs}
 \alias{transcriptIDs}
+<<<<<<< HEAD
 \alias{transcriptIDs}
+=======
+>>>>>>> trunk_deprecated
 \alias{transcriptIDs,ballgown-method}
 \title{get numeric transcript IDs from a ballgown object}
 \usage{

@@ -24,7 +24,6 @@
 #' info = annotate_assembly(assembled=structure(bg)$trans, annotated=annot)
 
 annotate_assembly = function(assembled, annotated){
-    
     stopifnot(is(annotated, "GRangesList"),
               is(assembled, "GRangesList"))
 

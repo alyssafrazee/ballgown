@@ -26,7 +26,7 @@ Two sample pipelines for preprocessing are as follows:
 Start R and run:
 
 ```r
-if (!requireNamespace("BiocManager", quietly=TRUE))
+if (!requireNamespace("BiocManager", quietly=TaRUE))
     install.packages("BiocManager")
 BiocManager::install("ballgown")
 ```

@@ -4,10 +4,24 @@
 \alias{plotMeans}
 \title{visualize transcript abundance by group}
 \usage{
+<<<<<<< HEAD
 plotMeans(gene, gown, overall = FALSE, groupvar, groupname = "all",
   meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
   colorby = c("transcript", "exon"), legend = TRUE,
   labelTranscripts = FALSE)
+=======
+plotMeans(
+  gene,
+  gown,
+  overall = FALSE,
+  groupvar,
+  groupname = "all",
+  meas = c("cov", "FPKM", "rcount", "ucount", "mrcount", "mcov"),
+  colorby = c("transcript", "exon"),
+  legend = TRUE,
+  labelTranscripts = FALSE
+)
+>>>>>>> trunk_deprecated
 }
 \arguments{
 \item{gene}{name of gene whose transcripts will be plotted.  When using 

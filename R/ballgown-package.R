@@ -9,7 +9,7 @@
 #' @import RColorBrewer
 #' @import splines
 #' @importFrom sva f.pvalue
-#' @importFrom rtracklayer import 
+#' @importFrom rtracklayer import
 #' @importFrom limma lmFit
 #' @import methods
 NULL

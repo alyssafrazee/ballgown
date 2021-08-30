@@ -4,8 +4,18 @@
 \alias{collapseTranscripts}
 \title{cluster a gene's transcripts and calculate cluster-level expression}
 \usage{
+<<<<<<< HEAD
 collapseTranscripts(gene, gown, meas = "FPKM", method = c("hclust",
   "kmeans"), k = NULL)
+=======
+collapseTranscripts(
+  gene,
+  gown,
+  meas = "FPKM",
+  method = c("hclust", "kmeans"),
+  k = NULL
+)
+>>>>>>> trunk_deprecated
 }
 \arguments{
 \item{gene}{which gene's transcripts should be clustered}

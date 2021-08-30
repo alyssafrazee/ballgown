@@ -3,7 +3,10 @@
 \docType{methods}
 \name{texpr}
 \alias{texpr}
+<<<<<<< HEAD
 \alias{texpr}
+=======
+>>>>>>> trunk_deprecated
 \alias{texpr,ballgown-method}
 \title{extract transcript-level expression measurements from ballgown objects}
 \usage{

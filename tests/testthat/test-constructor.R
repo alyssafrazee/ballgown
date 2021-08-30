@@ -2,7 +2,7 @@ context('test ballgown constructor + slots')
 
 ## need to load object first
 ## this will test constructor, pData, pData<-, and sampleNames for errors...
-bg = ballgown(dataDir=system.file('extdata', package='ballgown'), 
+bg = ballgown(dataDir=system.file('extdata', package='ballgown'),
     samplePattern='sample', verbose=FALSE)
 pData(bg) = data.frame(id=sampleNames(bg), group=rep(c(1,0), each=10))
 suppressMessages(library(GenomicRanges))

@@ -4,9 +4,22 @@
 \alias{plotLatentTranscripts}
 \title{cluster assembled transcripts and plot the results}
 \usage{
+<<<<<<< HEAD
 plotLatentTranscripts(gene, gown, method = c("hclust", "kmeans"), k = NULL,
   choosek = c("var90", "thumb"), returncluster = TRUE,
   labelTranscripts = TRUE, ...)
+=======
+plotLatentTranscripts(
+  gene,
+  gown,
+  method = c("hclust", "kmeans"),
+  k = NULL,
+  choosek = c("var90", "thumb"),
+  returncluster = TRUE,
+  labelTranscripts = TRUE,
+  ...
+)
+>>>>>>> trunk_deprecated
 }
 \arguments{
 \item{gene}{string, name of gene whose transcripts should be clustered 

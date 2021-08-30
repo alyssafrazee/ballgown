@@ -3,7 +3,10 @@
 \docType{methods}
 \name{indexes}
 \alias{indexes}
+<<<<<<< HEAD
 \alias{indexes}
+=======
+>>>>>>> trunk_deprecated
 \alias{indexes,ballgown-method}
 \title{extract the indexes from ballgown objects}
 \usage{
