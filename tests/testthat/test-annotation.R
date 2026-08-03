@@ -39,14 +39,14 @@ test_that('splitting attribute fields works', {
     expect_that(getAttributeField(x$attributes, 'transcript_id'), 
         not(throws_error()))
     expect_that(all(is.na(getAttributeField(x$seqname, 'transcript_id'))), 
-        is_true())
+        equals(TRUE))
     transcripts = getAttributeField(x$attributes, 'transcript_id')
     expect_that(transcripts, is_a('character'))
     expect_that(length(transcripts), equals(13732))
     expect_that(transcripts[192], equals('ENST00000444520'))
     expect_that(all(is.na(getAttributeField(x$attributes, 'transcript_id', 
         attrsep=','))), 
-        is_true())
+        equals(TRUE))
 })
 
 

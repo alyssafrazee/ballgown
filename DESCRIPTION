@@ -1,5 +1,4 @@
 Package: ballgown
-Maintainer: Jack Fu <jmfu@jhsph.edu>
 Authors@R: c(person("Jack", "Fu", role=c("aut"), email="jmfu@jhsph.edu"),
     person(c("Alyssa", "C."), "Frazee", role=c("aut", "cre"),
     email="alyssa.frazee@gmail.com"), person("Leonardo", "Collado-Torres",
